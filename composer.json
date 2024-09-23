@@ -1,0 +1,38 @@
+{
+    "name": "candocker/knowledge",
+    "type": "project",
+    "keywords": [
+        "php",
+        "application",
+        "knowledge",
+        "resource"
+    ],
+    "description": "A application of knowledge",
+    "license": "MIT",
+    "require": {
+        "php": "^8.2.0"
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "psr-4": {
+            "ModuleKnowledge\\": "app/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ModuleKnowledge\\Test\\": "./test/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": [],
+    "scripts": {
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://mirrors.aliyun.com/composer/"
+        }
+    }
+}
