@@ -30,7 +30,7 @@ class Figure extends AbstractResource
         }
         $ageStr = "{$ageInfo['ageStr']}<br />{$ageInfo['birthStr']}<br />{$ageInfo['deathStr']}";
 
-        return [              
+        return [
             'id' => $this->id,
             'code' => $this->code,
             'name' => $name,
@@ -45,7 +45,7 @@ class Figure extends AbstractResource
     protected function _baseData()
     {
         $ageInfo = $this->getBirthDeath();
-        return [              
+        return [
             'id' => $this->id,
             'code' => $this->code,
             'name' => $this->name,

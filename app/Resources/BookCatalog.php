@@ -8,7 +8,7 @@ class BookCatalog extends AbstractResource
 {
     protected function _frontBaseArray()
     {
-        return [              
+        return [
             'id' => $this->id,
             'code' => $this->code,
             'name' => $this->name,

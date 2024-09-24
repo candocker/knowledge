@@ -11,7 +11,7 @@ class BookVolume extends AbstractResource
         $series = $this->series;
         $press = $this->getRepository()->getKeyValues('press', $this->press);
         $press = empty($press) ? $series->getRepositoryObj()->getKeyValues('press', $series->press) : $press;
-        return [              
+        return [
             'id' => $this->id,
             'name' => $this->name,
             'press' => $press,

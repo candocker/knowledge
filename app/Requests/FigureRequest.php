@@ -40,7 +40,6 @@ class FigureRequest extends AbstractRequest
 
     public function filterDirtyData($data)
     {
-        \Log::info('figure-' . json_encode($data));
         foreach (['birthday', 'deathday', 'ftitle'] as $field) {
             if (isset($data[$field])) {
                 unset($data[$field]);

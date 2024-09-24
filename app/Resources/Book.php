@@ -41,7 +41,7 @@ class Book extends AbstractResource
 
     protected function _frontInfoArray()
     {
-        return [              
+        return [
             'id' => $this->id,
             'code' => $this->code,
             'name' => $this->name,

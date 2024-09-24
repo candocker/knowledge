@@ -26,8 +26,8 @@ class Chapter extends AbstractModel
         return $this->hasOne(Figure::class, 'code', 'author');
     }
 
-	public function getContent()
-	{
-		return $this->getChapterFile($this);
-	}
+    public function getContent()
+    {
+        return $this->getChapterFile($this);
+    }
 }

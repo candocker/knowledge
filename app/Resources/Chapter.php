@@ -7,7 +7,7 @@ class Chapter extends AbstractResource
 
     protected function _frontListArray()
     {
-        return [              
+        return [
             'id' => $this->id,
             'name' => $this->name,
             'author' => $this->authorInfo,

@@ -56,46 +56,46 @@ class BookRepository extends AbstractRepository
         ];
     }
 
-	public function _positionKeyDatas()
-	{
-		return [
-			'reading' => '在读书籍',
-			'favor' => '排行榜',
-		];
-	}
+    public function _positionKeyDatas()
+    {
+        return [
+            'reading' => '在读书籍',
+            'favor' => '排行榜',
+        ];
+    }
 
-	public function getNavBooks($number = 4)
-	{
+    public function getNavBooks($number = 4)
+    {
         $model = $this->getModelObj('passport-tag');
         $navTags = $model->where(['sort' => 'nav'])->orderBy('orderlist', 'desc')->get();
-		$datas = [];
-		foreach ($navTags as $tag) {
+        $datas = [];
+        foreach ($navTags as $tag) {
             $code = $tag['code'];
-			$datas[$code] = $tag;
+            $datas[$code] = $tag;
             $books = $this->getPointTagBooks($code, $number);
-			$datas[$code]['books'] = $books;
-		}
-		return $datas;
-	}
-
-    public function getPositionBooks($number = 10)
-    {
-		$positions = $this->_positionKeyDatas();
-		$datas = [];
-        $model = $this->getModelObj();
-		foreach ($positions as $position => $pName) {
-            $number = $position == 'favor' ? 3 : $number;
-			$data['name'] = $pName;
-			$bDatas = $model->where(['position' => $position])->orderBy('orderlist', 'desc')->limit($number)->get();
-            $bDatas = $this->getCollectionObj($bDatas, 'frontInfo');
-			$data['books'] = $bDatas;
-			$datas[$position] = $data;
-		}
+            $datas[$code]['books'] = $books;
+        }
         return $datas;
     }
 
-	public function getPointTagBooks($tagCode, $number)
-	{
+    public function getPositionBooks($number = 10)
+    {
+        $positions = $this->_positionKeyDatas();
+        $datas = [];
+        $model = $this->getModelObj();
+        foreach ($positions as $position => $pName) {
+            $number = $position == 'favor' ? 3 : $number;
+            $data['name'] = $pName;
+            $bDatas = $model->where(['position' => $position])->orderBy('orderlist', 'desc')->limit($number)->get();
+            $bDatas = $this->getCollectionObj($bDatas, 'frontInfo');
+            $data['books'] = $bDatas;
+            $datas[$position] = $data;
+        }
+        return $datas;
+    }
+
+    public function getPointTagBooks($tagCode, $number)
+    {
         $model = $this->getModelObj();
         $tagInfos = $this->getModelObj('passport-tagInfo')->where(['tag_code' => $tagCode, 'app' => 'knowledge', 'info_table' => 'book'])->limit($number)->get();
         $infos = [];
@@ -107,26 +107,26 @@ class BookRepository extends AbstractRepository
         })->limit($number)->get();*/
         $infos = $this->getCollectionObj($infos, 'frontInfo');
         return $infos;
-	}
+    }
 
-	public function _statusKeyDatas()
-	{
-		return [
-			'0' => '录入',
-			'1' => '完成',
+    public function _statusKeyDatas()
+    {
+        return [
+            '0' => '录入',
+            '1' => '完成',
             '99' => '下架',
-		];
-	}
+        ];
+    }
 
-	public function _creativeKeyDatas()
-	{
-		return [
-			'author' => '作者',
+    public function _creativeKeyDatas()
+    {
+        return [
+            'author' => '作者',
             'editor' => '编者',
-			'translator' => '译者',
+            'translator' => '译者',
             'correct' => '校正',
-		];
-	}
+        ];
+    }
 
     public function _categoryKeyDatas()
     {
