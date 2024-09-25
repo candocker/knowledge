@@ -27,7 +27,19 @@
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
 <body class="page-header-fixed">
-  @yield('content')
+@include('layouts.metronic._header-simple', ['datas' => $datas])
+<!-- BEGIN CONTAINER -->
+<div class="page-container row-fluid">
+  @include('layouts.metronic._sidebar-simple', ['datas' => $datas])
+  <!-- BEGIN PAGE -->
+  <div class="page-content">
+    {{--@include('knowledge.metronic._portlet-config', ['datas' => $datas])--}}
+    @yield('content')
+  </div>
+  <!-- END PAGE -->
+</div>
+<!-- END CONTAINER -->
+@include('layouts.metronic._footer', ['datas' => $datas])
   <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
   <!-- BEGIN CORE PLUGINS -->
   <script src="{{$commonAssetUrl}}/metronic/media/js/jquery-1.10.1.min.js" type="text/javascript"></script>
