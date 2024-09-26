@@ -40,9 +40,4 @@ class KnowledgeController extends AbstractController
         $view = view('knowledge.gather', ['datas' => $datas]);
         return $view;
     }
-
-    public function getBookServiceObj()
-    {
-        return $this->getServiceObj('book');
-    }
 }

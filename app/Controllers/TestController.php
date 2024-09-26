@@ -24,22 +24,50 @@ class TestController extends AbstractController
 
     public function _testDealancient()
     {
+        $file = '/data/htmlwww/resource/books/a.php';
+        $datas = require($file);
+        foreach ($datas as $bCode => $data) {
+            $bInfo = $this->getModelObj('book')->where(['code' => $bCode])->first();
+            var_dump($bInfo['book_path']);
+            $bInfo->book_path = $data;
+            //$bInfo->save();
+            var_dump($data);
+        }
+        exit();
         $basePath = config('knowledge.material_path');
         $books = require($basePath . "booklist/index.php");
         $columes = [0 => 196, 1 => 197, 2 => 198];
+        $command = '';
         foreach ($books['chapters'] as $index => $datas) {
             $i = 1;
             foreach ($datas['books'] as $bCode => $bData) {
-                if (in_array($bCode, ['yijing', 'shijing', 'daodejing'])) {
-                    continue;
+                if (!in_array($bCode, ['shijing'])) {
+                    //continue;
                 }
-                var_dump($bCode);
+                $command .= "cp -r /data/database/material/books/{$bCode} /data/htmlwww/resource/books/经典古籍/{$bData['name']};\n";
+                //print_r($bData);
+                //var_dump($bCode);
                 /*$chapters = require($basePath . "booklist/{$bCode}_catalogue.php");
                 $chapterInfos = require($basePath . "booklist/{$bCode}.php");
-                foreach ($chapterInfos as $cInfo) {
+                //print_r($chapters);
+                //print_r($chapterInfos);
+
+                //foreach ($chapterInfos as $cInfo) {
+                foreach ($chapterInfos['chapters'] as $cInfo) { // shijing
+                    print_r($cInfo);
                     $i = 1;
-                    foreach ($cInfo as $cData) {
-                        print_r($cData);
+                    $ncData = [
+                        'code' => '',
+                        'book_code' => $bCode,
+                        'chapter_type' => 'top',
+                        'name' => $cInfo['name'] ?? '',
+                        'serial' => $i * 10,
+                    ];
+                    $i++;
+                    $this->getModelObj('chapter')->create($ncData);
+                    print_r($ncData);
+                    //foreach ($cInfo as $cData) {
+                    foreach ($cInfo['elems'] as $cData) { //shijing
                         $ncData = [
                             'code' => '',
                             'book_code' => $bCode,
@@ -64,9 +92,7 @@ class TestController extends AbstractController
                             $i++;
                         }
                     }
-                }
-                //print_r($chapters);
-                //print_r($chapterInfos);*/
+                }*/
 
                 /*$infos = $this->getModelObj('chapter')->where(['book_code' => $bCode])->get();
                 var_dump(count($infos));
@@ -94,6 +120,7 @@ class TestController extends AbstractController
                 }*/
             }
         }
+        echo $command;
         exit();
         print_r($books);exit();
     }

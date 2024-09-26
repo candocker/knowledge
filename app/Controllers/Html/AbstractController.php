@@ -31,7 +31,7 @@ abstract class AbstractController extends AbstractControllerBase
         return view($view, ['datas' => $datas]);
     }
 
-    protected function formatTdk($datas)
+    protected function formatTdk($datas = [])
     {
         $tdkData = [
             'title' => $datas['name'] ?? '经典古籍',
@@ -71,5 +71,10 @@ abstract class AbstractController extends AbstractControllerBase
     protected function getNavDatas()
     {
         return [];
+    }
+
+    public function getBookServiceObj()
+    {
+        return $this->getServiceObj('book');
     }
 }

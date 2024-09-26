@@ -2,7 +2,7 @@
 <!--<nav class="uix-menu__container uix-trans">-->
   <div class="uix-menu__inner">
     <span class="uix-brand--mobile">
-      <a class="navbar-brand" href="/"><span>融会贯通</span></a>
+      <a class="navbar-brand" href="/"><span>经典古籍</span></a>
     </span>
     <ul class="uix-menu"> 
       @foreach ($datas['navDatas'] as $navCode => $navData)

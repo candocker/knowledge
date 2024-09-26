@@ -5,9 +5,10 @@ namespace ModuleKnowledge\Services;
 
 class BookService extends AbstractService
 {
-    public function _getVolumeBooks($pointsort = '', $withBooks = true)
+    public function _getVolumeBooks($pointCatalog = '', $withBooks = true)
     {
-        $where = ['catalog_code' => 'classicalorder'];
+        //$where = ['catalog_code' => 'classical'];
+        $where = ['catalog_code' => $pointCatalog];
         $bookVolumes = $this->getModelObj('bookVolume')->where($where)->orderBy('orderlist', 'desc')->get();
         $results = [];
         foreach ($bookVolumes as $bookVolume) {

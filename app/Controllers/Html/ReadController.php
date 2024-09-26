@@ -6,9 +6,15 @@ class ReadController extends AbstractController
 {
     public function readClassical()
     {
-        $datas = $this->getBookInfos('book', null, true);
-        $datas['pageCode'] = 'home';
-        $datas = $this->formatNav($datas);
+        $bookDatas = $this->getBookServiceObj()->_getVolumeBooks('classicalorder');
+        $datas = [
+            'name' => '经典古籍',
+            'brief' => '儒家经典，道家经典，诸子著作',
+            'pageCode' => 'home',
+            'bookDatas' => $bookDatas,
+        ];
+        $datas['tdkData'] = $this->formatTdk();
+        //print_R($datas);exit();
         return $this->customView('list', $datas);
     }
 
