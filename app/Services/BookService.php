@@ -173,4 +173,86 @@ class BookService extends AbstractService
         }
         return $file;
     }
+
+    public function formatChapterTreeDatas($chapters, $level = 2)
+    {
+        $top = $big = $small = $common = '';
+        $types = [
+            'top' => '',
+            'big' => '',
+            'small' => '',
+            //'common' => '',
+        ];
+        $tmps = [];
+        $tmpChapters = [];
+        foreach ($chapters as $chapter) {
+            $cId = $chapter['id'];
+            $tmpChapters[$cId] = $chapter;
+            $cType = $chapter['chapter_type'];
+            if ($cType == 'top') {
+                $types['top'] = $cId;
+                $types['big'] = '';
+            } elseif ($cType == 'big') {
+                $types['big'] = $cId;
+                $types['small'] = '';
+            } elseif ($cType == 'small') {
+                $types['small'] = $cId;
+            } else {
+                //$tmps[implode('-', $types)][] = $chapter;
+                $tmps[] = array_merge($chapter, $types);
+            }
+        }
+        //print_r($tmps);exit();
+        $results = [];
+        foreach ($tmps as $key => $tInfo) {
+            $topId = $tInfo['top'];
+            $topData = $tmpChapters[$topId] ?? [];
+            $bigId = $tInfo['big'];
+            $bigData = $tmpChapters[$bigId] ?? [];
+            $smallId = $tInfo['small'];
+            $smallData = $tmpChapters[$smallId] ?? [];
+            if ($level == 2) {
+                $fKey = $topId . '-' . $bigId . '-' . $smallId;
+                if (isset($results[$fKey])) {
+                    $results[$fKey]['subInfos'][] = $tInfo;
+                } else {
+                    $results[$fKey] = [
+                        'subInfos' => [],
+                        'topData' => $topData,
+                        'bigData' => $bigData,
+                        'smallData' => $smallData,
+                        'subInfos' => [$tInfo],
+                    ];
+                }
+            }
+            /*list($topId, $bigId, $smallId) = explode('-', $key);
+            if (!isset($results[$topId])) {
+                $tSubInfos = $tmpChapters[$topId] ?? [];
+                $tSubInfos['subInfos'] = [];
+                $results[$topId] = $tSubInfos;
+            }
+            if (!isset($results[$bigId]['subInfos'][$bigId])) {
+                $bSubInfos = $tmpChapters[$bigId] ?? [];
+                $bSubInfos['subInfos'] = [];
+                $results[$topId]['subInfos'][$bigId] = $bSubInfos;
+            }
+            if (!isset($results[$smallId]['subInfos'][$smallId])) {
+                $sSubInfos = $tmpChapters[$smallId] ?? [];
+                $sSubInfos['subInfos'] = $infos;
+                $results[$topId]['subInfos'][$bigId]['subInfos'][$smallId] = $sSubInfos;
+            }*/
+        }
+        return $results;
+        foreach ($results as $tDatas) {
+            foreach ($tDatas['subInfos'] as $bDatas) {
+                foreach ($bDatas['subInfos'] as $sDatas) {
+                }
+                print_r($bDatas);
+            }
+        }
+        exit();
+        print_r($results);
+        print_r($chapters);
+
+    }
 }

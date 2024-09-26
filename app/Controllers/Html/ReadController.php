@@ -20,7 +20,13 @@ class ReadController extends AbstractController
 
     public function bookCatalogue($code = null)
     {
-        $datas = $this->getChapterInfos('book', $code, true);
+        //$datas = $this->getChapterInfos('book', $code, true);
+        //print_r($datas);
+        $service = $this->getBookServiceObj();
+        $datas = $service->_bookDetail($code);
+        $datas['chapterDatas'] = $service->formatChapterTreeDatas($datas['chapterDatas']);
+        //print_r($datas);
+        //exit();
 
         $pageCodes = [
             'yijing' => 'yijing',
@@ -28,8 +34,10 @@ class ReadController extends AbstractController
             //'mengzi' => 'shijing',
             //'guwenguanzhi' => 'shijing'
         ];
-        $bookData = $this->getBookInfos('book', $code);
-        $datas['bookData'] = $bookData;
+        $datas['name'] = $datas['bookData']['name'];
+        $datas['brief'] = $datas['bookData']['description'];
+        //$bookData = $this->getBookInfos('book', $code);
+        //$datas['bookData'] = $bookData;
         $datas['pageCode'] = $pageCodes[$code] ?? 'common';//in_array($code, ['yijing', 'shijing']) ? $code : 'common';
         return $this->customView('list', $datas);
     }
