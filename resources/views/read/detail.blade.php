@@ -1,6 +1,6 @@
 @php
 $rand = time();
-$currentName = isset($datas['nameFull']) && !empty($datas['nameFull']) ? $datas['nameFull'] : $datas['name'];
+$currentName = isset($datas['nameFull']) && !empty($datas['nameFull']) ? $datas['nameFull'] : ($datas['name'] ?? '');
 $currentName .= isset($datas['bookData']['withAuthor']) ? "( {$datas['author']} )" : '';
 $currentName .= isset($datas['nameSpell']) ? "<span class='spellclass' style='display: none;'> ( {$datas['nameSpell']} )</span>" : '';
 
@@ -58,13 +58,13 @@ if (isset($datas['bookData']['tabs'])) {
       <hr>
       <div class="row">
         <div class="col-4 uix-t-l" style="padding-right:0px;font-size:12px;">
-          <a class="" @if ($datas['pre']['code'])href="/show-{{$datas['bookCode']}}-{{$datas['pre']['code']}}"@endif>&larr; {{$datas['pre']['name']}}</a>
+          <a class="" @if ($datas['relateChapters']['pre']['code'])href="/show-{{$datas['bookCode']}}-{{$datas['relateChapters']['pre']['code']}}"@endif>&larr; {{$datas['relateChapters']['pre']['name']}}</a>
         </div>
         <div class="col-4 uix-t-c" style="padding-right:0px; padding-left:0px; font-size:12px;">
  　 <a href="/book-{{$datas['bookCode']}}">{{$datas['bookData']['name']}}</a> @if (isset($datas['bookData']['author']))<span class="foot_key">作者:</span>{{$datas['bookData']['author']}} @endif
         </div>
         <div class="col-4 uix-t-r" style="padding-left:0px; font-size:12px;">
-          <a class="" @if ($datas['next']['code'])href="/show-{{$datas['bookCode']}}-{{$datas['next']['code']}}"@endif>{{$datas['next']['name']}} &rarr;</a>
+          <a class="" @if ($datas['relateChapters']['next']['code'])href="/show-{{$datas['bookCode']}}-{{$datas['relateChapters']['next']['code']}}"@endif>{{$datas['relateChapters']['next']['name']}} &rarr;</a>
         </div>             
       </div>
       {{--<div class="uix-entry__box__share uix-t-c">

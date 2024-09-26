@@ -26,7 +26,7 @@ class BookService extends AbstractService
         return $results;
     }
 
-    public function _bookDetail($bookCode)
+    public function _bookDetail($bookCode, $withRelate = true)
     {
         $bookInfo = $this->getModelObj('book')->where(['code' => $bookCode])->first();
         if (empty($bookInfo)) {
@@ -40,6 +40,9 @@ class BookService extends AbstractService
                 'code' => $cInfo['code'],
                 'chapter_type' => $cInfo['chapter_type'],
                 'book_code' => $cInfo['book_code'],
+                'serial' => $cInfo['serial'],
+                'description' => $cInfo['description'],
+                'title' => $cInfo['title'],
                 'id' => $cInfo['id'],
                 'chapterId' => $cInfo['id'],
             ];
@@ -56,7 +59,7 @@ class BookService extends AbstractService
         $datas = [
             'bookData' => $bookData,
             'chapterDatas' => $chapterDatas,
-            'relateChapters' => $this->getRelateChapters(['book_code' => $bookData['code'], 'serial' => 0]),
+            'relateChapters' => $withRelate ? $this->getRelateChapters(['book_code' => $bookData['code'], 'serial' => 0]) : [],
         ];
         return $datas;
     }
@@ -67,8 +70,8 @@ class BookService extends AbstractService
         $pre = $this->getModelObj('chapter')->where($where)->where('serial', '<', $chapterInfo['serial'])->orderBy('serial', 'desc')->first();
         $next = $this->getModelObj('chapter')->where($where)->where('serial', '>', $chapterInfo['serial'])->orderBy('serial', 'asc')->first();
         return [
-            'pre' => $pre,
-            'next' => $next,
+            'pre' => $pre ? $pre->toArray() : [],
+            'next' => $next ? $next->toArray() :[],
         ];
     }
 
@@ -80,7 +83,11 @@ class BookService extends AbstractService
         $chapterInfo = $this->getModelObj('chapter')->where(['book_code' => $bookCode, 'code' => $chapterCode])->first();
         $datas['currentChapterData'] = $chapterInfo->toArray();
 
-        $contents = $this->getChapterContents($chapterInfo);
+        $file = $this->_getChapterFile($chapterInfo);
+        $contents = require($file);
+        if ($returnType == 'array') {
+            $contents = $this->_formatChapterContents($contents);
+        }
         //print_r($contents);exit();
         if ($returnType == 'string') {
             $contents = implode('<p style="line-height:10px"><br /></p>', $contents);
@@ -93,16 +100,7 @@ class BookService extends AbstractService
         return $datas;
     }
 
-    public function getChapterContents($chapter, $withWrap = true)
-    {
-        $file = $this->_getChapterFile($chapter);
-        $contents = require($file);
-
-        $contents = $this->_formatChapterContents($contents, $withWrap);
-        return $contents;
-    }
-
-    public function _formatChapterContents($contents, $withWrap)
+    public function _formatChapterContents($contents)
     {
         $results = [];
         foreach ($contents as $key => $datas) {
@@ -225,34 +223,31 @@ class BookService extends AbstractService
                     ];
                 }
             }
-            /*list($topId, $bigId, $smallId) = explode('-', $key);
-            if (!isset($results[$topId])) {
-                $tSubInfos = $tmpChapters[$topId] ?? [];
-                $tSubInfos['subInfos'] = [];
-                $results[$topId] = $tSubInfos;
+            if ($level == 3) {
+                $fKey = $topId;
+                $sKey = $bigId . '-' . $smallId;
+                if (isset($results[$fKey])) {
+                    if (isset($results[$fKey]['secondDatas'][$sKey])) {
+                        $results[$fKey]['secondDatas'][$sKey]['subInfos'][] = $tInfo;
+                    } else {
+                        $results[$fKey]['secondDatas'][$sKey] = [
+                            'bigData' => $bigData,
+                            'smallData' => $smallData,
+                            'subInfos' => [$tInfo],
+                        ];
+                    }
+                } else {
+                    $results[$fKey] = [
+                        'topData' => $topData,
+                        'secondDatas' => [$sKey => [
+                            'bigData' => $bigData,
+                            'smallData' => $smallData,
+                            'subInfos' => [$tInfo],
+                        ]],
+                    ];
+                }
             }
-            if (!isset($results[$bigId]['subInfos'][$bigId])) {
-                $bSubInfos = $tmpChapters[$bigId] ?? [];
-                $bSubInfos['subInfos'] = [];
-                $results[$topId]['subInfos'][$bigId] = $bSubInfos;
-            }
-            if (!isset($results[$smallId]['subInfos'][$smallId])) {
-                $sSubInfos = $tmpChapters[$smallId] ?? [];
-                $sSubInfos['subInfos'] = $infos;
-                $results[$topId]['subInfos'][$bigId]['subInfos'][$smallId] = $sSubInfos;
-            }*/
         }
         return $results;
-        foreach ($results as $tDatas) {
-            foreach ($tDatas['subInfos'] as $bDatas) {
-                foreach ($bDatas['subInfos'] as $sDatas) {
-                }
-                print_r($bDatas);
-            }
-        }
-        exit();
-        print_r($results);
-        print_r($chapters);
-
     }
 }

@@ -20,7 +20,7 @@ class KnowledgeController extends AbstractController
     public function bookList($bookCode = null)
     {
         $this->viewPre();
-        $datas = $this->getBookServiceObj()->_bookDetail($bookCode);
+        $datas = $this->getBookServiceObj()->_bookDetail($bookCode, true);
         return view('knowledge.booklist', ['datas' => $datas]);
     }
 

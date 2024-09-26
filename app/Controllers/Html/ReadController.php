@@ -20,41 +20,36 @@ class ReadController extends AbstractController
 
     public function bookCatalogue($code = null)
     {
-        //$datas = $this->getChapterInfos('book', $code, true);
-        //print_r($datas);
         $service = $this->getBookServiceObj();
-        $datas = $service->_bookDetail($code);
-        $datas['chapterDatas'] = $service->formatChapterTreeDatas($datas['chapterDatas']);
-        //print_r($datas);
-        //exit();
+        $datas = $service->_bookDetail($code, false);
+        $bookData = $datas['bookData'];
+        $level = $bookData['code'] == 'shijing' ? 3 : 2;
+        $datas['chapterDatas'] = $service->formatChapterTreeDatas($datas['chapterDatas'], $level);
+
+        $datas = array_merge([
+            'tdkData' => $this->formatTdk($bookData),
+            'name' => $bookData['name'],
+            'brief' => $bookData['description'],
+        ], $datas);
+        //print_r($datas); exit();
 
         $pageCodes = [
             'yijing' => 'yijing',
             'shijing' => 'shijing',
-            //'mengzi' => 'shijing',
-            //'guwenguanzhi' => 'shijing'
         ];
-        $datas['name'] = $datas['bookData']['name'];
-        $datas['brief'] = $datas['bookData']['description'];
-        //$bookData = $this->getBookInfos('book', $code);
-        //$datas['bookData'] = $bookData;
-        $datas['pageCode'] = $pageCodes[$code] ?? 'common';//in_array($code, ['yijing', 'shijing']) ? $code : 'common';
+        $datas['pageCode'] = $pageCodes[$code] ?? 'common';
         return $this->customView('list', $datas);
     }
 
     public function bookShow($bookCode, $chapterCode)
     {
-        $bookData = $this->getBookInfos('book', $bookCode);
-        $file = $this->getBasePath() . "books/{$bookCode}/{$chapterCode}.php";
-        $datas = require($file);
+        $datas = $this->getBookServiceObj()->getChapterDetail($bookCode, $chapterCode, 'source');
+        //print_r($datas);exit();
         if (isset($bookData['noteType']) && $bookData['noteType'] == 'inner') {
-            $datas = $this->formatInnerNote($datas);
+            $datas = $this->formatInnerNote($datas['contents']);
         }
-        $relateInfos = $this->getRelateInfo('book', $bookCode, $chapterCode);
 
-        $datas['bookData'] = $bookData;
         $datas['bookCode'] = $bookCode;
-        $datas = array_merge($relateInfos, $datas);
         $datas['tdkData'] = $this->formatTdk($datas);
 
         $pageCodes = [
@@ -65,41 +60,6 @@ class ReadController extends AbstractController
         $datas['pageCode'] = $pageCodes[$bookCode] ?? 'common';
         //$datas['pageCode'] = in_array($bookCode, ['shijing', 'yijing']) ? $bookCode : 'common';
         return $this->customView('detail', $datas);
-    }
-
-    protected function getBookInfos($sort, $bookCode = null, $withTdk = false)
-    {
-        $bookListFile = $this->getBasePath() . $sort . 'list/index.php';
-        $bookDatas = require($bookListFile);
-        if (!empty($bookCode)) {
-            foreach ($bookDatas['chapters'] as $chapter) {
-                if (isset($chapter['books'][$bookCode])) {
-                    return $chapter['books'][$bookCode];
-                }
-            }
-        }
-
-        if ($withTdk) {
-            $bookDatas['tdkData'] = $this->formatTdk($bookDatas);
-            return $bookDatas;
-        }
-        return $bookDatas;
-    }
-
-    protected function getChapterInfos($sort, $bookCode, $withTdk = false)
-    {
-        $bookData = $this->getBookInfos($sort, $bookCode);
-
-        $chapterFile = $this->getBasePath() . $sort . "list/{$bookCode}.php";
-        $chapterInfosFile = $this->getBasePath() . $sort . "list/{$bookCode}_catalogue.php";
-        $chapterDatas = require($chapterFile);
-        $chapterDatas['infos'] = require($chapterInfosFile);
-
-        //print_r($chapterDatas);exit();
-        $chapterDatas['tdkData'] = $this->formatTdk($bookData);
-        $chapterDatas = array_merge($bookData, $chapterDatas);
-        $chapterDatas['bookCode'] = $bookCode;
-        return $chapterDatas;
     }
 
     protected function getRelateInfo($sort, $bookCode, $code, $types = ['pre', 'next'])

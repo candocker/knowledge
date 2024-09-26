@@ -28,6 +28,7 @@ $rand = time();
 </style>
 
 <div class="{{$mobileClass}}">
+@php $serial = 1; @endphp
 @foreach ($datas['chapterDatas'] as $pData)
 <section class="uix-spacing--s" style="padding-top:0px; padding-bottom:25px">
   <div class="container" style="padding-left:5px;padding-right:3px;">
@@ -41,22 +42,22 @@ $rand = time();
             <tbody class="uix-t-l--md">
               @php $i = 1; @endphp
               @foreach ($pData['subInfos'] as $subData)
-              @php $pCode = $subData['code']; @endphp
+              @php $pCode = $subData['code']; $symbolDatas = explode(',', $subData['description']); @endphp
               @if ($i % $rowCount == 1)<tr>@endif
               <td style="vertical-align: middle;text-align:center;padding-left:5px;padding-right:1px;padding-bottom:3px; padding-top:5px;">
                 <div class="baguatu" style="clear:both;align:center">
-                @foreach (array_reverse($subData['symbol']) as $symbol) {{$symbols[$symbol]}}<br>@endforeach
+                @foreach ($symbolDatas as $symbol) {{$symbols[$symbol]}}<br>@endforeach
                 </div>
 <br />
                 <div style="clear:both;text-align:center;font-size:@if ($mobileClass) 11pt @else 14pt @endif;">
                   <a href="/show-yijing-{{$pCode}}">
-                    {{$subData['serial']}}-{{$subData['brief']}}
+                    {{$serial}}-{{$subData['title']}}
                   </a>
                   @if (isset($subData['spell']) && $subData['spell'])<!--<br />(<span class="piny">{{$subData['spell']}}</span>)-->@endif
                 </div>
               </td>
               @if ($i % $rowCount == $rowCount)</tr>@endif
-              @php $i += 1; @endphp
+              @php $i += 1; $serial += 1; @endphp
               @endforeach
               @if ($i % $rowCount != $rowCount)</tr>@endif
             </tbody>

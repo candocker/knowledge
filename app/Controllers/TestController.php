@@ -24,15 +24,16 @@ class TestController extends AbstractController
 
     public function _testDealancient()
     {
-        $file = '/data/htmlwww/resource/books/a.php';
-        $datas = require($file);
-        foreach ($datas as $bCode => $data) {
-            $bInfo = $this->getModelObj('book')->where(['code' => $bCode])->first();
-            var_dump($bInfo['book_path']);
-            $bInfo->book_path = $data;
-            //$bInfo->save();
-            var_dump($data);
+        $datas = require('/data/database/material/booklist/yijing_catalogue.php');
+        foreach ($datas as $key => $data) {
+            $info = $this->getModelObj('chapter')->where(['book_code' => 'yijing', 'code' => $key])->first();
+            $info->description = implode(',', array_reverse($data['symbol']));
+            $info->title = $data['brief'];
+            $info->save();
+            //print_r($info->toArray());
+            //print_r($data);exit();
         }
+        print_r($datas);
         exit();
         $basePath = config('knowledge.material_path');
         $books = require($basePath . "booklist/index.php");

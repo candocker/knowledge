@@ -1,7 +1,7 @@
 @php $j = 1; @endphp
-@foreach ($datas['chapters'] as $chapter)
+@foreach ($datas['contents']['chapters'] as $chapter)
 
-@if (count($datas['chapters']) > 1)
+@if (count($datas['contents']['chapters']) > 1)
 <div class="uix-nav uix-nav--separation uix-t-c" style="padding: 0px">
   <ul><li class=""><a style="color:#a1887f;">@if (isset($chapter['name'])) {{$chapter['name']}} @else 第{{$j}} 节 @endif </a></li></ul>
 </div>
