@@ -24,7 +24,7 @@ class TestController extends AbstractController
 
     public function _testDealancient()
     {
-        $datas = require('/data/database/material/booklist/yijing_catalogue.php');
+        /*$datas = require('/data/database/material/booklist/yijing_catalogue.php');
         foreach ($datas as $key => $data) {
             $info = $this->getModelObj('chapter')->where(['book_code' => 'yijing', 'code' => $key])->first();
             $info->description = implode(',', array_reverse($data['symbol']));
@@ -34,18 +34,22 @@ class TestController extends AbstractController
             //print_r($data);exit();
         }
         print_r($datas);
-        exit();
+        exit();*/
         $basePath = config('knowledge.material_path');
         $books = require($basePath . "booklist/index.php");
+        //print_r($books);exit();
         $columes = [0 => 196, 1 => 197, 2 => 198];
         $command = '';
+        $results = [];
         foreach ($books['chapters'] as $index => $datas) {
             $i = 1;
             foreach ($datas['books'] as $bCode => $bData) {
                 if (!in_array($bCode, ['shijing'])) {
                     //continue;
                 }
-                $command .= "cp -r /data/database/material/books/{$bCode} /data/htmlwww/resource/books/经典古籍/{$bData['name']};\n";
+                $results[$bCode] = [$bData['rowCount'] ?? 0, $bData['rowCountMobile'] ?? 0];
+
+                //$command .= "cp -r /data/database/material/books/{$bCode} /data/htmlwww/resource/books/经典古籍/{$bData['name']};\n";
                 //print_r($bData);
                 //var_dump($bCode);
                 /*$chapters = require($basePath . "booklist/{$bCode}_catalogue.php");
@@ -121,9 +125,9 @@ class TestController extends AbstractController
                 }*/
             }
         }
+        var_export($results);
         echo $command;
         exit();
-        print_r($books);exit();
     }
 
     public function _test()

@@ -5,6 +5,8 @@ namespace ModuleKnowledge\Services;
 
 class BookService extends AbstractService
 {
+    use BookstoreTrait;
+
     public function _getVolumeBooks($pointCatalog = '', $withBooks = true)
     {
         //$where = ['catalog_code' => 'classical'];
@@ -48,6 +50,10 @@ class BookService extends AbstractService
             ];
         }
         $bookData = $bookInfo->toArray();
+        if ($bookData['is_ancientread']) {
+            $extSettings = require(self_app_path($this->getAppCode(), '/resources/formatdata/ancientbook.php'));
+            $bookData = $extSettings[$bookData['code']] ? array_merge($extSettings[$bookData['code']], $bookData) : $bookData;
+        }
         $figure = false;//$bookInfo->formatAuthorData();
         $catalogDatas = $this->getModelObj('bookListing')->where(['book_code' => $bookCode])->get();
         $bookData['categoryName'] = '';

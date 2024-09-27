@@ -1,6 +1,7 @@
 @php
 $rowspan = 15;
-$rowCount = $mobileClass ? 3 : 5;//$datas['rowCountMobile'] : $datas['rowCount'];
+$rowCount = $mobileClass ? 3 : 5;
+$lostCodes = [2341, 2342, 2343, 2344, 2345, 2346];
 @endphp
 
 @foreach ($datas['chapterDatas'] as $chapter)
@@ -16,6 +17,10 @@ $rowCount = $mobileClass ? 3 : 5;//$datas['rowCountMobile'] : $datas['rowCount']
             <tbody class="uix-t-l--md">
               @foreach ($chapter['secondDatas'] as $key => $elem)
               @foreach ($elem['subInfos'] as $pIndex => $pData)
+              @php 
+              $pUrl = !in_array($pData['code'], $lostCodes) ? "/show-{$pData['book_code']}-{$pData['code']}" : 'javascript: ;';
+              $showName = !in_array($pData['code'], $lostCodes) ? $pData['code'] . $pData['name'] : $pData['name'];
+              @endphp
               @if ($pIndex % $rowCount == 0)<tr>@endif
               @if ($pIndex == 0)
 
@@ -26,9 +31,7 @@ $rowCount = $mobileClass ? 3 : 5;//$datas['rowCountMobile'] : $datas['rowCount']
 
               <td style="text-align:center;padding-left:3px;padding-right:1px;padding-bottom:3px; padding-top:5px;">
                 <span style="margin: 0px;font-size:@if ($mobileClass) 9pt @else 14pt @endif;">
-                  <a @if (!isset($pData['isLost']))href="/show-{{$pData['book_code']}}-{{$pData['code']}}"@endif>
-                    @if (!isset($datas['bookData']['onlyName'])){{$pData['code']}}@endif {{$pData['name']}}
-                  </a>
+                  <a href="{{$pUrl}}">{{$showName}}</a>
                 </span>
               </td>
               @if ($pIndex % $rowCount == $rowCount - 1)</tr>@endif

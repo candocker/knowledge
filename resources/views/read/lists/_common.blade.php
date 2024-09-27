@@ -1,5 +1,5 @@
 @php
-$rowCount = $mobileClass ? 3 : 4;//$datas['rowCountMobile'] : $datas['rowCount'];
+$rowCount = $mobileClass ? $datas['bookData']['rowCountMobile'] : $datas['bookData']['rowCount'];
 @endphp
 
 @foreach ($datas['chapterDatas'] as $pData)

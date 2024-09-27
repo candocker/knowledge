@@ -1,3 +1,43 @@
+          <table class="table table-striped table-bordered table-hover table-advance">
+            <thead>
+              <tr>
+                <th>序号</th>
+                <th>Last Name</th>
+                <th class="hidden-480">Username</th>
+                <th>Descrition</th>
+                <th class="hidden-phone">Contact</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td class="hidden-480">lar</td>
+                <td class="hidden-phone">Server hardware purchase</td>
+                <td><span class="label label-success">Approved</span></td>
+                <td>610.50$ <span class="label label-danger label-mini">Overdue</span></td>
+                <td><a href="#">Pixel Ltd</a></td>
+              </tr>
+              <tr>
+                <td class="highlight"><div class="success"></div><a href="#">RedBull</a> </td>
+                <td><a href="#" class="btn mini green-stripe">View</a></td>
+                <td><a href="#" class="btn mini blue-stripe">View</a></td>
+                <td><a href="#" class="btn mini red-stripe">View</a></td>
+                <td><a href="#" class="btn mini purple"><i class="icon-edit"></i> Edit</a></td>
+                <td><a href="#" class="btn mini black"><i class="icon-trash"></i> Delete</a></td>
+                <td><a href="#" class="btn mini purple"><i class="icon-edit"></i> Edit</a></td>
+              </tr>
+              <tr>
+                <td class="highlight"><div class="info"></div><a href="#">Google</a></td>
+                <td class="highlight"><div class="important"></div><a href="#">Apple</a></td>
+                <td class="highlight"><div class="warning"></div><a href="#">Microsoft</a></td>
+                <td class="hidden-phone">Adam Larson</td>
+                <td class="hidden-phone">Daniel Kim</td>
+                <td class="hidden-phone">Nick </td>
+                <td><a href="#" class="btn mini blue"><i class="icon-share"></i> Share</a></td>
+              </tr>
+            </tbody>
+          </table>
+
   <!-- BEGIN PAGE CONTENT-->
   <div class="row-fluid">
     <div class="span6">
