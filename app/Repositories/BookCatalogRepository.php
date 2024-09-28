@@ -46,6 +46,16 @@ class BookCatalogRepository extends AbstractRepository
         ];
     }
 
+    public function _sortKeyDatas()
+    {
+        return [
+            'classical' => '经典古籍',
+            'luxun' => '鲁迅著作',
+            'scholarism' => '学术名著',
+            'famous' => '名家名作',
+        ];
+    }
+
     public function getBookCatalogDatas($pointCodes)
     {
         $pointSortStr = implode(",", $pointCodes);

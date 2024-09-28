@@ -47,8 +47,7 @@
       </div>
       <!-- END BEGIN STYLE CUSTOMIZER -->
       <!-- BEGIN PAGE TITLE & BREADCRUMB-->
-      <h3 class="page-title">
-        Basic Tables <small>basic table samples</small>
+      <h3 class="page-title">{{$datas['currentCatalog']['name']}}  <small>{{$datas['currentCatalog']['brief']}}</small>
       </h3>
       <!--<ul class="breadcrumb">
         <li>
