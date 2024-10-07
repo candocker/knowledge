@@ -1,4 +1,35 @@
 @php $leftNavs = $datas['leftNavs']; @endphp
+<div class="page-sidebar nav-collapse collapse visible-phone visible-tablet">
+  <ul class="page-sidebar-menu">
+    <li>
+      <div class="sidebar-toggler hidden-phone"></div>
+    </li>
+    <li class="start ">
+      <a href="index.html">
+      <i class="icon-home"></i>
+      <span class="title">一级分类</span>
+      </a>
+    </li>
+    @foreach ($datas['topCatalogs'] as $bCode => $pData)
+    <li @if ($datas['currentBigSort'] == $bCode) class="active" @endif>
+      <a href="javascript:;">
+      <i class="icon-th"></i>
+      <span class="title">{{$pData['name']}}</span>
+      <span class="selected"></span>
+      <span class="arrow open"></span>
+      </a>
+      <ul class="sub-menu" style="display:none;">
+        @foreach ($pData['subDatas'] as $subData)
+        <li @if ($datas['currentSort'] == $subData['code']) class="active" @endif>
+          <a href="/bookstore-{{$subData['code']}}">{{$subData['name']}}</a>
+        </li>
+        @endforeach
+      </ul>
+    </li>
+    @endforeach
+  </ul>
+<hr />
+</div>
 <div class="page-sidebar nav-collapse collapse">
   <ul class="page-sidebar-menu">
     <li>

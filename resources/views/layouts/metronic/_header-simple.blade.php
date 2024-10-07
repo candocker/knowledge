@@ -5,7 +5,7 @@
       <img src="{{$commonAssetUrl}}/metronic/media/image/menu-toggler.png" alt="" />
       </a>
 
-      <div class="navbar hor-menu ">
+      <div class="navbar hor-menu hidden-phone hidden-tablet">
         <div class="navbar-inner">
           <ul class="nav">
             @foreach ($datas['topCatalogs'] as $bCode => $pData)
