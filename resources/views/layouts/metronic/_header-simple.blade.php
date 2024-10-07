@@ -19,7 +19,7 @@
               <ul class="dropdown-menu">
                 @foreach ($pData['subDatas'] as $subData)
                 <li @if ($datas['currentSort'] == $subData['code']) class="active" @endif>
-                  <a href="/bookstore-{{$subData['code']}}">{{$subData['name']}}</a>
+                  <a href="{{$subData['url']}}">{{$subData['name']}}</a>
                 </li>
                 @endforeach
               </ul>

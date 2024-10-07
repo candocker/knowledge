@@ -5,7 +5,7 @@
       <div class="sidebar-toggler hidden-phone"></div>
     </li>
     <li class="start ">
-      <a href="index.html">
+      <a href="javascript:;">
       <i class="icon-home"></i>
       <span class="title">一级分类</span>
       </a>
@@ -13,7 +13,7 @@
     @foreach ($datas['topCatalogs'] as $bCode => $pData)
     <li @if ($datas['currentBigSort'] == $bCode) class="active" @endif>
       <a href="javascript:;">
-      <i class="icon-th"></i>
+      <i></i>
       <span class="title">{{$pData['name']}}</span>
       <span class="selected"></span>
       <span class="arrow open"></span>
@@ -21,7 +21,7 @@
       <ul class="sub-menu" style="display:none;">
         @foreach ($pData['subDatas'] as $subData)
         <li @if ($datas['currentSort'] == $subData['code']) class="active" @endif>
-          <a href="/bookstore-{{$subData['code']}}">{{$subData['name']}}</a>
+          <a href="{{$subData['url']}}">{{$subData['name']}}</a>
         </li>
         @endforeach
       </ul>
@@ -51,7 +51,7 @@
       <ul class="sub-menu">
         @foreach ($leftNavs['subDatas'] as $subData)
         <li @if ($datas['currentVolumeId'] == $subData['id']) class="active" @endif>
-          <a href="/bookstore-{{$leftNavs['code']}}-{{$subData['id']}}">{{$subData['name']}}</a>
+          <a href="{{$subData['url']}}">{{$subData['name']}}</a>
         </li>
         @endforeach
       </ul>

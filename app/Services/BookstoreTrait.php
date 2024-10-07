@@ -9,11 +9,12 @@ trait BookstoreTrait
     {
         $sorts = $this->getRepositoryObj('bookCatalog')->_sortKeyDatas();
         $sortStr = implode(',', array_keys($sorts));
-        $infos = $this->getModelObj('bookCatalog')->orderByRaw("FIND_IN_SET(sort, '{$sortStr}') asc")->get();
+        $infos = $this->getModelObj('bookCatalog')->orderByRaw("FIND_IN_SET(sort, '{$sortStr}') asc")->orderBy('orderlist', 'desc')->get();
         $results = [];
         foreach ($infos as $info) {
             $sortCode = $info['sort'];
             $subData = $info->toArray();
+            $subData['url'] = "/bookstore-{$subData['code']}";
             if (!isset($results[$sortCode])) {
                 $results[$sortCode] = ['name' => $sorts[$sortCode], 'subDatas' => [$subData]];
             } else {
@@ -29,7 +30,7 @@ trait BookstoreTrait
         $catalog = $this->getModelObj('bookCatalog')->where(['code' => $catalogCode])->first();
         $leftNavs = $catalog->toArray();
 
-        $volumes = $this->getModelObj('bookVolume')->where(['catalog_code' => $catalogCode])->get();
+        $volumes = $this->getModelObj('bookVolume')->where(['catalog_code' => $catalogCode])->orderBy('orderlist', 'asc')->get();
         $firstVolumeId = $currentVolumeId = false;
         $vDatas = [];
         foreach ($volumes as $volume) {
@@ -40,7 +41,11 @@ trait BookstoreTrait
             if ($vId == $volumeId) {
                 $currentVolumeId = $vId;
             }
-            $vDatas[$vId] = $volume->toArray();
+            $vData = $volume->toArray();
+            $isDependence = $catalog['is_independence'];
+            $vData['url'] = $isDependence ? "/bookstore-{$catalog['code']}-{{$vData['id']}" : "#volume-{$vData['id']}";
+            $vData['bookListings'] = $this->getBookListings($vData['id']);
+            $vDatas[$vId] = $vData;
         }
         $leftNavs['subDatas'] = array_values($vDatas);
 
@@ -51,8 +56,8 @@ trait BookstoreTrait
         $results['currentSort'] = $catalogCode;
         $results['currentVolumeId'] = $currentVolumeId;
         $results['currentVolume'] = $vDatas[$currentVolumeId];
-        $results['bookListings'] = $this->getBookListings($currentVolumeId);
-        $results['tableTitles'] = $this->bookTableTitle($vDatas[$currentVolumeId]);
+        //$results['bookListings'] = $this->getBookListings($currentVolumeId);
+        $results['tableTitles'] = $this->bookTableTitle($catalog, $vDatas[$currentVolumeId]);
         return $results;
     }
 
@@ -67,8 +72,16 @@ trait BookstoreTrait
         return $results;
     }
 
-    public function bookTableTitle($volume)
+    public function bookTableTitle($catalog, $volume)
     {
+        if ($catalog['sort'] == 'scholarism') {
+            return [
+                'name' => '书名',
+                'author' => '作者',
+                'nationality' => '国家',
+                'translator' => '译者',
+            ];
+        }
         return [
             'name' => '书名', //'online' => '在线阅读',
         ];

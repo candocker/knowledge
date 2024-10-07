@@ -11,9 +11,11 @@ $labels = ['success', 'info', 'warning', 'danger']; //'mini',
   @include('knowledge.metronic._setting', ['datas' => $datas])
   <div class="row-fluid">
     <div class="span12">
-      <div class="portlet box {{$tableColors[rand(0, 3)]}}">
+      @foreach ($datas['leftNavs']['subDatas'] as $vData)
+      @if (isset($vData['bookListings']) && !empty($vData['bookListings']))
+      <div class="portlet box {{$tableColors[rand(0, 3)]}}" id="volume-{{$vData['id']}}">
         <div class="portlet-title">
-          <div class="caption"><i class="icon-{{$tableIcons[rand(0, 5)]}}"></i>{{$datas['currentVolume']['name']}}</div>
+          <div class="caption"><i class="icon-{{$tableIcons[rand(0, 5)]}}"></i>{{$vData['name']}}</div>
         </div>
         <div class="portlet-body">
           <table class="table table-striped table-bordered table-hover table-advance">
@@ -25,7 +27,7 @@ $labels = ['success', 'info', 'warning', 'danger']; //'mini',
               </tr>
             </thead>
             <tbody>
-              @foreach ($datas['bookListings'] as $pData)
+              @foreach ($vData['bookListings'] as $pData)
               <tr>
                 @foreach ($datas['tableTitles'] as $tField => $tName)
                 <th>{{$pData[$tField]}}</th>
@@ -36,6 +38,8 @@ $labels = ['success', 'info', 'warning', 'danger']; //'mini',
           </table>
         </div>
       </div>
+      @endif
+      @endforeach
     </div>
   </div>
 </div>
