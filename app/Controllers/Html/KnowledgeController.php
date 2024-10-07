@@ -31,6 +31,26 @@ class KnowledgeController extends AbstractController
         return view('knowledge.bookdetail', ['datas' => $datas]);
     }
 
+    public function figure($catalogCode = null, $volumeId = null)
+    {
+        $this->viewPre();
+        $topCatalogs = $this->getBookServiceObj()->getBookCatalogs();
+        $results = $this->getBookServiceObj()->getVolumeBookListings($catalogCode, $volumeId);
+        $results['topCatalogs'] = $topCatalogs;
+        //print_r($results);
+        return view('knowledge.bookstore', ['datas' => $results]);
+    }
+
+    public function history($catalogCode = null, $volumeId = null)
+    {
+        $this->viewPre();
+        $topCatalogs = $this->getBookServiceObj()->getBookCatalogs();
+        $results = $this->getBookServiceObj()->getVolumeBookListings($catalogCode, $volumeId);
+        $results['topCatalogs'] = $topCatalogs;
+        //print_r($results);
+        return view('knowledge.bookstore', ['datas' => $results]);
+    }
+
     public function bookstore($catalogCode = null, $volumeId = null)
     {
         $this->viewPre();
