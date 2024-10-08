@@ -73,6 +73,11 @@ abstract class AbstractController extends AbstractControllerBase
         return [];
     }
 
+    public function getSubjectServiceObj()
+    {
+        return $this->getServiceObj('subject');
+    }
+
     public function getBookServiceObj()
     {
         return $this->getServiceObj('book');

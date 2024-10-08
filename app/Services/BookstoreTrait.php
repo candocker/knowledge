@@ -5,59 +5,72 @@ namespace ModuleKnowledge\Services;
 
 trait BookstoreTrait
 {
-    public function getBookCatalogs()
+    public function getBookCatalogs($catalogCode)
     {
         $sorts = $this->getRepositoryObj('bookCatalog')->_sortKeyDatas();
         $sortStr = implode(',', array_keys($sorts));
         $infos = $this->getModelObj('bookCatalog')->orderByRaw("FIND_IN_SET(sort, '{$sortStr}') asc")->orderBy('orderlist', 'desc')->get();
-        $results = [];
+        $topNavs = [];
+        $currentBigNavCode = $currentNavCode = $currentNav = $firstNav = '';
         foreach ($infos as $info) {
             $sortCode = $info['sort'];
             $subData = $info->toArray();
-            $subData['url'] = "/bookstore-{$subData['code']}";
-            if (!isset($results[$sortCode])) {
-                $results[$sortCode] = ['name' => $sorts[$sortCode], 'subDatas' => [$subData]];
+            $cCode = $subData['code'];
+            $subData['url'] = "/bookstore-{$cCode}";
+            if (!isset($topNavs[$sortCode])) {
+                $topNavs[$sortCode] = ['name' => $sorts[$sortCode], 'subDatas' => [$subData]];
             } else {
-                $results[$sortCode]['subDatas'][] = $subData;
+                $topNavs[$sortCode]['subDatas'][] = $subData;
+            }
+            if ($cCode == $catalogCode) {
+                $currentBigNavCode = $sortCode;
+                $currentNavCode = $cCode;
+                $currentNav = $subData;
+            }
+            if (empty($firstNav)) {
+                $firstNav = $subData;
             }
         }
+        $results = [
+            'currentBigNavCode' => $currentBigNavCode ?: $firstNav['sort'],
+            'currentNavCode' => $currentNavCode ?: $firstNav['code'],
+            'currentNav' => $currentNav ?: $firstNav,
+            'topNavs' => $topNavs,
+        ];
         return $results;
     }
 
-    public function getVolumeBookListings($catalogCode = null, $volumeId = null)
+    public function getVolumeBookListings($catalog, $volumeId = null)
     {
-        $catalogCode = $catalogCode ?: 'classical';
-        $catalog = $this->getModelObj('bookCatalog')->where(['code' => $catalogCode])->first();
-        $leftNavs = $catalog->toArray();
+        $catalogCode = $catalog['code'];
 
         $volumes = $this->getModelObj('bookVolume')->where(['catalog_code' => $catalogCode])->orderBy('orderlist', 'asc')->get();
-        $firstVolumeId = $currentVolumeId = false;
+        $firstVolume = $currentLeftNav = $currentLeftNavCode = false;
         $vDatas = [];
         foreach ($volumes as $volume) {
             $vId = $volume['id'];
-            if (empty($firstVolumeId)) {
-                $firstVolumeId = $vId;
+            $vData = $volume->toArray();
+            $vData['code'] = $vId;
+            if (empty($firstVolume)) {
+                $firstVolume = $vData;
             }
             if ($vId == $volumeId) {
-                $currentVolumeId = $vId;
+                $currentLeftNavCode = $vId;
+                $currentLeftNav = $vData;
             }
-            $vData = $volume->toArray();
-            $isDependence = $catalog['is_independence'];
-            $vData['url'] = $isDependence ? "/bookstore-{$catalog['code']}-{{$vData['id']}" : "#volume-{$vData['id']}";
-            $vData['bookListings'] = $this->getBookListings($vData['id']);
+            $vData['url'] = "#showelem-{$vData['id']}"; //"/bookstore-{$catalog['code']}-{{$vData['id']}"
+            $vData['bookListings'] = $this->getBookListings($vId);
             $vDatas[$vId] = $vData;
         }
+
+        $leftNavs = $catalog;
         $leftNavs['subDatas'] = array_values($vDatas);
 
-        $currentVolumeId = $currentVolumeId ?: $firstVolumeId;
+        $currentLeftNav = $currentLeftNav ?: $firstVolume;
         $results['leftNavs'] = $leftNavs;
-        $results['currentBigSort'] = $catalog['sort'];
-        $results['currentCatalog'] = $catalog;
-        $results['currentSort'] = $catalogCode;
-        $results['currentVolumeId'] = $currentVolumeId;
-        $results['currentVolume'] = $vDatas[$currentVolumeId];
-        //$results['bookListings'] = $this->getBookListings($currentVolumeId);
-        $results['tableTitles'] = $this->bookTableTitle($catalog, $vDatas[$currentVolumeId]);
+        $results['currentLeftNavCode'] = $currentLeftNavCode ?: $firstVolume['id'];
+        $results['currentLeftNav'] = $currentLeftNav;
+        $results['tableTitles'] = $this->bookTableTitle($catalog, $currentLeftNav);
         return $results;
     }
 

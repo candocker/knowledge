@@ -9,37 +9,40 @@ $labels = ['success', 'info', 'warning', 'danger']; //'mini',
 @section('content')
 <div class="container-fluid">
   @include('knowledge.metronic._setting', ['datas' => $datas])
+  @if ($datas['leftNavs'])
   <div class="row-fluid">
     <div class="span12">
-      <div class="portlet box {{$tableColors[rand(0, 3)]}}">
+      @foreach ($datas['leftNavs']['subDatas'] as $vData)
+      @if (isset($vData['bookListings']) && !empty($vData['bookListings']))
+      <div class="portlet box {{$tableColors[rand(0, 3)]}}" id="showelem-{{$vData['id']}}">
         <div class="portlet-title">
-          <div class="caption"><i class="icon-{{$tableIcons[rand(0, 5)]}}"></i>Simple Table</div>
+          <div class="caption"><i class="icon-{{$tableIcons[rand(0, 5)]}}"></i>{{$vData['name']}}</div>
         </div>
         <div class="portlet-body">
           <table class="table table-striped table-bordered table-hover table-advance">
             <thead>
               <tr>
-                <th>序号</th>
-                <th>Last Name</th>
-                <th class="hidden-480">Username</th>
-                <th>Descrition</th>
-                <th class="hidden-phone">Contact</th>
+                @foreach ($datas['tableTitles'] as $pData)
+                <th>{{$pData}}</th>
+                @endforeach
               </tr>
             </thead>
             <tbody>
+              @foreach ($vData['bookListings'] as $pData)
               <tr>
-                <td>1</td>
-                <td class="hidden-480">lar</td>
-                <td class="hidden-phone">Server hardware purchase</td>
-                <td><span class="label label-success">Approved</span></td>
-                <td>610.50$ <span class="label label-danger label-mini">Overdue</span></td>
-                <td><a href="#">Pixel Ltd</a></td>
+                @foreach ($datas['tableTitles'] as $tField => $tName)
+                <th>{{$pData[$tField]}}</th>
+                @endforeach
               </tr>
+              @endforeach
             </tbody>
           </table>
         </div>
       </div>
+      @endif
+      @endforeach
     </div>
   </div>
+  @endif
 </div>
 @endsection

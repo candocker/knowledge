@@ -6,68 +6,59 @@ class KnowledgeController extends AbstractController
 {
     public function home()
     {
-        $this->viewPre();
         $results = $this->getBookServiceObj()->_getVolumeBooks('all');
         $datas = [
             'tdkData' => ['title' => '图书分类-图书在线阅读，鲁迅全集、汉译学史名著'],
             'sortBooks' => $results,
         ];
-        $view = view('knowledge.bookhome', ['datas' => $datas]);
+        return $this->customView('book.home', $datas);
         //\Storage::disk('local')->put('views/' . request()->path(), $view->render());
         return $view;
     }
 
     public function bookList($bookCode = null)
     {
-        $this->viewPre();
         $datas = $this->getBookServiceObj()->_bookDetail($bookCode, true);
-        return view('knowledge.booklist', ['datas' => $datas]);
+        return $this->customView('book.list', $datas);
     }
 
     public function bookDetail($bookCode, $chapterCode)
     {
-        $this->viewPre();
         $datas = $this->getBookServiceObj()->getChapterDetail($bookCode, $chapterCode);
-        return view('knowledge.bookdetail', ['datas' => $datas]);
+        return $this->customView('book.detail', $datas);
     }
 
-    public function figure($catalogCode = null, $volumeId = null)
+    public function figure($projectCode = null, $groupCode = null)
     {
-        $this->viewPre();
-        $topCatalogs = $this->getBookServiceObj()->getBookCatalogs();
-        $results = $this->getBookServiceObj()->getVolumeBookListings($catalogCode, $volumeId);
-        $results['topCatalogs'] = $topCatalogs;
+        $service = $this->getSubjectServiceObj();
+        $results = $service->getSubjectSorts('figure', $projectCode);
+        //$results = [];//$service->getGroupDatas($subjectCode, $groupCode);
         //print_r($results);
-        return view('knowledge.bookstore', ['datas' => $results]);
+        $results['leftNavs'] = [];
+        return $this->customView('gather', $results);
     }
 
-    public function history($catalogCode = null, $volumeId = null)
+    public function history($projectCode = null, $groupCode = null)
     {
-        $this->viewPre();
-        $topCatalogs = $this->getBookServiceObj()->getBookCatalogs();
-        $results = $this->getBookServiceObj()->getVolumeBookListings($catalogCode, $volumeId);
-        $results['topCatalogs'] = $topCatalogs;
+        $service = $this->getSubjectServiceObj();
+        $topNavs = $service->getSubjectSorts('history', $projectCode);
+        $results = $service->getGroupDatas($topNavs['currentNav'], $groupCode);
+        $results = array_merge($topNavs, $results);
         //print_r($results);
-        return view('knowledge.bookstore', ['datas' => $results]);
+        return $this->customView('gather', $results);
     }
 
     public function bookstore($catalogCode = null, $volumeId = null)
     {
-        $this->viewPre();
-        $topCatalogs = $this->getBookServiceObj()->getBookCatalogs();
-        $results = $this->getBookServiceObj()->getVolumeBookListings($catalogCode, $volumeId);
-        $results['topCatalogs'] = $topCatalogs;
+        $topNavs = $this->getBookServiceObj()->getBookCatalogs($catalogCode);
+        $results = $this->getBookServiceObj()->getVolumeBookListings($topNavs['currentNav'], $volumeId);
+        $results = array_merge($topNavs, $results);
         //print_r($results);
-        return view('knowledge.bookstore', ['datas' => $results]);
+        return $this->customView('gather', $results);
     }
 
-    public function gatherData()
+    protected function viewPath()
     {
-        $this->viewPre();
-        $datas = [
-            'tdkData' => ['title' => '图书分类-图书在线阅读，鲁迅全集、汉译学史名著'],
-        ];
-        $view = view('knowledge.gather', ['datas' => $datas]);
-        return $view;
+        return 'knowledge';
     }
 }

@@ -37,7 +37,7 @@ a:hover{color:#6699FF}
             <tr>
                 <td width=662 bgcolor=#000000>
                     <table border=0 cellspacing=1 width=661 cellpadding=6>
-                        @include('knowledge._booktop-nav', ['datas' => $datas])
+                        @include('knowledge.book._top-nav', ['datas' => $datas])
                         <tr bgcolor=#CCCC99>
                             <td width=100% height=20 valign="middle" bgcolor="#FFFFCC">
                                 <p align=center>
@@ -61,7 +61,7 @@ a:hover{color:#6699FF}
                                 </p>-->
                             </td>
                         </tr>
-                        @include('knowledge._bookbottom-nav', ['datas' => $datas])
+                        @include('knowledge.book._bottom-nav', ['datas' => $datas])
                     </table>
                 </td>
             </tr>

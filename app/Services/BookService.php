@@ -9,8 +9,8 @@ class BookService extends AbstractService
 
     public function _getVolumeBooks($pointCatalog = '', $withBooks = true)
     {
-        //$where = ['catalog_code' => 'classical'];
-        $where = ['catalog_code' => $pointCatalog];
+        $where = ['catalog_code' => 'otheracademic'];
+        //$where = ['catalog_code' => $pointCatalog];
         $bookVolumes = $this->getModelObj('bookVolume')->where($where)->orderBy('orderlist', 'desc')->get();
         $results = [];
         foreach ($bookVolumes as $bookVolume) {
@@ -19,7 +19,9 @@ class BookService extends AbstractService
                 $bookListings = $this->getModelObj('bookListing')->where(['catalog_volume_id' => $bookVolume['id']])->orderBy('serial', 'asc')->get();
                 $sortData['books'] = [];
                 foreach ($bookListings as $bookListing) {
+                    if ($bookListing->bookInfo) {
                     $sortData['books'][] = $bookListing->bookInfo->toArray();
+                    }
                 }
             }
             $results[] = $sortData;

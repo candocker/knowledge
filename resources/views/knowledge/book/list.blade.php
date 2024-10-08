@@ -24,7 +24,7 @@ p,td,select{font-size:9pt}a{color:#0058b0;font-size:9pt;text-decoration:none}a:h
             <tr>
                 <td width=661 bgcolor=#000000>
                     <table border=0 cellspacing=1 width=661 cellpadding=6>
-                        @include('knowledge._booktop-nav', ['datas' => $datas])
+                        @include('knowledge.book._top-nav', ['datas' => $datas])
                         <tr bgcolor=#CCCC99>
                             <td width=641 height=20 valign="middle" bgcolor="#FFFFCC">
                                 <p align=center>
@@ -150,7 +150,7 @@ p,td,select{font-size:9pt}a{color:#0058b0;font-size:9pt;text-decoration:none}a:h
                                 </p>-->
                             </td>
                         </tr>
-                        @include('knowledge._bookbottom-nav', ['datas' => $datas])
+                        @include('knowledge.book._bottom-nav', ['datas' => $datas])
                     </table>
                 </td>
             </tr>

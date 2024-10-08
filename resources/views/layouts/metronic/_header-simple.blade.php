@@ -8,8 +8,8 @@
       <div class="navbar hor-menu hidden-phone hidden-tablet">
         <div class="navbar-inner">
           <ul class="nav">
-            @foreach ($datas['topCatalogs'] as $bCode => $pData)
-            <li @if ($datas['currentBigSort'] == $bCode) class="active" @endif>
+            @foreach ($datas['topNavs'] as $bCode => $pData)
+            <li @if ($datas['currentBigNavCode'] == $bCode) class="active" @endif>
               @if (!isset($pData['subDatas']) || empty($pData['subDatas']))
               <a href="javascript:;">{{$pData['name']}}</a>
               @else
@@ -18,7 +18,7 @@
               </a>
               <ul class="dropdown-menu">
                 @foreach ($pData['subDatas'] as $subData)
-                <li @if ($datas['currentSort'] == $subData['code']) class="active" @endif>
+                <li @if ($datas['currentNavCode'] == $subData['code']) class="active" @endif>
                   <a href="{{$subData['url']}}">{{$subData['name']}}</a>
                 </li>
                 @endforeach
