@@ -14,4 +14,10 @@ class AbstractModel extends AbstractModelBase
     {
         return 'knowledge';
     }
+
+    public function getFullKnowledgePathAttribute()
+    {
+        $base = $this->config->get('knowledge.knowledge_path');
+        return $this->knowledge_path ? $base . $this->knowledge_path : '';
+    }
 }

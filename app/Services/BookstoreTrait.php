@@ -17,6 +17,7 @@ trait BookstoreTrait
             $subData = $info->toArray();
             $cCode = $subData['code'];
             $subData['url'] = "/bookstore-{$cCode}";
+            $subData['knowledge_path'] = $info->fullKnowledgePath;
             if (!isset($topNavs[$sortCode])) {
                 $topNavs[$sortCode] = ['name' => $sorts[$sortCode], 'subDatas' => [$subData]];
             } else {
@@ -61,6 +62,7 @@ trait BookstoreTrait
             $vData['url'] = "#showelem-{$vData['id']}"; //"/bookstore-{$catalog['code']}-{{$vData['id']}"
             $vData['showUrl'] = $vData['knowledge_path'] ? "/wiki-volume-{$vData['id']}.html" : '';
             $vData['bookListings'] = $this->getBookListings($vId);
+            $vData['extTables'] = $this->getExtTableDatas($catalog, $volume);
             $vDatas[$vId] = $vData;
         }
 
@@ -104,5 +106,17 @@ trait BookstoreTrait
         return [
             'name' => '书名', //'online' => '在线阅读',
         ];
+    }
+
+    public function getExtTableDatas($catalog, $volume)
+    {
+        $cTables = $vTables = [];
+        if ($catalog['knowledge_path']) {
+            $cTables = require($catalog['knowledge_path'] . '/tables.php');
+        }
+        if ($volume->full_knowledge_path) {
+            $vTables = require($volume->full_knowledge_path . '/tables.php');
+        }
+        return array_merge(array_values($cTables), array_values($vTables));
     }
 }

@@ -151,6 +151,15 @@ return [
     'rowCount' => 2,
     'rowCountMobile' => 2,
 ],
+'guwenguanzhishiyi' => [
+    //'rowspan' => 10,
+    'name' => '古文观止',
+    'withTitle' => 1,
+    'brief' => '古文观止',
+    'noteType' => 'inner',
+    'rowCount' => 2,
+    'rowCountMobile' => 2,
+],
 'guoyu' => [
     'name' => '国语',
     'brief' => '国语',
