@@ -20,6 +20,7 @@
   <link href="{{$commonAssetUrl}}/metronic/media/css/uniform.default.css" rel="stylesheet" type="text/css"/>
   <!-- END GLOBAL MANDATORY STYLES -->
   <!-- BEGIN PAGE LEVEL STYLES -->
+  <link rel="stylesheet" type="text/css" href="{{$commonAssetUrl}}/metronic/media/css/select2_metro.css" />^
   <link rel="stylesheet" href="{{$commonAssetUrl}}/metronic/media/css/DT_bootstrap.css" />
   <!-- END PAGE LEVEL STYLES -->
   <link rel="shortcut icon" href="{{$commonAssetUrl}}/metronic/media/image/favicon.ico" />

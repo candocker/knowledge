@@ -59,6 +59,7 @@ trait BookstoreTrait
                 $currentLeftNav = $vData;
             }
             $vData['url'] = "#showelem-{$vData['id']}"; //"/bookstore-{$catalog['code']}-{{$vData['id']}"
+            $vData['showUrl'] = $vData['knowledge_path'] ? "/wiki-volume-{$vData['id']}.html" : '';
             $vData['bookListings'] = $this->getBookListings($vId);
             $vDatas[$vId] = $vData;
         }
@@ -80,7 +81,12 @@ trait BookstoreTrait
         $listings = $this->getModelObj('bookListing')->where(['catalog_volume_id' => $volumeId])->get();
         foreach ($listings as $listing) {
             $book = $listing->bookInfo ? $listing->bookInfo->toArray() : [];
-            $results[] = array_merge($listing->toArray(), $book);
+            $bData = array_merge($listing->toArray(), $book);
+            if (isset($bData['code']) && !empty($bData['code'])) {
+                $showUrl = "/wiki-book-{$bData['code']}.html";
+                $bData['name'] = "<a href='{$showUrl}' >{$bData['name']}</a>";
+            }
+            $results[] = $bData;
         }
         return $results;
     }
