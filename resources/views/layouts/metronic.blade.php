@@ -30,12 +30,17 @@ $layoutDatas = $datas['layoutDatas'] ?? [];
   @elseif ($layoutDatas['type'] == 'home')
   <link href="{{$commonAssetUrl}}/metronic/media/css/promo.css" rel="stylesheet" type="text/css"/>
   <link href="{{$commonAssetUrl}}/metronic/media/css/animate.css" rel="stylesheet" type="text/css"/>
+  @elseif ($layoutDatas['type'] == 'login')
+  <link href="{{$commonAssetUrl}}/metronic/media/css/login.css" rel="stylesheet" type="text/css"/>
   @endif
   <link rel="shortcut icon" href="{{$commonAssetUrl}}/metronic/media/image/favicon.ico" />
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
-<body class="page-header-fixed {{$layoutDatas['bodyClass']}}">
+<body class="{{$layoutDatas['bodyClass']}}">
+@if (in_array($layoutDatas['type'], ['login']))
+@yield('content')
+@else
 @if (isset($datas['topNavs']))
 @include('layouts.metronic._header-simple', ['datas' => $datas])
 @endif
@@ -60,6 +65,7 @@ $layoutDatas = $datas['layoutDatas'] ?? [];
 @include('layouts.metronic._footer', ['datas' => $datas])
 @else
 @include('layouts.metronic._footer1', ['datas' => $datas])
+@endif
 @endif
   <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
   <!-- BEGIN CORE PLUGINS -->

@@ -1,5 +1,5 @@
 @php
-$datas['layoutDatas'] = ['type' => 'backend', 'bodyClass' => ''];
+$datas['layoutDatas'] = ['type' => 'backend', 'bodyClass' => 'page-header-fixed '];
 
 $tableColors = ['green', 'purple', 'yellow']; //'red',
 $tableIcons = ['cogs', 'coffee', 'comments', 'picture', 'bell', 'shopping'];
