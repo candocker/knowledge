@@ -1,6 +1,3 @@
-@php
-$layoutDatas = $datas['layoutDatas'] ?? [];
-@endphp
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
@@ -8,7 +5,7 @@ $layoutDatas = $datas['layoutDatas'] ?? [];
 <!-- BEGIN HEAD -->
 <head>
   <meta charset="utf-8" />
-  <title>Metronic | Data Tables - Basic Tables</title>
+  <title>Metronic | Layouts - Promo Page</title>
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
   <meta content="" name="description" />
   <meta content="" name="author" />
@@ -22,45 +19,33 @@ $layoutDatas = $datas['layoutDatas'] ?? [];
   <link href="{{$commonAssetUrl}}/metronic/media/css/default.css" rel="stylesheet" type="text/css" id="style_color"/>
   <link href="{{$commonAssetUrl}}/metronic/media/css/uniform.default.css" rel="stylesheet" type="text/css"/>
   <!-- END GLOBAL MANDATORY STYLES -->
-  @if ($layoutDatas['type'] == 'backend')
-  <!-- BEGIN PAGE LEVEL STYLES -->
-  <link rel="stylesheet" type="text/css" href="{{$commonAssetUrl}}/metronic/media/css/select2_metro.css" />^
-  <link rel="stylesheet" href="{{$commonAssetUrl}}/metronic/media/css/DT_bootstrap.css" />
-  <!-- END PAGE LEVEL STYLES -->
-  @elseif ($layoutDatas['type'] == 'home')
   <link href="{{$commonAssetUrl}}/metronic/media/css/promo.css" rel="stylesheet" type="text/css"/>
   <link href="{{$commonAssetUrl}}/metronic/media/css/animate.css" rel="stylesheet" type="text/css"/>
-  @endif
   <link rel="shortcut icon" href="{{$commonAssetUrl}}/metronic/media/image/favicon.ico" />
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
-<body class="page-header-fixed {{$layoutDatas['bodyClass']}}">
-@if (isset($datas['topNavs']))
-@include('layouts.metronic._header-simple', ['datas' => $datas])
-@endif
-<!-- BEGIN CONTAINER -->
-<div class="page-container row-fluid">
-  @if (isset($datas['topNavs']))
-  @include('layouts.metronic._sidebar-simple', ['datas' => $datas])
-  @endif
-  <!-- BEGIN PAGE -->
-  @if ($layoutDatas['type'] == 'backend')
-  <div class="page-content">
-    {{--@include('knowledge.metronic._portlet-config', ['datas' => $datas])--}}
+<body class="page-header-fixed page-full-width">
+  <!-- BEGIN CONTAINER -->
+  <div class="page-container row-fluid">
     @yield('content')
   </div>
-  @else
-  @yield('content')
-  @endif
   <!-- END PAGE -->
-</div>
-<!-- END CONTAINER -->
-@if ($layoutDatas['type'] == 'backend')
-@include('layouts.metronic._footer', ['datas' => $datas])
-@else
-@include('layouts.metronic._footer1', ['datas' => $datas])
-@endif
+  <!-- END CONTAINER -->
+  <!-- BEGIN FOOTER1 -->
+  <div class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        2013 &copy; Metronic by keenthemes.
+      </div>
+      <div class="footer-tools">
+        <span class="go-top">
+        <i class="icon-angle-up"></i>
+        </span>
+      </div>
+    </div>
+  </div>
+  <!-- END FOOTER -->
   <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
   <!-- BEGIN CORE PLUGINS -->
   <script src="{{$commonAssetUrl}}/metronic/media/js/jquery-1.10.1.min.js" type="text/javascript"></script>
@@ -81,14 +66,13 @@ $layoutDatas = $datas['layoutDatas'] ?? [];
   <script>
     jQuery(document).ready(function() {
        App.init();
-       @if ($layoutDatas['type'] == 'home')
        jQuery('#promo_carousel').carousel({
           interval: 10000,
           pause: 'hover'
        });
-       @endif
     });
   </script>
+  <!-- END JAVASCRIPTS -->
 <script type="text/javascript">  var _gaq = _gaq || [];  _gaq.push(['_setAccount', 'UA-37564768-1']);  _gaq.push(['_setDomainName', 'keenthemes.com']);  _gaq.push(['_setAllowLinker', true]);  _gaq.push(['_trackPageview']);  (function() {    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;    ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);  })();</script></body>
 <!-- END BODY -->
 </html>

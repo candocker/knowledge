@@ -34,6 +34,12 @@ class KnowledgeController extends AbstractController
         return $this->customView('wiki', $datas);
     }
 
+    public function testView($view)
+    {
+        $datas = [];
+        return $this->customView($view, $datas);
+    }
+
     public function figure($projectCode = null, $groupCode = null)
     {
         $service = $this->getSubjectServiceObj();

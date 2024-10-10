@@ -1,4 +1,6 @@
 @php
+$datas['layoutDatas'] = ['type' => 'backend', 'bodyClass' => ''];
+
 $tableColors = ['green', 'purple', 'yellow']; //'red',
 $tableIcons = ['cogs', 'coffee', 'comments', 'picture', 'bell', 'shopping'];
 $icons = ['briefcase', 'bookmark', 'briefcase', 'shopping-cart', 'question-sign', 'user'];
