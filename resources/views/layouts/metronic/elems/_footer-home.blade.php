@@ -1,4 +1,3 @@
-  <!-- BEGIN FOOTER1 -->
   <div class="footer">
     <div class="container">
       <div class="footer-inner">
@@ -11,4 +10,3 @@
       </div>
     </div>
   </div>
-  <!-- END FOOTER -->
