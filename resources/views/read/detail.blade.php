@@ -1,8 +1,11 @@
 @php
 $rand = time();
-$currentName = isset($datas['nameFull']) && !empty($datas['nameFull']) ? $datas['nameFull'] : ($datas['name'] ?? '');
-$currentName .= isset($datas['bookData']['withAuthor']) ? "( {$datas['author']} )" : '';
+$chapterData = $datas['currentChapterData'];
+$currentName = $chapterData['title'] ?: $chapterData['name'];
+$currentName .= isset($datas['bookData']['withAuthor']) ? "( {$chapterData['author']} )" : '';
 $currentName .= isset($datas['nameSpell']) ? "<span class='spellclass' style='display: none;'> ( {$datas['nameSpell']} )</span>" : '';
+$nextData = $datas['relateChapters']['next'];
+$preData = $datas['relateChapters']['pre'];
 
 $tabNames = ['spellclass' => '拼音', 'commentinner' => '注释', 'comment' => '注释', 'yiwen' => '译文', 'jiedu' => '解读', 'zhuxi' => '朱熹', 'wangbi' => '王弼', 'sushi' => '苏轼', 'simple' => '原文'];
 if (isset($datas['bookData']['tabs'])) {
@@ -53,38 +56,42 @@ if (isset($datas['bookData']['tabs'])) {
         @endif
         @include('read.details._' . $datas['pageCode'], ['datas' => $datas])
       </div>
-    </div>  
+    </div>
     <div class="uix-entry__box uix-entry__box--top uix-entry__box--mark uix-spacing--no">
       <hr>
       <div class="row">
         <div class="col-4 uix-t-l" style="padding-right:0px;font-size:12px;">
-          <a class="" @if ($datas['relateChapters']['pre']['code'])href="/show-{{$datas['bookCode']}}-{{$datas['relateChapters']['pre']['code']}}"@endif>&larr; {{$datas['relateChapters']['pre']['name']}}</a>
+          @if ($preData)
+          <a class="" href="/show-{{$datas['bookCode']}}-{{$datas['relateChapters']['pre']['code']}}">&larr; {{$datas['relateChapters']['pre']['name']}}</a>
+          @endif
         </div>
         <div class="col-4 uix-t-c" style="padding-right:0px; padding-left:0px; font-size:12px;">
- 　 <a href="/book-{{$datas['bookCode']}}">{{$datas['bookData']['name']}}</a> @if (isset($datas['bookData']['author']))<span class="foot_key">作者:</span>{{$datas['bookData']['author']}} @endif
+          <a href="/book-{{$datas['bookCode']}}">{{$datas['bookData']['name']}}</a> @if (!empty($datas['bookData']['author']))<span class="foot_key">作者:</span>{{$datas['bookData']['author']}} @endif
         </div>
         <div class="col-4 uix-t-r" style="padding-left:0px; font-size:12px;">
-          <a class="" @if ($datas['relateChapters']['next']['code'])href="/show-{{$datas['bookCode']}}-{{$datas['relateChapters']['next']['code']}}"@endif>{{$datas['relateChapters']['next']['name']}} &rarr;</a>
-        </div>             
+          @if ($nextData)
+          <a class="" href="/show-{{$datas['bookCode']}}-{{$datas['relateChapters']['next']['code']}}">{{$datas['relateChapters']['next']['name']}} &rarr;</a>
+          @endif
+        </div>
       </div>
       {{--<div class="uix-entry__box__share uix-t-c">
         <hr>
         <a class="uix-btn uix-btn__border--medium uix-btn__size--s is-pill uix-social-bg uix-social-bg--google" href="//plus.google.com/share?url=https://uiux.cc" target="_blank">
           <i class="fa fa-google-plus"></i> Share on Google+
-        </a>  
+        </a>
         <a class="uix-btn uix-btn__border--medium uix-btn__size--s is-pill uix-social-bg uix-social-bg--twitter" href="//twitter.com/intent/tweet?url=https://uiux.cc&text=Shortcodes" target="_blank">
           <i class="fa fa-twitter"></i> Share on Twitter
-        </a>  
+        </a>
         <a class="uix-btn uix-btn__border--medium uix-btn__size--s is-pill uix-social-bg uix-social-bg--facebook" href="//www.facebook.com/sharer/sharer.php?u=https://uiux.cc" target="_blank">
           <i class="fa fa-facebook"></i> Share on Facebook
         </a>
       </div>--}}
-    </div>  
+    </div>
   </div>
 </article>
 
 <script>
-function showElems(type) 
+function showElems(type)
 {
   if (type == 'simple') {
     var obj = $('.yiwen');

@@ -43,7 +43,7 @@ $labels = ['success', 'info', 'warning', 'danger']; //'mini',
         </div>
       </div>
       @endif
-      @if ($vData['extTables'])
+      @if (isset($vData['extTables']))
       @include('knowledge.metronic._table', ['tableDatas' => $vData['extTables']])
       @endif
       @endforeach

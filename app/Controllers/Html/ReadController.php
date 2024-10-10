@@ -44,9 +44,9 @@ class ReadController extends AbstractController
     public function bookShow($bookCode, $chapterCode)
     {
         $datas = $this->getBookServiceObj()->getChapterDetail($bookCode, $chapterCode, 'source');
-        //print_r($datas);exit();
+        $bookData = $datas['bookData'];
         if (isset($bookData['noteType']) && $bookData['noteType'] == 'inner') {
-            $datas = $this->formatInnerNote($datas['contents']);
+            $datas['contents'] = $this->formatInnerNote($datas['contents']);
         }
 
         $datas['bookCode'] = $bookCode;

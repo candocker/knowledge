@@ -37,10 +37,9 @@ class KnowledgeController extends AbstractController
     public function figure($projectCode = null, $groupCode = null)
     {
         $service = $this->getSubjectServiceObj();
-        $results = $service->getSubjectSorts('figure', $projectCode);
-        //$results = [];//$service->getGroupDatas($subjectCode, $groupCode);
-        //print_r($results);
-        $results['leftNavs'] = [];
+        $topNavs = $service->getSubjectSorts('figure', $projectCode);
+        $results = $service->getGroupDatas($topNavs['currentNav'], $groupCode);
+        $results = array_merge($topNavs, $results);
         return $this->customView('gather', $results);
     }
 

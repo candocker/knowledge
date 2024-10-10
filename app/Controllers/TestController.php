@@ -24,6 +24,19 @@ class TestController extends AbstractController
 
     public function _testDealancient()
     {
+        $datas = require('/data/database/material/booklist/guwenguanzhi_catalogue.php');
+        foreach ($datas as $data) {
+            $cInfo = $this->getModelObj('chapter')->where(['book_code' => 'guwenguanzhi', 'code' => $data['code']])->first();
+            if (empty($cInfo)) {
+            print_r($cInfo->toArray());
+            print_r($data);
+            exit();
+            }
+            $cInfo->author = $data['author'];
+            $cInfo->title = $data['nameFull'];
+            $cInfo->save();
+        }
+        exit();
         /*$datas = require('/data/database/material/booklist/yijing_catalogue.php');
         foreach ($datas as $key => $data) {
             $info = $this->getModelObj('chapter')->where(['book_code' => 'yijing', 'code' => $key])->first();

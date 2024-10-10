@@ -47,6 +47,7 @@ class BookService extends AbstractService
                 'serial' => $cInfo['serial'],
                 'description' => $cInfo['description'],
                 'title' => $cInfo['title'],
+                'author' => $cInfo['author'],
                 'id' => $cInfo['id'],
                 'chapterId' => $cInfo['id'],
             ];

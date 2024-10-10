@@ -145,7 +145,7 @@ return [
 'guwenguanzhi' => [
     //'rowspan' => 10,
     'name' => '古文观止',
-    'withTitle' => 1,
+    'withAuthor' => 1,
     'brief' => '古文观止',
     'noteType' => 'inner',
     'rowCount' => 2,
