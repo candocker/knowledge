@@ -1,4 +1,4 @@
-@php $datas['layoutDatas'] = ['type' => 'home', 'bodyClass' => 'page-header-fixed page-full-width']; @endphp
+@php $datas['layoutDatas'] = ['viewCode' => 'single', 'bodyClass' => 'page-header-fixed page-full-width', 'footerView' => 'center']; @endphp
 @extends('layouts.metronic')
 @section('content')
     <!-- BEGIN PAGE -->

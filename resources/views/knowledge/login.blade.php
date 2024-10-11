@@ -1,9 +1,9 @@
-@php $datas['layoutDatas'] = ['type' => 'login', 'bodyClass' => 'login']; @endphp
+@php $datas['layoutDatas'] = ['viewCode' => 'login', 'bodyClass' => 'login', 'footerView' => 'simple']; @endphp
 @extends('layouts.metronic')
 @section('content')
   <!-- BEGIN LOGO -->
   <div class="logo">
-    <img src="media/image/logo-big.png" alt="" />
+    <img src="{{$commonAssetUrl}}/metronic/media/image/logo-big.png" alt="" />
   </div>
   <!-- END LOGO -->
   <!-- BEGIN LOGIN -->
@@ -45,14 +45,14 @@
       <div class="forget-password">
         <h4>Forgot your password ?</h4>
         <p>
-          no worries, click <a href="javascript:;" class="" id="forget-password">here</a>
+          no worries, click <a "javascript:;" class="" id="forget-password">here</a>
           to reset your password.
         </p>
       </div>
       <div class="create-account">
         <p>
           Don't have an account yet ?&nbsp;
-          <a href="javascript:;" id="register-btn" class="">Create an account</a>
+          <a "javascript:;" id="register-btn" class="">Create an account</a>
         </p>
       </div>
     </form>
@@ -123,7 +123,7 @@
       <div class="control-group">
         <div class="controls">
           <label class="checkbox">
-          <input type="checkbox" name="tnc"/> I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+          <input type="checkbox" name="tnc"/> I agree to the <a "#">Terms of Service</a> and <a href="#">Privacy Policy</a>
           </label>
           <div id="register_tnc_error"></div>
         </div>
@@ -141,41 +141,5 @@
   </div>
   <!-- END LOGIN -->
   <!-- BEGIN COPYRIGHT -->
-  <div class="copyright">
-    2013 &copy; Metronic. Admin Dashboard Template.
-  </div>
   <!-- END COPYRIGHT -->
-  <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
-  <!-- BEGIN CORE PLUGINS -->
-  <script src="media/js/jquery-1.10.1.min.js" type="text/javascript"></script>
-  <script src="media/js/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
-  <!-- IMPORTANT! Load jquery-ui-1.10.1.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
-  <script src="media/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
-  <script src="media/js/bootstrap.min.js" type="text/javascript"></script>
-  <!--[if lt IE 9]>
-  <script src="media/js/excanvas.min.js"></script>
-  <script src="media/js/respond.min.js"></script>
-  <![endif]-->
-  <script src="media/js/jquery.slimscroll.min.js" type="text/javascript"></script>
-  <script src="media/js/jquery.blockui.min.js" type="text/javascript"></script>
-  <script src="media/js/jquery.cookie.min.js" type="text/javascript"></script>
-  <script src="media/js/jquery.uniform.min.js" type="text/javascript" ></script>
-  <!-- END CORE PLUGINS -->
-  <!-- BEGIN PAGE LEVEL PLUGINS -->
-  <script src="media/js/jquery.validate.min.js" type="text/javascript"></script>
-  <!-- END PAGE LEVEL PLUGINS -->
-  <!-- BEGIN PAGE LEVEL SCRIPTS -->
-  <script src="media/js/app.js" type="text/javascript"></script>
-  <script src="media/js/login.js" type="text/javascript"></script>
-  <!-- END PAGE LEVEL SCRIPTS -->
-  <script>
-    jQuery(document).ready(function() {
-      App.init();
-      Login.init();
-    });
-  </script>
-  <!-- END JAVASCRIPTS -->
-<script type="text/javascript">  var _gaq = _gaq || [];  _gaq.push(['_setAccount', 'UA-37564768-1']);  _gaq.push(['_setDomainName', 'keenthemes.com']);  _gaq.push(['_setAllowLinker', true]);  _gaq.push(['_trackPageview']);  (function() {    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;    ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);  })();</script></body>
-<!-- END BODY -->
-</html>
 @endsection

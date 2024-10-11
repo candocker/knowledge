@@ -1,3 +1,4 @@
+@if (isset($datas['topNavs']))
 @php $leftNavs = $datas['leftNavs']; @endphp
 <div class="page-sidebar nav-collapse collapse visible-phone visible-tablet">
   <ul class="page-sidebar-menu">
@@ -59,4 +60,5 @@
     </li>
   </ul>
 </div>
+@endif
 @endif

@@ -1,3 +1,4 @@
+@if (isset($datas['topNavs']))
 <div class="header navbar navbar-inverse navbar-fixed-top hidden-pc">
   <div class="navbar-inner">
     <div class="container-fluid">
@@ -34,3 +35,4 @@
     </div>
   </div>
 </div>
+@endif
