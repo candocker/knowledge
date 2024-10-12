@@ -1,4 +1,3 @@
-      <div class="container-fluid">
         <!-- BEGIN PAGE HEADER-->
         <div class="row-fluid">
           <div class="span12">
@@ -49,7 +48,7 @@
             <!-- END BEGIN STYLE CUSTOMIZER -->
             <!-- BEGIN PAGE TITLE & BREADCRUMB-->
             <h3 class="page-title">
-              500 Page Option 1 <small>500 page option 1</small>
+              404 Page Option 1 <small>404 page option 1</small>
             </h3>
             <ul class="breadcrumb">
               <li>
@@ -61,10 +60,9 @@
                 <a href="#">Extra</a>
                 <i class="icon-angle-right"></i>
               </li>
-              <li><a href="#">500 Page Option 1</a></li>
+              <li><a href="#">404 Page Option 1</a></li>
             </ul>
             <!-- END PAGE TITLE & BREADCRUMB-->
           </div>
         </div>
         <!-- END PAGE HEADER-->
-      </div>

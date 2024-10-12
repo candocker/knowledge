@@ -10,7 +10,7 @@
 <link href="{{$commonAssetUrl}}/metronic/media/css/login.css" rel="stylesheet" type="text/css"/>
 @elseif (in_array($viewCode, ['loginSoft']))
 <link href="{{$commonAssetUrl}}/metronic/media/css/login-soft.css" rel="stylesheet" type="text/css"/>
-@elseif (in_array($viewCode, ['error500']))
+@elseif (in_array($viewCode, ['errorbase']))
 <link href="{{$commonAssetUrl}}/metronic/media/css/error.css" rel="stylesheet" type="text/css"/>
 @elseif (in_array($viewCode, ['timeline']))
 <link href="{{$commonAssetUrl}}/metronic/media/css/timeline.css" rel="stylesheet" type="text/css"/>

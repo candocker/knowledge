@@ -1,8 +1,8 @@
-@php $datas['layoutDatas'] = ['viewCode' => 'error500', 'bodyClass' => 'page-header-fixed']; @endphp
+@php $datas['layoutDatas'] = ['viewCode' => 'errorbase', 'bodyClass' => 'page-header-fixed']; @endphp
 @extends('layouts.metronic')
 @section('content')
-<div class="container-fluid">
-  @include('knowledge.metronic._breadcrumb', ['datas' => $datas])
+      <div class="container-fluid">
+        @include('knowledge.metronic._breadcrumb', ['datas' => $datas])
         <!-- BEGIN PAGE CONTENT-->
         <div class="row-fluid">
           <div class="span12 page-500">
@@ -18,7 +18,5 @@
             </div>
           </div>
         </div>
-        </div>
-        <!-- END PAGE CONTENT-->
-      <!-- END PAGE CONTAINER-->
+      </div>
 @endsection

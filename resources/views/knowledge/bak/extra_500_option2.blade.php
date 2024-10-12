@@ -1,4 +1,4 @@
-@php $datas['layoutDatas'] = ['viewCode' => 'error500', 'bodyClass' => 'page-500-full-page', 'footerView' => 'no', 'onlyContent' => true]; @endphp
+@php $datas['layoutDatas'] = ['viewCode' => 'errorbase', 'bodyClass' => 'page-500-full-page', 'footerView' => 'no', 'onlyContent' => true]; @endphp
 @extends('layouts.metronic-simple')
 @section('content')
   <div class="row-fluid">

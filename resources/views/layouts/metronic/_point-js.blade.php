@@ -11,7 +11,7 @@
 <script src="{{$commonAssetUrl}}/metronic/media/js/jquery.backstretch.min.js" type="text/javascript"></script>
 <script src="{{$commonAssetUrl}}/metronic/media/js/app.js" type="text/javascript"></script>
 <script src="{{$commonAssetUrl}}/metronic/media/js/login-soft.js" type="text/javascript"></script>
-@elseif (in_array($viewCode, ['error500']))
+@elseif (in_array($viewCode, ['errorbase']))
 <script src="{{$commonAssetUrl}}/metronic/media/js/breakpoints.js" type="text/javascript"></script>
 <script src="{{$commonAssetUrl}}/metronic/media/js/app.js"></script>
 @elseif (in_array($viewCode, ['login']))
