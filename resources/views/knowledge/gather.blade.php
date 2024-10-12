@@ -10,7 +10,7 @@ $labels = ['success', 'info', 'warning', 'danger']; //'mini',
 @extends('layouts.metronic')
 @section('content')
 <div class="container-fluid">
-  @include('knowledge.metronic._setting', ['datas' => $datas])
+  @include('knowledge.metronic._breadcrumb', ['datas' => $datas])
   @if ($datas['leftNavs'])
   <div class="row-fluid">
     <div class="span12">

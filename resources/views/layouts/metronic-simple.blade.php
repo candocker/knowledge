@@ -1,7 +1,7 @@
 @extends('layouts._metronic-base')
 @section('layoutcontent')
 
-@if (in_array($datas['layoutDatas']['viewCode'], ['login']))
+@if (isset($datas['layoutDatas']['onlyContent']))
 @yield('content')
 @else
 

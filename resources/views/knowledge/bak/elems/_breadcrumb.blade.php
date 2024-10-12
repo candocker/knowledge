@@ -1,3 +1,7 @@
+      <div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row-fluid">
+          <div class="span12">
             <!-- BEGIN STYLE CUSTOMIZER -->
             <div class="color-panel hidden-phone">
               <div class="color-mode-icons icon-color"></div>
@@ -43,3 +47,24 @@
               </div>
             </div>
             <!-- END BEGIN STYLE CUSTOMIZER -->
+            <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+            <h3 class="page-title">
+              500 Page Option 1 <small>500 page option 1</small>
+            </h3>
+            <ul class="breadcrumb">
+              <li>
+                <i class="icon-home"></i>
+                <a href="index.html">Home</a>
+                <i class="icon-angle-right"></i>
+              </li>
+              <li>
+                <a href="#">Extra</a>
+                <i class="icon-angle-right"></i>
+              </li>
+              <li><a href="#">500 Page Option 1</a></li>
+            </ul>
+            <!-- END PAGE TITLE & BREADCRUMB-->
+          </div>
+        </div>
+        <!-- END PAGE HEADER-->
+      </div>

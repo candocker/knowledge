@@ -6,6 +6,14 @@
 <script src="{{$commonAssetUrl}}/metronic/media/js/app.js"></script>
 <script src="{{$commonAssetUrl}}/metronic/media/js/table-advanced.js"></script>
 <!-- END PAGE LEVEL PLUGINS -->
+@elseif (in_array($viewCode, ['loginSoft']))
+<script src="{{$commonAssetUrl}}/metronic/media/js/jquery.validate.min.js" type="text/javascript"></script>
+<script src="{{$commonAssetUrl}}/metronic/media/js/jquery.backstretch.min.js" type="text/javascript"></script>
+<script src="{{$commonAssetUrl}}/metronic/media/js/app.js" type="text/javascript"></script>
+<script src="{{$commonAssetUrl}}/metronic/media/js/login-soft.js" type="text/javascript"></script>
+@elseif (in_array($viewCode, ['error500']))
+<script src="{{$commonAssetUrl}}/metronic/media/js/breakpoints.js" type="text/javascript"></script>
+<script src="{{$commonAssetUrl}}/metronic/media/js/app.js"></script>
 @elseif (in_array($viewCode, ['login']))
 <script src="{{$commonAssetUrl}}/metronic/media/js/app.js"></script>
 <script src="{{$commonAssetUrl}}/metronic/media/js/login.js"></script>
@@ -23,7 +31,7 @@ jQuery(document).ready(function() {
   });
   @elseif (in_array($viewCode, ['tableAdvanced']))
   TableAdvanced.init();
-  @elseif (in_array($viewCode, ['login']))
+  @elseif (in_array($viewCode, ['login', 'loginSoft']))
   Login.init();
   @endif
 });

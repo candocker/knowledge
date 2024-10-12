@@ -1,4 +1,4 @@
-@php $datas['layoutDatas'] = ['viewCode' => 'login', 'bodyClass' => 'login', 'footerView' => 'simple']; @endphp
+@php $datas['layoutDatas'] = ['viewCode' => 'login', 'bodyClass' => 'login', 'footerView' => 'simple', 'onlyContent' => true]; @endphp
 @extends('layouts.metronic-simple')
 @section('content')
   <!-- BEGIN LOGO -->
