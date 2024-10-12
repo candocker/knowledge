@@ -17,6 +17,31 @@
 @elseif (in_array($viewCode, ['login']))
 <script src="{{$commonAssetUrl}}/metronic/media/js/app.js"></script>
 <script src="{{$commonAssetUrl}}/metronic/media/js/login.js"></script>
+@elseif (in_array($viewCode, ['charts']))
+<script src="{{$commonAssetUrl}}/metronic/media/js/jquery.flot.js"></script>
+<script src="{{$commonAssetUrl}}/metronic/media/js/jquery.flot.resize.js"></script>
+<script src="{{$commonAssetUrl}}/metronic/media/js/jquery.flot.pie.js"></script>
+<script src="{{$commonAssetUrl}}/metronic/media/js/jquery.flot.stack.js"></script>
+<script src="{{$commonAssetUrl}}/metronic/media/js/jquery.flot.crosshair.js"></script>
+<script src="{{$commonAssetUrl}}/metronic/media/js/app.js"></script>
+<script src="{{$commonAssetUrl}}/metronic/media/js/charts.js"></script>
+@elseif (in_array($viewCode, ['image']))
+<script src="{{$commonAssetUrl}}/metronic/media/js/jquery.fancybox.pack.js"></script>
+<script type="text/javascript" src="{{$commonAssetUrl}}/metronic/media/js/chosen.jquery.min.js"></script>
+<script src="{{$commonAssetUrl}}/metronic/media/js/app.js"></script>
+<script src="{{$commonAssetUrl}}/metronic/media/js/gallery.js"></script>
+@elseif (in_array($viewCode, ['profile']))
+<script type="text/javascript" src="{{$commonAssetUrl}}/metronic/media/js/bootstrap-fileupload.js"></script>
+<script type="text/javascript" src="{{$commonAssetUrl}}/metronic/media/js/chosen.jquery.min.js"></script>
+@elseif (in_array($viewCode, ['search']))
+<script type="text/javascript" src="{{$commonAssetUrl}}/metronic/media/js/bootstrap-datepicker.js"></script>
+<script src="{{$commonAssetUrl}}/metronic/media/js/jquery.fancybox.pack.js"></script>
+<script src="{{$commonAssetUrl}}/metronic/media/js/app.js"></script>
+<script src="{{$commonAssetUrl}}/metronic/media/js/search.js"></script>
+@elseif (in_array($viewCode, ['lock']))
+<script src="{{$commonAssetUrl}}/metronic/media/js/jquery.backstretch.min.js" type="text/javascript"></script>
+<script src="{{$commonAssetUrl}}/metronic/media/js/app.js"></script>
+<script src="{{$commonAssetUrl}}/metronic/media/js/lock.js"></script>
 @else
 <script src="{{$commonAssetUrl}}/metronic/media/js/app.js"></script>
 @endif
@@ -31,6 +56,16 @@ jQuery(document).ready(function() {
   });
   @elseif (in_array($viewCode, ['tableAdvanced']))
   TableAdvanced.init();
+  @elseif (in_array($viewCode, ['search']))
+  Search.init();
+  @elseif (in_array($viewCode, ['lock']))
+  Lock.init();
+  @elseif (in_array($viewCode, ['image']))
+  Gallery.init();
+  @elseif (in_array($viewCode, ['charts']))
+  Charts.init();
+  Charts.initCharts();
+  Charts.initPieCharts();
   @elseif (in_array($viewCode, ['login', 'loginSoft']))
   Login.init();
   @endif
