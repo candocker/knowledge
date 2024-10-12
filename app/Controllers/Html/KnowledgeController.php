@@ -36,8 +36,10 @@ class KnowledgeController extends AbstractController
 
     public function testView($view)
     {
-        $datas = [];
-        return $this->customView($view, $datas);
+        $topNavs = $this->getBookServiceObj()->getBookCatalogs(null);
+        $results = $this->getBookServiceObj()->getVolumeBookListings($topNavs['currentNav'], null);
+        $datas = array_merge($topNavs, $results);
+        return $this->customView('bak.' . $view, $datas);
     }
 
     public function figure($projectCode = null, $groupCode = null)
