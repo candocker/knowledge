@@ -8,4 +8,6 @@
 <link href="{{$commonAssetUrl}}/metronic/media/css/animate.css" rel="stylesheet" type="text/css"/>
 @elseif (in_array($viewCode, ['login']))
 <link href="{{$commonAssetUrl}}/metronic/media/css/login.css" rel="stylesheet" type="text/css"/>
+@elseif (in_array($viewCode, ['timeline']))
+<link href="{{$commonAssetUrl}}/metronic/media/css/timeline.css" rel="stylesheet" type="text/css"/>
 @endif

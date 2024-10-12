@@ -1,5 +1,11 @@
-@php $datas['layoutDatas'] = ['viewCode' => 'single', 'bodyClass' => 'page-header-fixed page-full-width', 'footerView' => 'center']; @endphp
-@extends('layouts.metronic')
+@php
+$datas['layoutDatas'] = [
+    'viewCode' => 'single',
+    'bodyClass' => 'page-header-fixed page-full-width',
+    'footerView' => 'center'
+];
+@endphp
+@extends('layouts.metronic-simple')
 @section('content')
     <!-- BEGIN PAGE -->
     <div class="page-content no-min-height">

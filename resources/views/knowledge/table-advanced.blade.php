@@ -1,5 +1,5 @@
 @php
-$datas['layoutDatas'] = ['viewCode' => 'tableAdvanced', 'withPageContent' => true, 'bodyClass' => 'page-header-fixed'];
+$datas['layoutDatas'] = ['viewCode' => 'tableAdvanced', 'bodyClass' => 'page-header-fixed'];
 @endphp
 @extends('layouts.metronic')
 @section('content')

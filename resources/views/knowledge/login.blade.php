@@ -1,5 +1,5 @@
 @php $datas['layoutDatas'] = ['viewCode' => 'login', 'bodyClass' => 'login', 'footerView' => 'simple']; @endphp
-@extends('layouts.metronic')
+@extends('layouts.metronic-simple')
 @section('content')
   <!-- BEGIN LOGO -->
   <div class="logo">

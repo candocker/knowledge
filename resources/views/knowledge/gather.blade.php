@@ -1,5 +1,5 @@
 @php
-$datas['layoutDatas'] = ['viewCode' => 'table', 'withPageContent' => true, 'bodyClass' => 'page-header-fixed'];
+$datas['layoutDatas'] = ['viewCode' => 'table', 'bodyClass' => 'page-header-fixed'];
 
 $tableColors = ['green', 'purple', 'yellow']; //'red',
 $tableIcons = ['cogs', 'coffee', 'comments', 'picture', 'bell', 'shopping'];
