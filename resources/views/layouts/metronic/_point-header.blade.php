@@ -1,36 +1,32 @@
-@if (in_array($viewCode, ['table']))
-<link rel="stylesheet" href="{{$commonAssetUrl}}/metronic/media/css/DT_bootstrap.css" />
-@elseif (in_array($viewCode, ['tableAdvanced']))
-<link rel="stylesheet" type="text/css" href="{{$commonAssetUrl}}/metronic/media/css/select2_metro.css" />
-<link rel="stylesheet" href="{{$commonAssetUrl}}/metronic/media/css/DT_bootstrap.css" />
-@elseif (in_array($viewCode, ['single']))
-<link href="{{$commonAssetUrl}}/metronic/media/css/promo.css" rel="stylesheet" type="text/css"/>
-<link href="{{$commonAssetUrl}}/metronic/media/css/animate.css" rel="stylesheet" type="text/css"/>
-@elseif (in_array($viewCode, ['login']))
-<link href="{{$commonAssetUrl}}/metronic/media/css/login.css" rel="stylesheet" type="text/css"/>
-@elseif (in_array($viewCode, ['loginSoft']))
-<link href="{{$commonAssetUrl}}/metronic/media/css/login-soft.css" rel="stylesheet" type="text/css"/>
-@elseif (in_array($viewCode, ['image']))
-<link href="{{$commonAssetUrl}}/metronic/media/css/jquery.fancybox.css" rel="stylesheet" />
-<link href="{{$commonAssetUrl}}/metronic/media/css/chosen.css" rel="stylesheet" type="text/css"/>
-@elseif (in_array($viewCode, ['invoice']))
-{{--<link href="media/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" media="screen"/>--}}
-<link href="{{$commonAssetUrl}}/metronic/media/css/invoice.css" rel="stylesheet" type="text/css"/>
-<link href="{{$commonAssetUrl}}/metronic/media/css/print.css" rel="stylesheet" type="text/css" media="print"/>
-@elseif (in_array($viewCode, ['lock']))
-<link href="{{$commonAssetUrl}}/metronic/media/css/lock.css" rel="stylesheet" type="text/css"/>
-@elseif (in_array($viewCode, ['search']))
-<link rel="stylesheet" type="text/css" href="{{$commonAssetUrl}}/metronic/media/css/datepicker.css" />
-<link href="{{$commonAssetUrl}}/metronic/media/css/jquery.fancybox.css" rel="stylesheet" />
-<link href="{{$commonAssetUrl}}/metronic/media/css/search.css" rel="stylesheet" type="text/css"/>
-@elseif (in_array($viewCode, ['profile']))
-<link href="{{$commonAssetUrl}}/metronic/media/css/bootstrap-fileupload.css" rel="stylesheet" type="text/css" />
-<link href="{{$commonAssetUrl}}/metronic/media/css/chosen.css" rel="stylesheet" type="text/css" />
-<link href="{{$commonAssetUrl}}/metronic/media/css/profile.css" rel="stylesheet" type="text/css" />
-@elseif (in_array($viewCode, ['pricing']))
-<link href="{{$commonAssetUrl}}/metronic/media/css/pricing-tables.css" rel="stylesheet" type="text/css"/>
-@elseif (in_array($viewCode, ['errorbase']))
-<link href="{{$commonAssetUrl}}/metronic/media/css/error.css" rel="stylesheet" type="text/css"/>
-@elseif (in_array($viewCode, ['timeline']))
-<link href="{{$commonAssetUrl}}/metronic/media/css/timeline.css" rel="stylesheet" type="text/css"/>
+@php
+$elems = [
+    'table' => ['DT_bootstrap.css'],
+    'tableAdvanced' => ['select2_metro.css', 'DT_bootstrap.css'],
+    'single' => ['promo.css', 'animate.css'],
+    'login' => ['login.css'],
+    'loginSoft' => ['login-soft.css'],
+    'image' => ['jquery.fancybox.css', 'chosen.css'],
+    'invoice' => ['bootstrap-responsive.min.css', 'invoice.css', 'print.css'],
+    'lock' => ['lock.css'],
+    'form' => [
+        'bootstrap-fileupload.css', 'jquery.gritter.css', 'chosen.css', 'select2_metro.css', 'jquery.tagsinput.css',
+        'clockface.css', 'bootstrap-wysihtml5.css', 'datepicker.css', 'timepicker.css', 'colorpicker.css',
+        'bootstrap-toggle-buttons.css', 'daterangepicker.css', 'datetimepicker.css', 'multi-select-metro.css', 'bootstrap-modal.css',
+    ],
+    'search' => ['datepicker.css', 'jquery.fancybox.css', 'search.css'],
+    'profile' => ['bootstrap-fileupload.css', 'chosen.css', 'profile.css'],
+    'pricing' => ['pricing-tables.css'],
+    'errorbase' => ['error.css'],
+    'timeline' => ['timeline.css'],
+    'dropzone' => ['dropzone.css'],
+    'formsample' => ['select2_metro.css'],
+    'formvalidation' => ['select2_metro.css', 'chosen.css'],
+    'formwizard' => ['select2_metro.css', 'chosen.css'],
+    'fileupload' => ['jquery.fancybox.css', 'jquery.fileupload-ui.css'],
+];
+@endphp
+@if (isset($elems[$viewCode]))
+@foreach ($elems[$viewCode] as $pView)
+<link rel="stylesheet" type="text/css" href="{{$commonAssetUrl}}/metronic/media/css/{{$pView}}" />
+@endforeach
 @endif

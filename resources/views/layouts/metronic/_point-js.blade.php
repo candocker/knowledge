@@ -1,50 +1,47 @@
-@if (in_array($viewCode, ['tableAdvanced']))
-<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script type="text/javascript" src="{{$commonAssetUrl}}/metronic/media/js/select2.min.js"></script>
-<script type="text/javascript" src="{{$commonAssetUrl}}/metronic/media/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="{{$commonAssetUrl}}/metronic/media/js/DT_bootstrap.js"></script>
-<script src="{{$commonAssetUrl}}/metronic/media/js/app.js"></script>
-<script src="{{$commonAssetUrl}}/metronic/media/js/table-advanced.js"></script>
-<!-- END PAGE LEVEL PLUGINS -->
-@elseif (in_array($viewCode, ['loginSoft']))
-<script src="{{$commonAssetUrl}}/metronic/media/js/jquery.validate.min.js" type="text/javascript"></script>
-<script src="{{$commonAssetUrl}}/metronic/media/js/jquery.backstretch.min.js" type="text/javascript"></script>
-<script src="{{$commonAssetUrl}}/metronic/media/js/app.js" type="text/javascript"></script>
-<script src="{{$commonAssetUrl}}/metronic/media/js/login-soft.js" type="text/javascript"></script>
-@elseif (in_array($viewCode, ['errorbase']))
-<script src="{{$commonAssetUrl}}/metronic/media/js/breakpoints.js" type="text/javascript"></script>
-<script src="{{$commonAssetUrl}}/metronic/media/js/app.js"></script>
-@elseif (in_array($viewCode, ['login']))
-<script src="{{$commonAssetUrl}}/metronic/media/js/app.js"></script>
-<script src="{{$commonAssetUrl}}/metronic/media/js/login.js"></script>
-@elseif (in_array($viewCode, ['charts']))
-<script src="{{$commonAssetUrl}}/metronic/media/js/jquery.flot.js"></script>
-<script src="{{$commonAssetUrl}}/metronic/media/js/jquery.flot.resize.js"></script>
-<script src="{{$commonAssetUrl}}/metronic/media/js/jquery.flot.pie.js"></script>
-<script src="{{$commonAssetUrl}}/metronic/media/js/jquery.flot.stack.js"></script>
-<script src="{{$commonAssetUrl}}/metronic/media/js/jquery.flot.crosshair.js"></script>
-<script src="{{$commonAssetUrl}}/metronic/media/js/app.js"></script>
-<script src="{{$commonAssetUrl}}/metronic/media/js/charts.js"></script>
-@elseif (in_array($viewCode, ['image']))
-<script src="{{$commonAssetUrl}}/metronic/media/js/jquery.fancybox.pack.js"></script>
-<script type="text/javascript" src="{{$commonAssetUrl}}/metronic/media/js/chosen.jquery.min.js"></script>
-<script src="{{$commonAssetUrl}}/metronic/media/js/app.js"></script>
-<script src="{{$commonAssetUrl}}/metronic/media/js/gallery.js"></script>
-@elseif (in_array($viewCode, ['profile']))
-<script type="text/javascript" src="{{$commonAssetUrl}}/metronic/media/js/bootstrap-fileupload.js"></script>
-<script type="text/javascript" src="{{$commonAssetUrl}}/metronic/media/js/chosen.jquery.min.js"></script>
-@elseif (in_array($viewCode, ['search']))
-<script type="text/javascript" src="{{$commonAssetUrl}}/metronic/media/js/bootstrap-datepicker.js"></script>
-<script src="{{$commonAssetUrl}}/metronic/media/js/jquery.fancybox.pack.js"></script>
-<script src="{{$commonAssetUrl}}/metronic/media/js/app.js"></script>
-<script src="{{$commonAssetUrl}}/metronic/media/js/search.js"></script>
-@elseif (in_array($viewCode, ['lock']))
-<script src="{{$commonAssetUrl}}/metronic/media/js/jquery.backstretch.min.js" type="text/javascript"></script>
-<script src="{{$commonAssetUrl}}/metronic/media/js/app.js"></script>
-<script src="{{$commonAssetUrl}}/metronic/media/js/lock.js"></script>
-@else
-<script src="{{$commonAssetUrl}}/metronic/media/js/app.js"></script>
-@endif
+@php
+$elems = [
+    'tableAdvanced' => ['select2.min.js', 'jquery.dataTables.min.js', 'DT_bootstrap.js', 'app.js', 'table-advanced.js'],
+    'loginSoft' => ['jquery.validate.min.js', 'jquery.backstretch.min.js', 'app.js', 'login-soft.js'],
+    'errorbase' => ['breakpoints.js', 'app.js'],
+    'login' => ['jquery.validate.min.js', 'app.js', 'login.js'],
+    'charts' => [
+        'jquery.flot.js', 'jquery.flot.resize.js', 'jquery.flot.pie.js', 'jquery.flot.stack.js',
+        'jquery.flot.crosshair.js', 'app.js', 'charts.js',
+    ],
+    'image' => ['jquery.fancybox.pack.js', 'chosen.jquery.min.js', 'app.js', 'gallery.js'],
+    'profile' => ['bootstrap-fileupload.js', 'chosen.jquery.min.js'],
+    'search' => ['bootstrap-datepicker.js', 'jquery.fancybox.pack.js', 'app.js', 'search.js'],
+    'lock' => ['jquery.backstretch.min.js', 'app.js', 'lock.js'],
+    'form' => [
+        'ckeditor.js', 'bootstrap-fileupload.js', 'chosen.jquery.min.js', 'select2.min.js', 'wysihtml5-0.3.0.js',
+        'bootstrap-wysihtml5.js', 'jquery.tagsinput.min.js', 'jquery.toggle.buttons.js', 'bootstrap-datepicker.js',
+        'bootstrap-datetimepicker.js', 'clockface.js', 'date.js', 'daterangepicker.js',
+        'bootstrap-colorpicker.js', 'bootstrap-timepicker.js', 'jquery.inputmask.bundle.min.js', 'jquery.input-ip-address-control-1.0.min.js',
+        'jquery.multi-select.js', 'bootstrap-modal.js', 'bootstrap-modalmanager.js', 'app.js',
+        'form-components.js',
+    ],
+    'fileupload' => [
+        'jquery.fancybox.pack.js', 'jquery.ui.widget.js', 'tmpl.min.js', 'load-image.min.js',
+        'canvas-to-blob.min.js', 'jquery.iframe-transport.js', 'jquery.fileupload.js', 'jquery.fileupload-fp.js',
+        'jquery.fileupload-ui.js', 'jquery.xdr-transport.js', 'app.js', 'form-fileupload.js',
+    ],
+    'dropzone' => ['dropzone.js', 'app.js'],
+    'formsample' => ['select2.min.js', 'app.js', 'form-samples.js'],
+    'formvalidation' => [
+        'jquery.validate.min.js', 'additional-methods.min.js', 'select2.min.js', 'chosen.jquery.min.js',
+        'app.js', 'form-validation.js'
+    ],
+    'formwizard' => [
+        'jquery.validate.min.js', 'additional-methods.min.js', 'jquery.bootstrap.wizard.min.js', 'chosen.jquery.min.js',
+        'select2.min.js', 'app.js', 'form-wizard.js',
+    ],
+    'other' => ['app.js'],
+];
+$jsElems = $elems[$viewCode] ?? $elems['other'];
+@endphp
+@foreach ($jsElems as $pView)
+<script type="text/javascript" src="{{$commonAssetUrl}}/metronic/media/js/{{$pView}}"></script>
+@endforeach
 
 <script>
 jQuery(document).ready(function() {
@@ -54,6 +51,16 @@ jQuery(document).ready(function() {
     interval: 10000,
     pause: 'hover'
   });
+  @elseif (in_array($viewCode, ['formwizard']))
+       FormWizard.init();
+  @elseif (in_array($viewCode, ['formvalidation']))
+  FormValidation.init();
+  @elseif (in_array($viewCode, ['formsample']))
+  FormSamples.init();
+  @elseif (in_array($viewCode, ['upload']))
+  FormFileUpload.init();
+  @elseif (in_array($viewCode, ['form']))
+  FormComponents.init();
   @elseif (in_array($viewCode, ['tableAdvanced']))
   TableAdvanced.init();
   @elseif (in_array($viewCode, ['search']))
