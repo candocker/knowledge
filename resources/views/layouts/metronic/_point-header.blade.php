@@ -38,6 +38,12 @@ $elems = [
     'jqueryui' => ['jquery-ui-1.10.1.custom.min.css'],
     'uigeneral' => ['jquery.gritter.css'],
     'uibuttons' => ['glyphicons.css', 'halflings.css'],
+    'email' => ['email.css'],
+    'about' => ['about-us.css'],
+    'blog' => ['blog.css'],
+    'calendar' => ['fullcalendar.css'],
+    'news' => ['news.css', 'blog.css'],
+    'comingsoon' => ['coming-soon.css'],
 ];
 @endphp
 @if (isset($elems[$viewCode]))

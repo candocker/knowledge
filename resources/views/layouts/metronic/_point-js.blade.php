@@ -63,6 +63,9 @@ $elems = [
     'modals' => ['bootstrap-modal.js', 'bootstrap-modalmanager.js', 'app.js', 'ui-modals.js'],
     'jqueryui' => ['app.js', 'ui-jqueryui.js'],
     'uigeneral' => ['jquery.gritter.js', 'jquery.pulsate.min.js', 'jquery.bootpag.min.js', 'app.js', 'ui-general.js'],
+    'calendar' => ['fullcalendar.min.js', 'app.js', 'calendar.js'],
+    'comingsoon' => ['jquery.countdown.js', 'jquery.backstretch.min.js', 'app.js', 'coming-soon.js'],
+    'contact' => ['js', 'gmaps.js', 'app.js', 'contact-us.js'],
     'other' => ['app.js'],
 ];
 $jsElems = $elems[$viewCode] ?? $elems['other'];
@@ -79,6 +82,12 @@ jQuery(document).ready(function() {
     interval: 10000,
     pause: 'hover'
   });
+  @elseif (in_array($viewCode, ['contact']))
+       ContactUs.init();
+  @elseif (in_array($viewCode, ['comingsoon']))
+      CoomingSoon.init();
+  @elseif (in_array($viewCode, ['calendar']))
+       Calendar.init();
   @elseif (in_array($viewCode, ['uigeneral']))
        UIGeneral.init();
   @elseif (in_array($viewCode, ['jqueryui']))
