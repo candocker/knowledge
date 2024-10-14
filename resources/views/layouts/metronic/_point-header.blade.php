@@ -23,6 +23,12 @@ $elems = [
     'formvalidation' => ['select2_metro.css', 'chosen.css'],
     'formwizard' => ['select2_metro.css', 'chosen.css'],
     'fileupload' => ['jquery.fancybox.css', 'jquery.fileupload-ui.css'],
+    'index' => ['jquery.gritter.css', 'daterangepicker.css', 'fullcalendar.css', 'jqvmap.css', 'jquery.easy-pie-chart.css'],
+    'inbox' => [
+        'bootstrap-tag.css', 'bootstrap-wysihtml5.css', 'jquery.fancybox.css', 'bootstrap-wysihtml5.css',
+        'jquery.fileupload-ui.css', 'inbox.css',
+    ],
+    'vector' => ['jqvmap.css'],
 ];
 @endphp
 @if (isset($elems[$viewCode]))

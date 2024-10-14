@@ -35,6 +35,26 @@ $elems = [
         'jquery.validate.min.js', 'additional-methods.min.js', 'jquery.bootstrap.wizard.min.js', 'chosen.jquery.min.js',
         'select2.min.js', 'app.js', 'form-wizard.js',
     ],
+    'inbox' => [
+        'bootstrap-tag.js', 'jquery.fancybox.pack.js', 'wysihtml5-0.3.0.js', 'bootstrap-wysihtml5.js',
+        'jquery.ui.widget.js', 'tmpl.min.js', 'load-image.min.js', 'canvas-to-blob.min.js',
+        'jquery.iframe-transport.js', 'jquery.fileupload.js', 'jquery.fileupload-fp.js', 'jquery.fileupload-ui.js',
+        'jquery.xdr-transport.js', 'app.js', 'inbox.js',
+    ],
+    'index' => [
+        'jquery.vmap.js', 'jquery.vmap.russia.js', 'jquery.vmap.world.js', 'jquery.vmap.europe.js',
+        'jquery.vmap.germany.js', 'jquery.vmap.usa.js', 'jquery.vmap.sampledata.js', 'jquery.flot.js',
+        'jquery.flot.resize.js', 'jquery.pulsate.min.js', 'date.js', 'daterangepicker.js',
+        'jquery.gritter.js', 'fullcalendar.min.js', 'jquery.easy-pie-chart.js', 'jquery.sparkline.min.js',
+        'app.js', 'index.js',
+    ],
+    'draggable' => ['app.js', 'portlet-draggable.js'],
+    'google' => ['js', 'gmaps.js', 'app.js', 'maps-google.js'],
+    'vector' => [
+        'jquery.vmap.js', 'jquery.vmap.russia.js', 'jquery.vmap.world.js', 'jquery.vmap.europe.js',
+        'jquery.vmap.germany.js', 'jquery.vmap.usa.js', 'jquery.vmap.sampledata.js',
+        'app.js', 'maps-vector.js',
+    ],
     'other' => ['app.js'],
 ];
 $jsElems = $elems[$viewCode] ?? $elems['other'];
@@ -51,8 +71,25 @@ jQuery(document).ready(function() {
     interval: 10000,
     pause: 'hover'
   });
+  @elseif (in_array($viewCode, ['index']))
+       Index.init();
+       Index.initJQVMAP(); // init index page's custom scripts
+       Index.initCalendar(); // init index page's custom scripts
+       Index.initCharts(); // init index page's custom scripts
+       Index.initChat();
+       Index.initMiniCharts();
+       Index.initDashboardDaterange();
+       Index.initIntro();
+  @elseif (in_array($viewCode, ['vector']))
+       MapsVector.init();
+  @elseif (in_array($viewCode, ['google']))
+       MapsGoogle.init();
+  @elseif (in_array($viewCode, ['draggable']))
+       PortletDraggable.init();
+  @elseif (in_array($viewCode, ['inbox']))
+  Inbox.init();
   @elseif (in_array($viewCode, ['formwizard']))
-       FormWizard.init();
+  FormWizard.init();
   @elseif (in_array($viewCode, ['formvalidation']))
   FormValidation.init();
   @elseif (in_array($viewCode, ['formsample']))

@@ -2,6 +2,7 @@
 @section('layoutcontent')
 
 @include('layouts.metronic._header-simple', ['datas' => $datas])
+{{--<div class="page-container">--}}
 <div class="page-container row-fluid">
   @include('layouts.metronic._sidebar-simple', ['datas' => $datas])
   <div class="page-content">
