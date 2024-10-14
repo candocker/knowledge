@@ -55,6 +55,14 @@ $elems = [
         'jquery.vmap.germany.js', 'jquery.vmap.usa.js', 'jquery.vmap.sampledata.js',
         'app.js', 'maps-vector.js',
     ],
+    'tableEditable' => ['select2.min.js', 'jquery.dataTables.min.js', 'DT_bootstrap.js', 'app.js', 'table-editable.js'],
+    'tableManaged' => ['select2.min.js', 'jquery.dataTables.min.js', 'DT_bootstrap.js', 'app.js', 'table-managed.js'],
+    'tree' => ['bootstrap-tree.js', 'app.js', 'ui-tree.js'],
+    'sliders' => ['jquery.knob.js', 'app.js', 'ui-sliders.js'],
+    'nestable' => ['jquery.nestable.js', 'ui-nestable.js', 'app.js'],
+    'modals' => ['bootstrap-modal.js', 'bootstrap-modalmanager.js', 'app.js', 'ui-modals.js'],
+    'jqueryui' => ['app.js', 'ui-jqueryui.js'],
+    'uigeneral' => ['jquery.gritter.js', 'jquery.pulsate.min.js', 'jquery.bootpag.min.js', 'app.js', 'ui-general.js'],
     'other' => ['app.js'],
 ];
 $jsElems = $elems[$viewCode] ?? $elems['other'];
@@ -71,6 +79,23 @@ jQuery(document).ready(function() {
     interval: 10000,
     pause: 'hover'
   });
+  @elseif (in_array($viewCode, ['uigeneral']))
+       UIGeneral.init();
+  @elseif (in_array($viewCode, ['jqueryui']))
+       UIJQueryUI.init();
+  @elseif (in_array($viewCode, ['modals']))
+       UIModals.init();
+  @elseif (in_array($viewCode, ['nestable']))
+       UINestable.init();
+  @elseif (in_array($viewCode, ['sliders']))
+       UISliders.initSliders();
+       UISliders.initKnowElements();
+  @elseif (in_array($viewCode, ['tree']))
+       UITree.init();
+  @elseif (in_array($viewCode, ['tableManaged']))
+       TableManaged.init();
+  @elseif (in_array($viewCode, ['tableEditable']))
+       TableEditable.init();
   @elseif (in_array($viewCode, ['index']))
        Index.init();
        Index.initJQVMAP(); // init index page's custom scripts

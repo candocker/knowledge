@@ -2,6 +2,8 @@
 $elems = [
     'table' => ['DT_bootstrap.css'],
     'tableAdvanced' => ['select2_metro.css', 'DT_bootstrap.css'],
+    'tableEditable' => ['select2_metro.css', 'DT_bootstrap.css'],
+    'tableManaged' => ['select2_metro.css', 'DT_bootstrap.css'],
     'single' => ['promo.css', 'animate.css'],
     'login' => ['login.css'],
     'loginSoft' => ['login-soft.css'],
@@ -29,6 +31,13 @@ $elems = [
         'jquery.fileupload-ui.css', 'inbox.css',
     ],
     'vector' => ['jqvmap.css'],
+    'tree' => ['bootstrap-tree.css'],
+    'sliders' => ['jquery-ui-1.10.1.custom.min.css', 'jquery.ui.slider.css'],
+    'nestable' => ['jquery.nestable.css'],
+    'modals' => ['jquery-ui-1.10.1.custom.min.css', 'bootstrap-modal.css'],
+    'jqueryui' => ['jquery-ui-1.10.1.custom.min.css'],
+    'uigeneral' => ['jquery.gritter.css'],
+    'uibuttons' => ['glyphicons.css', 'halflings.css'],
 ];
 @endphp
 @if (isset($elems[$viewCode]))
