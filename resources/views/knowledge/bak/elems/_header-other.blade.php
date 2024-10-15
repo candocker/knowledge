@@ -1,8 +1,8 @@
+  <!-- BEGIN HEADER -->
   <div class="header navbar navbar-inverse navbar-fixed-top">
     <!-- BEGIN TOP NAVIGATION BAR -->
     <div class="navbar-inner">
-      {{--<div class="container">--}}
-      <div class="container-fluid">
+      <div class="container">
         <!-- BEGIN LOGO -->
         <a class="brand" href="index.html">
         <img src="media/image/logo.png" alt="logo" />
@@ -234,3 +234,4 @@
     </div>
     <!-- END TOP NAVIGATION BAR -->
   </div>
+  <!-- END HEADER -->

@@ -3,7 +3,6 @@
 @section('content')
       <div class="container-fluid">
         @include('knowledge.metronic._breadcrumb', ['datas' => $datas])
-<body class="">
         <!-- BEGIN PAGE CONTENT-->
         <div class="row-fluid">
           <div class="span12">
