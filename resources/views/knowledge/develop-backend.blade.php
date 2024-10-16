@@ -5,7 +5,7 @@
 @include('layouts.metronic._header-simple', ['datas' => $datas])
 <div class="page-container">
 {{--<div class="page-container row-fluid">--}}
-  @include('metronicsource.elems._sidebar', ['datas' => $datas])
+  @include('layouts.metronic._sidebar-simple', ['datas' => $datas])
   <div class="page-content">
     {{--@include('knowledge.metronic._portlet-config', ['datas' => $datas])--}}
 

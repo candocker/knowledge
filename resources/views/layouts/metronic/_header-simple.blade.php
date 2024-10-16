@@ -1,10 +1,9 @@
 @if (isset($datas['topNavs']))
 <div class="header navbar navbar-inverse navbar-fixed-top">
   <div class="navbar-inner">
-    <div class="container-fluid">
-    {{--<div class="container">--}}
+    <div class="{{$headerClass?? 'container-fluid'}}">
       <a class="brand" href="index.html">
-        <!--<img src="{{$commonAssetUrl}}/metronic/media/image/logo.png" alt="logo" />-->
+        <img src="{{$commonAssetUrl}}/metronic/media/image/logo.png" alt="logo" />
       </a>
 
       <div class="navbar hor-menu hidden-phone hidden-tablet">

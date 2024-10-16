@@ -12,7 +12,7 @@ $datas['layoutDatas'] = [
   <!-- BEGIN CONTAINER -->
   <div class="page-container row-fluid">
     @include('metronicsource.elems._modal', ['datas' => $datas])
-    @include('metronicsource.elems._sidebar-other1', ['datas' => $datas])
+    @include('metronicsource.elems._sidebar', ['datas' => $datas])
     <!-- BEGIN PAGE -->
     <div class="page-content">
       <!-- BEGIN PAGE CONTAINER-->

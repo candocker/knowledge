@@ -5,9 +5,9 @@
 @yield('content')
 @else
 
-@include('metronicsource.elems._header-home', ['datas' => $datas])
+@include('layouts.metronic._header-simple', ['datas' => $datas, 'headerClass' => 'container'])
 <div class="page-container row-fluid">
-  @include('metronicsource.elems._sidebar-home', ['datas' => $datas])
+  @include('layouts.metronic._sidebar-simple', ['sidebarClass' => 'visible-phone visible-tablet', 'datas' => $datas])
   @yield('content')
 </div>
 
