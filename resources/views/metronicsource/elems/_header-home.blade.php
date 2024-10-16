@@ -52,13 +52,13 @@
                       <li><a tabindex="-1" href="index.html">Second level link</a></li>
                       <li><a href="index.html">Second level link</a></li>
                     </ul>
-                    <a href="javascript:;">More options<span class="arrow"></span></a>
+                    <!--<a href="javascript:;">More options<span class="arrow"></span></a>
                     <ul class="dropdown-menu">
                       <li><a href="#">Second level link</a></li>
                       <li class="dropdown-submenu">
                         <a href="javascript:;">More options<span class="arrow"></span></a>
                       </li>
-                    </ul>
+                    </ul>-->
                   </li>
                 </ul>
                 <b class="caret-out"></b>
