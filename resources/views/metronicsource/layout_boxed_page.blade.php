@@ -8,7 +8,7 @@ $datas['layoutDatas'] = [
 @endphp
 @extends('layouts.metronic-simple')
 @section('content')
-  @include('metronicsource.elems._header-other', ['datas' => $datas])
+  @include('metronicsource.elems._header', ['datas' => $datas])
   <div class="container">
     <!-- BEGIN CONTAINER -->
     <div class="page-container row-fluid">

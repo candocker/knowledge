@@ -8,7 +8,7 @@ $datas['layoutDatas'] = [
 @endphp
 @extends('layouts.metronic-simple')
 @section('content')
-  @include('metronicsource.elems._header-other', ['datas' => $datas])
+  @include('metronicsource.elems._header', ['datas' => $datas])
   {{--<meta content="width=device-width, initial-scale=1.0" name="viewport" />--}}
   <div class="container">
     <!-- BEGIN CONTAINER -->
