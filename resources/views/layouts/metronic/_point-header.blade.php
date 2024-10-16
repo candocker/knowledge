@@ -44,6 +44,7 @@ $elems = [
     'calendar' => ['fullcalendar.css'],
     'news' => ['news.css', 'blog.css'],
     'comingsoon' => ['coming-soon.css'],
+    'ajax' => ['select2_metro.css'],
 ];
 @endphp
 @if (isset($elems[$viewCode]))

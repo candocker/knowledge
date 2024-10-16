@@ -66,6 +66,7 @@ $elems = [
     'calendar' => ['fullcalendar.min.js', 'app.js', 'calendar.js'],
     'comingsoon' => ['jquery.countdown.js', 'jquery.backstretch.min.js', 'app.js', 'coming-soon.js'],
     'contact' => ['js', 'gmaps.js', 'app.js', 'contact-us.js'],
+    'ajax' => ['select2.min.js', 'app.js'],
     'other' => ['app.js'],
 ];
 $jsElems = $elems[$viewCode] ?? $elems['other'];
@@ -82,6 +83,8 @@ jQuery(document).ready(function() {
     interval: 10000,
     pause: 'hover'
   });
+  @elseif (in_array($viewCode, ['ajax']))
+       $('.page-sidebar .ajaxify.start').click() // load the content for the dashboard page.
   @elseif (in_array($viewCode, ['contact']))
        ContactUs.init();
   @elseif (in_array($viewCode, ['comingsoon']))
