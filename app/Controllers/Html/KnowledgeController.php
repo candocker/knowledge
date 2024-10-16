@@ -39,7 +39,7 @@ class KnowledgeController extends AbstractController
         $topNavs = $this->getBookServiceObj()->getBookCatalogs(null);
         $results = $this->getBookServiceObj()->getVolumeBookListings($topNavs['currentNav'], null);
         $datas = array_merge($topNavs, $results);
-        return $this->customView('bak.' . $view, $datas);
+        return $this->customView($view, $datas, 'metronicsource');
     }
 
     public function figure($projectCode = null, $groupCode = null)

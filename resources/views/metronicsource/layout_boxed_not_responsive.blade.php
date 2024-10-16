@@ -8,18 +8,18 @@ $datas['layoutDatas'] = [
 @endphp
 @extends('layouts.metronic-simple')
 @section('content')
-  @include('knowledge.bak.elems._header-other', ['datas' => $datas])
+  @include('metronicsource.elems._header-other', ['datas' => $datas])
   {{--<meta content="width=device-width, initial-scale=1.0" name="viewport" />--}}
   <div class="container">
     <!-- BEGIN CONTAINER -->
     <div class="page-container row-fluid">
-      @include('knowledge.bak.elems._sidebar-other', ['datas' => $datas])
+      @include('metronicsource.elems._sidebar-other', ['datas' => $datas])
       <!-- BEGIN PAGE -->
       <div class="page-content">
-        @include('knowledge.bak.elems._modal', ['datas' => $datas])
+        @include('metronicsource.elems._modal', ['datas' => $datas])
         <!-- BEGIN PAGE CONTAINER-->
         <div class="container-fluid">
-          @include('knowledge.bak.elems._breadcrumb', ['datas' => $datas])
+          @include('metronicsource.elems._breadcrumb', ['datas' => $datas])
           <!-- BEGIN PAGE CONTENT-->
           <div class="row-fluid">
             <div class="span12">
@@ -35,6 +35,6 @@ $datas['layoutDatas'] = [
       <!-- END PAGE -->
     </div>
     <!-- END CONTAINER -->
-    @include('knowledge.bak.elems._footer', ['datas' => $datas])
+    @include('metronicsource.elems._footer', ['datas' => $datas])
   </div>
 @endsection

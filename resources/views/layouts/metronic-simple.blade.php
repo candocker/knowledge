@@ -5,9 +5,9 @@
 @yield('content')
 @else
 
-@include('knowledge.bak.elems._header-home', ['datas' => $datas])
+@include('metronicsource.elems._header-home', ['datas' => $datas])
 <div class="page-container row-fluid">
-  @include('knowledge.bak.elems._sidebar-home', ['datas' => $datas])
+  @include('metronicsource.elems._sidebar-home', ['datas' => $datas])
   @yield('content')
 </div>
 

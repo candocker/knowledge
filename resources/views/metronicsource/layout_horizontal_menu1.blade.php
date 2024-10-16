@@ -8,10 +8,10 @@ $datas['layoutDatas'] = [
 @endphp
 @extends('layouts.metronic-simple')
 @section('content')
-  @include('knowledge.bak.elems._header-home1', ['datas' => $datas])
+  @include('metronicsource.elems._header-home1', ['datas' => $datas])
   <!-- BEGIN CONTAINER -->
   <div class="page-container row-fluid" >
-    @include('knowledge.bak.elems._sidebar-home', ['datas' => $datas])
+    @include('metronicsource.elems._sidebar-home', ['datas' => $datas])
 
     <!-- BEGIN PAGE -->
     <div class="page-content">
