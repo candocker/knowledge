@@ -7,6 +7,7 @@
         <a class="brand" href="index.html">
         <img src="media/image/logo.png" alt="logo" />
         </a>
+        @include('metronicsource.elems.__headerbase-menu', ['datas' => $datas])
         <!-- END LOGO -->
         <!-- BEGIN RESPONSIVE MENU TOGGLER -->
         <a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">

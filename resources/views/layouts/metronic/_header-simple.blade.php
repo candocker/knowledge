@@ -1,9 +1,10 @@
 @if (isset($datas['topNavs']))
-<div class="header navbar navbar-inverse navbar-fixed-top hidden-pc">
+<div class="header navbar navbar-inverse navbar-fixed-top">
   <div class="navbar-inner">
     <div class="container-fluid">
-      <a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
-      <img src="{{$commonAssetUrl}}/metronic/media/image/menu-toggler.png" alt="" />
+    {{--<div class="container">--}}
+      <a class="brand" href="index.html">
+        <!--<img src="{{$commonAssetUrl}}/metronic/media/image/logo.png" alt="logo" />-->
       </a>
 
       <div class="navbar hor-menu hidden-phone hidden-tablet">
@@ -32,6 +33,12 @@
         </div>
       </div>
 
+      {{--@include('metronicsource.elems.__headerbase-menu', ['datas' => $datas])--}}
+      {{--@include('metronicsource.elems.__headerbase-right', ['datas' => $datas])--}}
+
+      <a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
+        <img src="{{$commonAssetUrl}}/metronic/media/image/menu-toggler.png" alt="" />
+      </a>
     </div>
   </div>
 </div>

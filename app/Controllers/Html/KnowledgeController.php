@@ -34,6 +34,14 @@ class KnowledgeController extends AbstractController
         return $this->customView('wiki', $datas);
     }
 
+    public function viewDevelop($view)
+    {
+        $topNavs = $this->getBookServiceObj()->getBookCatalogs(null);
+        $results = $this->getBookServiceObj()->getVolumeBookListings($topNavs['currentNav'], null);
+        $datas = array_merge($topNavs, $results);
+        return $this->customView('develop-' . $view, $datas);
+    }
+
     public function testView($view)
     {
         $topNavs = $this->getBookServiceObj()->getBookCatalogs(null);
