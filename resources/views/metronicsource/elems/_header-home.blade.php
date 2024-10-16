@@ -1,7 +1,9 @@
+  <!-- BEGIN HEADER -->
   <div class="header navbar navbar-inverse navbar-fixed-top">
     <!-- BEGIN TOP NAVIGATION BAR -->
     <div class="navbar-inner">
-      <div class="container">
+      {{--<div class="container">--}}
+      <div class="container-fluid">
         <!-- BEGIN LOGO -->
         <a class="brand" href="index.html">
         <img src="media/image/logo.png" alt="logo" />
@@ -22,6 +24,7 @@
                 </form>
                 <!-- END RESPONSIVE QUICK SEARCH FORM -->
               </li>
+              <li class="active"><a href="index.html">Dashboard<span class="selected"></span></a></li>
               <li><a href="index.html">Dashboard</a></li>
               <li  class="active">
                 <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:;">
@@ -41,8 +44,20 @@
                           <li><a tabindex="-1" href="index.html">Third level link</a></li>
                           <li><a tabindex="-1" href="index.html">Third level link</a></li>
                         </ul>
+                        {{--<ul class="dropdown-menu">
+                          <li><a href="index.html">Third level link</a></li>
+                          <li><a href="index.html">Third level link</a></li>
+                        </ul>--}}
                       </li>
                       <li><a tabindex="-1" href="index.html">Second level link</a></li>
+                      <li><a href="index.html">Second level link</a></li>
+                    </ul>
+                    <a href="javascript:;">More options<span class="arrow"></span></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="#">Second level link</a></li>
+                      <li class="dropdown-submenu">
+                        <a href="javascript:;">More options<span class="arrow"></span></a>
+                      </li>
                     </ul>
                   </li>
                 </ul>
@@ -54,6 +69,14 @@
                 <ul class="dropdown-menu">
                   <li><a href="index.html">About Us</a></li>
                   <li><a href="index.html">Services</a></li>
+                </ul>
+                <b class="caret-out"></b>
+              </li>
+              <li>
+                <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:;">Sections<span class="arrow"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Section 1</a></li>
+                  <li><a href="#">Section 2</a></li>
                 </ul>
                 <b class="caret-out"></b>
               </li>
@@ -82,3 +105,4 @@
     </div>
     <!-- END TOP NAVIGATION BAR -->
   </div>
+  <!-- END HEADER -->
