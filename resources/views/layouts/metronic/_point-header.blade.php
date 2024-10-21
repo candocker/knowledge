@@ -5,6 +5,9 @@ $elems = [
     'tableEditable' => ['select2_metro.css', 'DT_bootstrap.css'],
     'tableManaged' => ['select2_metro.css', 'DT_bootstrap.css'],
     'single' => ['promo.css', 'animate.css'],
+    'pointsingle' => [
+        'promo.css', 'animate.css', 'profile.css',
+    ],
     'login' => ['login.css'],
     'loginSoft' => ['login-soft.css'],
     'image' => ['jquery.fancybox.css', 'chosen.css'],

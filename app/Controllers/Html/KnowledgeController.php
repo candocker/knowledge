@@ -11,7 +11,9 @@ class KnowledgeController extends AbstractController
             'tdkData' => ['title' => '图书分类-图书在线阅读，鲁迅全集、汉译学史名著'],
             'sortBooks' => $results,
         ];
-        return $this->customView('book.home', $datas);
+        $navs = require(self_app_path($this->getAppCode(), '/resources/formatdata/nav.php'));
+        $datas = $navs;
+        return $this->customView('develop-single', $datas);
         //\Storage::disk('local')->put('views/' . request()->path(), $view->render());
         return $view;
     }
@@ -30,8 +32,11 @@ class KnowledgeController extends AbstractController
 
     public function wikiDetail($type, $code)
     {
-        $datas = [];
-        return $this->customView('wiki', $datas);
+        $topNavs = $this->getBookServiceObj()->getBookCatalogs(null);
+        $results = $this->getBookServiceObj()->getVolumeBookListings($topNavs['currentNav'], null);
+        $datas = array_merge($topNavs, $results);
+        $datas['detailData'] = $this->getSubjectServiceObj()->getPointDetail($type, $code);
+        return $this->customView('develop-single', $datas);
     }
 
     public function viewDevelop($view)

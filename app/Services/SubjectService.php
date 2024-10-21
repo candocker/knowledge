@@ -88,4 +88,70 @@ class SubjectService extends AbstractService
             'name' => '名称', //'online' => '在线阅读',
         ];
     }
+
+    public function getPointDetail($type, $code)
+    {
+        $info = $this->getPointKnowledgeInfo($type, $code);
+        $method = "_{$type}Detail";
+        $detail = $this->$method($code);
+        return $detail;
+    }
+
+    public function getPointKnowledgePath($type, $code)
+    {
+        $params = [
+            'figure' => ['mCode' => 'figure', 'field' => 'code'],
+            'book' => ['mCode' => 'book', 'field' => 'code'],
+            'group' => ['mCode' => 'group', 'field' => 'code'],
+            'volume' => ['mCode' => 'book_volume', 'field' => 'id'],
+        ];
+        $param = $params[$type];
+        $info = $this->getModelObj($param['mCode'])->where([$param['field'] => $code])->first();
+        if (empty($info)) {
+            $this->resource->throwException(400, '信息不存在-' . $code);
+        }
+        $knowledgePath = $info->full_knowledge_path;
+        if (empty($knowledgePath)) {
+            $this->resource->throwException(400, '知识文件不存在-' . $info['name']);
+        }
+        $detail = require($knowledgePath . '.php');
+        return $detail;
+    }
+
+    public function _figureDetail($code)
+    {
+        $info = $this->getModelObj('figure')->where(['code' => $code])->first();
+        if (empty($info)) {
+            $this->resource->throwException(400, '信息不存在-' . $code);
+        }
+        $knowledgePath = $info->full_knowledge_path;
+        if (empty($knowledgePath)) {
+            $this->resource->throwException(400, '知识文件不存在-' . $info['name']);
+        }
+        $detail = require($knowledgePath . '.php');
+        $detail['brief'] = "<b>{$info['name']}</b>:" . $detail['brief'];
+        $detail['headerPicUrl'] = $info->photoUrl;
+        return $detail;
+    }
+
+    public function _bookDetail($code)
+    {
+        $info = $this->getModelObj('book')->where(['code' => $code])->first();
+        if (empty($info)) {
+            $this->resource->throwException(400, '信息不存在-' . $code);
+        }
+        $knowledgePath = $info->full_knowledge_path;
+        if (empty($knowledgePath)) {
+            $this->resource->throwException(400, '知识文件不存在-' . $info['name']);
+        }
+        $detail = require($knowledgePath . '.php');
+        if (is_array($detail['brief'])) {
+            $detail['briefInfos'] = $detail['brief'];
+            $detail['brief'] = $detail['brief'][0];
+        }
+        $detail['brief'] = "<b>{$info['name']}</b>:" . $detail['brief'];
+        $detail['headerPicUrl'] = $info->coverUrl;
+        $detail['description'] = is_array($detail['desc']) ? $detail['desc'][0] : '';
+        return $detail;
+    }
 }
