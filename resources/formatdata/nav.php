@@ -1,7 +1,7 @@
 <?php
 return [
-    'currentBigNavCode' => 'onlineread',
-    'currentNavCode' => 'classical',
+    'currentBigNavCode' => '',
+    'currentNavCode' => '',
     'leftNavs' => [],
     'topNavs' => [
         'onlineread' => [
@@ -10,7 +10,7 @@ return [
                 ['code' => 'classical', 'name' => '经典古籍', 'url' => 'http://read.canliang.wang/'],
                 ['code' => 'luxun', 'name' => '鲁迅全集', 'url' => '/onlineread-luxun'],
                 ['code' => 'xueshu', 'name' => '学术著作', 'url' => '/onlineread-xueshu'],
-                ['code' => 'other', 'name' => '其他著作', 'url' => '/onlineread-other'],
+                ['code' => 'other', 'name' => '其他阅读', 'url' => '/onlineread-other'],
                 //['code' => '', 'name' => '', 'url' => ''],
             ],
         ],

@@ -4,15 +4,29 @@ namespace ModuleKnowledge\Controllers\Html;
 
 class KnowledgeController extends AbstractController
 {
-    public function home()
+    public function entrance($navCode = '', $subCode = '')
     {
         $results = $this->getBookServiceObj()->_getVolumeBooks('all');
         $datas = [
-            'tdkData' => ['title' => '图书分类-图书在线阅读，鲁迅全集、汉译学史名著'],
+            'tdkData' => ['title' => '知识库'],
             'sortBooks' => $results,
         ];
         $navs = require(self_app_path($this->getAppCode(), '/resources/formatdata/nav.php'));
         $datas = $navs;
+        if (!empty($subCode)) {
+            $isMobile = $this->isMobile(true);
+            $method = "_{$navCode}Datas";
+            $datas['currentBigNavCode'] = $navCode;
+            $datas['currentNavCode'] = $subCode;
+            $datas['isMobile'] = $isMobile;
+
+            $service = $this->getSubjectServiceObj();
+            $dDatas = $service->formatPointDatas($navCode, $subCode, $isMobile);
+            $datas[$navCode . 'Datas'] = $dDatas;//require(self_app_path($this->getAppCode(), "/resources/formatdata/{$navCode}-{$subCode}.php"));
+        } else {
+            $datas['detailDatas'] = require(self_app_path($this->getAppCode(), '/resources/formatdata/homedetail.php'));
+        }
+        //print_r($datas);exit();
         return $this->customView('develop-single', $datas);
         //\Storage::disk('local')->put('views/' . request()->path(), $view->render());
         return $view;
@@ -81,6 +95,12 @@ class KnowledgeController extends AbstractController
         $results = array_merge($topNavs, $results);
         //print_r($results);
         return $this->customView('gather', $results);
+    }
+
+    public function formatPointData($navCode, $subCode)
+    {
+        $service = $this->getSubjectServiceObj();
+        $service->formatPointDatas($navCode, $subCode);
     }
 
     protected function viewPath()

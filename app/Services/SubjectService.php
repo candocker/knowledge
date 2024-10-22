@@ -5,6 +5,8 @@ namespace ModuleKnowledge\Services;
 
 class SubjectService extends AbstractService
 {
+    use SubjectFormatDataTrait;
+
     public function getSubjectSorts($subjectSort, $subjectCode)
     {
         $sorts = $this->getModelObj('subjectSort')->where('sort', $subjectSort)->orderBy('orderlist', 'desc')->get();
