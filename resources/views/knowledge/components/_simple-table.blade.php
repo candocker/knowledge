@@ -1,4 +1,4 @@
-@foreach ($onlinereadDatas as $tData)
+@foreach ($simpleTableDatas as $tData)
 <div class="portlet box blue">
   <div class="portlet-title">
     <div class="caption">

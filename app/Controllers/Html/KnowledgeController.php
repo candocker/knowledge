@@ -13,19 +13,16 @@ class KnowledgeController extends AbstractController
         ];
         $navs = require(self_app_path($this->getAppCode(), '/resources/formatdata/nav.php'));
         $datas = $navs;
-        if (!empty($subCode)) {
-            $isMobile = $this->isMobile(true);
-            $method = "_{$navCode}Datas";
-            $datas['currentBigNavCode'] = $navCode;
-            $datas['currentNavCode'] = $subCode;
-            $datas['isMobile'] = $isMobile;
 
-            $service = $this->getSubjectServiceObj();
-            $dDatas = $service->formatPointDatas($navCode, $subCode, $isMobile);
-            $datas[$navCode . 'Datas'] = $dDatas;//require(self_app_path($this->getAppCode(), "/resources/formatdata/{$navCode}-{$subCode}.php"));
-        } else {
-            $datas['detailDatas'] = require(self_app_path($this->getAppCode(), '/resources/formatdata/homedetail.php'));
-        }
+        $isMobile = $this->isMobile(true);
+        $method = "_{$navCode}Datas";
+        $datas['currentBigNavCode'] = $navCode;
+        $datas['currentNavCode'] = $subCode;
+        $datas['isMobile'] = $isMobile;
+
+        $service = $this->getSubjectServiceObj();
+        $dDatas = $service->formatPointDatas($navCode, $subCode, $isMobile);
+        $datas['detailDatas'] = $dDatas;//require(self_app_path($this->getAppCode(), "/resources/formatdata/{$navCode}-{$subCode}.php"));
         //print_r($datas);exit();
         return $this->customView('develop-single', $datas);
         //\Storage::disk('local')->put('views/' . request()->path(), $view->render());

@@ -7,9 +7,20 @@ trait SubjectFormatDataTrait
 {
     public function formatPointDatas($navCode, $subCode, $isMobile)
     {
+        if (empty($subCode)) {
+            $detailDatas = require(self_app_path($this->getAppCode(), '/resources/formatdata/homedetail.php'));
+            $detailDatas['viewCode'] = 'simple';
+            return $detailDatas;
+        }
         $method = '_' . $navCode . ucfirst($subCode);
         $datas = $this->$method();
-        return $this->_formatTableDatas($datas, $isMobile);
+        if ($navCode == 'onlineread' || $subCode == 'classical') {
+            $detailDatas = [
+                'simpleTableDatas' => $this->_formatTableDatas($datas, $isMobile),
+            ];
+            return $detailDatas;
+        }
+        return [];
     }
 
     public function _onlinereadXueshu()
@@ -44,6 +55,11 @@ trait SubjectFormatDataTrait
         }
         //var_export($results);exit();
         return $results;
+    }
+
+    public function _bookstoreClassical()
+    {
+        return $this->_getVolumeBooks(['classical']);
     }
 
     public function _onlinereadOther()
