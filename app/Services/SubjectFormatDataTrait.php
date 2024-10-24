@@ -18,13 +18,145 @@ trait SubjectFormatDataTrait
             $method = '_' . $navCode . ucfirst($subCode);
             $datas = $this->$method($isMobile);
         }
-        //if ($navCode == 'onlineread' || ($navCode == 'bookstore' && in_array($subCode, ['other', 'classical']))) {
-            //return [];
-        //}
+        if ($navCode == 'bookstore' && in_array($subCode, ['luxun'])) {
+            return $datas;
+        }
         $detailDatas = [
             'simpleTableDatas' => $this->_formatTableDatas($datas, $navCode, $isMobile),
         ];
         return $detailDatas;
+    }
+
+    public function _bookstoreLuxun()
+    {
+        $catalogs = $this->getModelObj('bookCatalog')->where(['sort' => 'luxun'])->orderBy('orderlist', 'desc')->get();
+        $results = [];
+        foreach ($catalogs as $catalog) {
+            $rData = ['name' => $catalog['name']];
+            $titles = [];
+            $bookNumMax = 0;
+            $volumes = $this->getModelObj('bookVolume')->where(['catalog_code' => $catalog['code']])->orderBy('orderlist', 'desc')->get();
+            $volumeInfos = [];
+            foreach ($volumes as $volume) {
+                $books = $this->getModelObj('bookListing')->where(['catalog_volume_id' => $volume['id']])->orderBy('serial', 'asc')->get();
+                $bookInfos = [];
+                foreach ($books as $book) {
+                    $bName = $book['name'] ?: $book->bookInfo['name'];
+                    $bCode = $book['book_code'];
+                    $elem = [
+                        'name' => $bName,
+                        'infoId' => $book['id'],
+                        'bookCode' => $bCode,
+                        'url' => $bCode ? "/wiki-book-{$bCode}.html" : '',
+                    ];
+                    $bookInfos[] = $elem;
+                }
+                $vId = $volume['id'];
+                $vName = $volume['name'];
+                $titles[$vId] = $vName;
+                $volumeInfos[$vId] = [
+                    'name' => $vName,
+                    'bookInfos' => $bookInfos,
+                ];
+                $bookNumMax = max($bookNumMax, count($bookInfos));
+            }
+            $rData['titles'] = $titles;
+            $rData['bookNumMax'] = $bookNumMax;
+            $rData['volumeInfos'] = $volumeInfos;
+            $results[] = $rData;
+        }
+        $emptyElem = ['name' => '<span style="color:white;">占位符</span>', 'url' => ''];
+        foreach ($results as & $result) {
+            $simples = [];
+            $iKey = 0;
+            $maxNum = min(7, $result['bookNumMax'] + 1);
+            foreach ($result['volumeInfos'] as $vData) {
+                $books = $this->getModelObj('bookListing')->where(['catalog_volume_id' => $volume['id']])->orderBy('serial', 'asc')->get();
+                $elem = ['name' => "<b style='color:red'>{$vData['name']}</b>", 'url' => ''];
+                $simples[$iKey][] = $elem;
+                $num = 1;
+                foreach ($vData['bookInfos'] as $book) {
+                    if ($num % $maxNum == 0) {
+                        $iKey++;
+                        $simples[$iKey][] = $emptyElem;
+                        $num++;
+                    }
+                    $num++;
+                    $simples[$iKey][] = $book;
+                }
+                $remain = $maxNum - count($simples[$iKey]);
+                if ($remain > 0) {
+                    for ($remain; $remain > 0; $remain--) {
+                        $simples[$iKey][] = $emptyElem;
+                    }
+                }
+                $iKey++;
+            }
+            $result['infos'] = $simples;
+
+            $fixed = [];
+            $fNum = $result['bookNumMax'];
+            for ($fNum; $fNum > 0; $fNum--) {
+                $currentFixed = [];
+                foreach ($result['titles'] as $vId => $vName) {
+                    $index = $result['bookNumMax'] - $fNum;
+                    $currentFixed[] = $result['volumeInfos'][$vId]['bookInfos'][$index] ?? $emptyElem;
+                }
+                $fixed[] = $currentFixed;
+            }
+            $result['fixed'] = $fixed;
+        }
+        return ['simpleFixedDatas' => $results];
+    }
+
+    public function _bookstoreLuxunold()
+    {
+        $catalogs = $this->getModelObj('bookCatalog')->where(['sort' => 'luxun'])->orderBy('orderlist', 'desc')->get();
+        $fixed = $simple = [];
+        foreach ($catalogs as $catalog) {
+            $rData = [
+                'name' => $catalog['name'],
+                'titles' => [],
+                'volumeId' => '',
+            ];
+            $volumes = $this->getModelObj('bookVolume')->where(['catalog_code' => $catalog['code']])->orderBy('orderlist', 'desc')->get();
+            $infos = [];
+            $iKey = 0;
+            foreach ($volumes as $volume) {
+                $books = $this->getModelObj('bookListing')->where(['catalog_volume_id' => $volume['id']])->orderBy('serial', 'asc')->get();
+                $elem = ['name' => "<b style='color:red'>{$volume['name']}</b>", 'url' => ''];
+                $infos[$iKey][] = $elem;
+                $num = 1;
+                foreach ($books as $book) {
+                    if ($num % 7 == 0) {
+                        $iKey++;
+                        $infos[$iKey][] = ['name' => '', 'url' => ''];
+                        $num++;
+                    }
+                    $bName = $book['name'] ?: $book->bookInfo['name'];
+                    $bCode = $book['book_code'];
+                    $elem = [
+                        'name' => $bName,
+                        'infoId' => $book['id'],
+                        'bookCode' => $bCode,
+                        'url' => $bCode ? "/wiki-book-{$bCode}.html" : '',
+                    ];
+                    $num++;
+                    $infos[$iKey][] = $elem;
+                }
+                $remain = 7 - count($infos[$iKey]);
+                if ($remain > 0) {
+                    for ($remain; $remain > 0; $remain--) {
+                        $infos[$iKey][] = ['name' => '', 'url' => ''];
+                    }
+                }
+                $iKey++;
+            }
+            $rData['infos'] = $infos;
+            $simple[] = $rData;
+        }
+        //print_r($simple);exit();
+        return ['simpleTableDatas' => $simple];
     }
 
     public function _onlinereadXueshu()

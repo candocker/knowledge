@@ -4,7 +4,7 @@
       <div class="span5 margin-bottom-20" style="display: flex; justify-content: center; align-items: center;">
         <a href="index.html"><img src="{{$baseData['headerPicUrl']}}" width="300px" height="800px" alt=""></a>
       </div>
-      <div class="span7" style="">
+      <div class="span6" style="">
         <div class="portlet sale-summary">
           <div class="portlet-title">
             <div class="caption">{!!$baseData['brief']!!}</div>

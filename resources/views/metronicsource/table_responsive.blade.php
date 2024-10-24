@@ -23,7 +23,7 @@
                 </div>
               </div>
               <div class="portlet-body flip-scroll">
-                <table class="table-bordered table-striped table-condensed flip-content">
+                <table class="table-bordered table-striped flip-content">
                   <thead class="flip-content">
                     <tr>
                       <th>Code</th>

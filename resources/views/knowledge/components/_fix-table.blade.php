@@ -1,5 +1,5 @@
-@foreach ($simpleTableDatas as $tData)
-<div class="portlet box blue">
+@foreach ($fixedDatas as $tData)
+<div class="portlet box green">
   <div class="portlet-title">
     <div class="caption">
       <b>{{$tData['name']}}</b>
@@ -11,14 +11,20 @@
       @if (isset($tData['showUrl']) && !empty($tData['showUrl']))<a href="{{$tData['showUrl']}}" style="color:red;">详情</a>@endif
     </div>
   </div>
-  <div class="portlet-body">
-    <table class="table table-striped table-bordered table-hover">
-    <!--<table class="table table-striped table-bordered table-hover table-advance">-->
+  <div class="portlet-body flip-scroll">
+    <table class="table-bordered table-striped table-condensed flip-content table-bordered">
+      <thead class="flip-content">
+        <tr>
+          @foreach ($tData['titles'] as $tName)
+          <th>{{$tName}}</th>
+          @endforeach
+        </tr>
+      </thead>
       <tbody>
-        @foreach ($tData['infos'] as $pData)
+        @foreach ($tData['fixed'] as $pData)
         <tr>
           @foreach ($pData as $vData)
-          <td @if (isset($vData['colspan'])) colspan="{{$vData['colspan']}}" @endif style="text-align: center;">
+          <td @if (isset($vData['colspan'])) colspan="{{$vData['colspan']}}" @endif style="text-align: left;">
             @if (!empty($vData['url']) || !empty($vData['modalUrl']))
             <a href="{{$vData['url']}}" @if (isset($vData['modalUrl'])) modal-url="{{$vData['modalUrl']}}" class="modal_ajax_btn" @endif>{!!$vData['name']!!}</a>
             @else

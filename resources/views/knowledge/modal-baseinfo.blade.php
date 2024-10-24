@@ -1,4 +1,4 @@
-<div id="responsive" class="modal " tabindex="-1" data-width="760">
+<div id="responsive" class="modal container span12" tabindex="-1">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
     <h3>{!!$datas['baseData']['brief']!!}</h3>
