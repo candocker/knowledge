@@ -12,15 +12,19 @@ trait SubjectFormatDataTrait
             $detailDatas['viewCode'] = 'simple';
             return $detailDatas;
         }
-        $method = '_' . $navCode . ucfirst($subCode);
-        $datas = $this->$method();
-        if ($navCode == 'onlineread' || $subCode == 'classical') {
-            $detailDatas = [
-                'simpleTableDatas' => $this->_formatTableDatas($datas, $isMobile),
-            ];
-            return $detailDatas;
+        if ($navCode == 'bookstore' && in_array($subCode, ['philosophy', 'history', 'politics', 'economics', 'language', 'otheracademic'])) {
+            $datas = $this->_getVolumeBooks([$subCode]);
+        } else {
+            $method = '_' . $navCode . ucfirst($subCode);
+            $datas = $this->$method($isMobile);
         }
-        return [];
+        //if ($navCode == 'onlineread' || ($navCode == 'bookstore' && in_array($subCode, ['other', 'classical']))) {
+            //return [];
+        //}
+        $detailDatas = [
+            'simpleTableDatas' => $this->_formatTableDatas($datas, $navCode, $isMobile),
+        ];
+        return $detailDatas;
     }
 
     public function _onlinereadXueshu()
@@ -57,6 +61,11 @@ trait SubjectFormatDataTrait
         return $results;
     }
 
+    public function _bookstoreOther()
+    {
+        return $this->_getVolumeBooks(['goodworks']);
+    }
+
     public function _bookstoreClassical()
     {
         return $this->_getVolumeBooks(['classical']);
@@ -89,8 +98,9 @@ trait SubjectFormatDataTrait
             ];
             $subInfos = [];
             foreach ($books as $book) {
+                $bName = $book['name'] ?: $book->bookInfo['name'];
                 $subInfos[] = [
-                    'name' => $book['name'],
+                    'name' => $bName,
                     'infoId' => $book['id'],
                     'bookCode' => $book['book_code'],
                 ];
@@ -104,7 +114,7 @@ trait SubjectFormatDataTrait
         print_r($results);exit();
     }
 
-    protected function _formatTableDatas($datas, $isMobile)
+    protected function _formatTableDatas($datas, $navCode, $isMobile)
     {
         $num = $isMobile ? 2 : 5;
         foreach ($datas as & $data) {
@@ -113,6 +123,16 @@ trait SubjectFormatDataTrait
             $newInfos = [];
             foreach ($data['infos'] as $info) {
                 //$info['name'] .= strlen($info['name']);
+                $bCode = $info['bookCode'];
+                if ($navCode == 'onlineread') {
+                    $url = $isMobile ? "http://book.canliang.wang/pages/book/info?book_code={$bCode}" : "/{$bCode}/list.html";
+                } else if ($navCode == 'bookstore') {
+                    $url = 'javascript:;';
+                    $info['modalUrl'] = "/ajax-book-{$bCode}.html";
+                } else {
+                    $url = "/wiki-book-{$bCode}.html";
+                }
+                $info['url'] = $url;
                 $newInfos[$key][] = $info;
                 if ($i % $num == 0) {
                     $key++;

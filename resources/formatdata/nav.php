@@ -2,6 +2,7 @@
 return [
     'currentBigNavCode' => '',
     'currentNavCode' => '',
+    'currentSubCode' => '',
     'leftNavs' => [],
     'topNavs' => [
         'onlineread' => [
@@ -34,9 +35,20 @@ return [
             'name' => '书架',
             'subDatas' => [
                 ['code' => 'classical', 'name' => '中国古籍', 'url' => '/bookstore-classical'],
-                ['code' => 'luxun', 'name' => '鲁迅著作', 'url' => '/bookstore-'],
-                ['code' => 'shwhanyixueshu', 'name' => '商务汉译学术名著', 'url' => '/bookstore-'],
-                ['code' => 'other', 'name' => '其他著作', 'url' => '/bookstore-'],
+                ['code' => 'luxun', 'name' => '鲁迅著作', 'url' => '/bookstore-luxun'],
+                [
+                    'code' => 'shwhanyixueshu',
+                    'name' => '汉译学术名著',
+                    'subDatas' => [
+                        ['code' => 'philosophy', 'name' => '哲学', 'url' => '/bookstore-philosophy'],
+                        ['code' => 'history', 'name' => '历史·地理', 'url' => '/bookstore-history'],
+                        ['code' => 'politics', 'name' => '政治·法律·社会', 'url' => '/bookstore-politics'],
+                        ['code' => 'economics', 'name' => '经济', 'url' => '/bookstore-economics'],
+                        ['code' => 'language', 'name' => '语言·文艺理论', 'url' => '/bookstore-language'],
+                        ['code' => 'otheracademic', 'name' => '学术补编', 'url' => '/bookstore-otheracademic'],
+                    ],
+                ],
+                ['code' => 'other', 'name' => '其他著作', 'url' => '/bookstore-other'],
                 //['code' => '', 'name' => '', 'url' => '/bookstore-'],
             ],
         ],

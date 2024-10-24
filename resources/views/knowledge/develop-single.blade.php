@@ -18,7 +18,7 @@ $simpleTableDatas = $detailDatas['simpleTableDatas'] ?? [];
   <div class="container-fluid promo-page">
     <div class="row-fluid">
       <div class="span12">
-        @include('knowledge.components._articlepicture', ['baseData' => $baseData])
+        @include('knowledge.components._baseinfo', ['baseData' => $baseData])
       </div>
     </div>
   </div>
@@ -30,5 +30,6 @@ $simpleTableDatas = $detailDatas['simpleTableDatas'] ?? [];
     </div>
   </div>
   @endif
+  <div class="ajax-modal" class="modal hide fade" tabindex="-1"></div>
 </div>
 @endsection

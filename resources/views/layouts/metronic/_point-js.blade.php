@@ -60,7 +60,10 @@ $elems = [
     'tree' => ['bootstrap-tree.js', 'app.js', 'ui-tree.js'],
     'sliders' => ['jquery.knob.js', 'app.js', 'ui-sliders.js'],
     'nestable' => ['jquery.nestable.js', 'ui-nestable.js', 'app.js'],
-    'modals' => ['bootstrap-modal.js', 'bootstrap-modalmanager.js', 'app.js', 'ui-modals.js'],
+    'modals' => ['bootstrap-modal.js', 'bootstrap-modalmanager.js', 'app.js', 'select2.min.js', 'ui-modals.js'],
+    'pointsingle' => [
+        'bootstrap-modal.js', 'bootstrap-modalmanager.js', 'app.js', 'select2.min.js', 'self-ajax.js'
+    ],
     'jqueryui' => ['app.js', 'ui-jqueryui.js'],
     'uigeneral' => ['jquery.gritter.js', 'jquery.pulsate.min.js', 'jquery.bootpag.min.js', 'app.js', 'ui-general.js'],
     'calendar' => ['fullcalendar.min.js', 'app.js', 'calendar.js'],
@@ -70,9 +73,10 @@ $elems = [
     'other' => ['app.js'],
 ];
 $jsElems = $elems[$viewCode] ?? $elems['other'];
+$randNum = time();
 @endphp
 @foreach ($jsElems as $pView)
-<script type="text/javascript" src="{{$commonAssetUrl}}/metronic/media/js/{{$pView}}"></script>
+<script type="text/javascript" src="{{$commonAssetUrl}}/metronic/media/js/{{$pView}}?v={{$randNum}}"></script>
 @endforeach
 
 <script>
@@ -95,6 +99,8 @@ jQuery(document).ready(function() {
        UIGeneral.init();
   @elseif (in_array($viewCode, ['jqueryui']))
        UIJQueryUI.init();
+  @elseif (in_array($viewCode, ['pointsingle']))
+       SelfAjax.init();
   @elseif (in_array($viewCode, ['modals']))
        UIModals.init();
   @elseif (in_array($viewCode, ['nestable']))

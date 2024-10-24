@@ -94,12 +94,15 @@ class SubjectService extends AbstractService
     public function getPointDetail($type, $code)
     {
         $info = $this->getPointKnowledgeInfo($type, $code);
-        $method = "_{$type}Detail";
-        $detail = $this->$method($code);
-        return $detail;
+        $detailDatas = $this->getKnowledgeDetail($info);
+        $method = "_{$type}FormatDetail";
+        if (method_exists($this, $method)) {
+            $detailDatas = $this->$method($detailDatas, $info);
+        }
+        return $detailDatas;
     }
 
-    public function getPointKnowledgePath($type, $code)
+    public function getPointKnowledgeInfo($type, $code)
     {
         $params = [
             'figure' => ['mCode' => 'figure', 'field' => 'code'],
@@ -112,48 +115,54 @@ class SubjectService extends AbstractService
         if (empty($info)) {
             $this->resource->throwException(400, '信息不存在-' . $code);
         }
-        $knowledgePath = $info->full_knowledge_path;
-        if (empty($knowledgePath)) {
-            $this->resource->throwException(400, '知识文件不存在-' . $info['name']);
-        }
-        $detail = require($knowledgePath . '.php');
-        return $detail;
+        return $info;
     }
 
-    public function _figureDetail($code)
+    public function getKnowledgeDetail($info)
     {
-        $info = $this->getModelObj('figure')->where(['code' => $code])->first();
-        if (empty($info)) {
-            $this->resource->throwException(400, '信息不存在-' . $code);
-        }
         $knowledgePath = $info->full_knowledge_path;
         if (empty($knowledgePath)) {
-            $this->resource->throwException(400, '知识文件不存在-' . $info['name']);
+            //$this->resource->throwException(400, '知识文件不存在-' . $info['name']);
+            return [];
         }
-        $detail = require($knowledgePath . '.php');
-        $detail['brief'] = "<b>{$info['name']}</b>:" . $detail['brief'];
-        $detail['headerPicUrl'] = $info->photoUrl;
-        return $detail;
+        return require($knowledgePath . '.php');
     }
 
-    public function _bookDetail($code)
+    public function _figureFormatDetail($detailDatas, $info)
     {
-        $info = $this->getModelObj('book')->where(['code' => $code])->first();
-        if (empty($info)) {
-            $this->resource->throwException(400, '信息不存在-' . $code);
+        $baseData = $detailDatas['baseData'] ?? [];
+        if (empty($baseData)) {
+            $baseData = [
+                'infos' => [
+                    '姓名' => $info['name'],
+                    '百科' => $info['baidu_url'] ?: "<a href='{$info['baidu_url']}'>百度百科</a>",
+                    '详情' => $info['knowledge_path'] ?: "<a href='/wiki-book-{$info['code']}.html'>详情</a>",
+                ],
+                'brief' => $info['name'],
+                'desc' => $info['description'],
+            ];
         }
-        $knowledgePath = $info->full_knowledge_path;
-        if (empty($knowledgePath)) {
-            $this->resource->throwException(400, '知识文件不存在-' . $info['name']);
+        $baseData['headerPicUrl'] = $info->photoUrl;
+        $detailDatas['baseData'] = $baseData;
+        return $detailDatas;
+    }
+
+    public function _bookFormatDetail($detail, $info)
+    {
+        $baseData = $detailDatas['baseData'] ?? [];
+        if (empty($baseData)) {
+            $baseData = [
+                'infos' => [
+                    '名称' => $info['name'],
+                    '百科' => !empty($info['baidu_url']) ? "<a href='{$info['baidu_url']}'>百度百科</a>" : '',
+                    '详情' => "<a href='/wiki-book-{$info['code']}.html'>详情</a>",
+                ],
+                'brief' => $info['name'],
+                'desc' => $info['description'],
+            ];
         }
-        $detail = require($knowledgePath . '.php');
-        if (is_array($detail['brief'])) {
-            $detail['briefInfos'] = $detail['brief'];
-            $detail['brief'] = $detail['brief'][0];
-        }
-        $detail['brief'] = "<b>{$info['name']}</b>:" . $detail['brief'];
-        $detail['headerPicUrl'] = $info->coverUrl;
-        $detail['description'] = is_array($detail['desc']) ? $detail['desc'][0] : '';
-        return $detail;
+        $baseData['headerPicUrl'] = $info->coverUrl;
+        $detailDatas['baseData'] = $baseData;
+        return $detailDatas;
     }
 }

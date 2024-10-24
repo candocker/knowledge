@@ -17,8 +17,9 @@
         @foreach ($tData['infos'] as $pData)
         <tr>
           @foreach ($pData as $vData)
-          @php $vName = $vData['name']; if (!empty($vData['bookCode'])) { $url = $isMobile ? "http://book.canliang.wang/pages/book/info?book_code={$vData['bookCode']}" : "/{$vData['bookCode']}/list.html"; $vName = "<a href='{$url}'>{$vName}</a>"; } @endphp
-          <td @if (isset($vData['colspan'])) colspan="{{$vData['colspan']}}" @endif style="text-align: center;">{!!$vName!!}</td>
+          <td @if (isset($vData['colspan'])) colspan="{{$vData['colspan']}}" @endif style="text-align: center;">
+            <a href="{{$vData['url']}}" @if (isset($vData['modalUrl'])) modal-url="{{$vData['modalUrl']}}" class="modal_ajax_btn" @endif>{!!$vData['name']!!}</a>
+          </td>
           @endforeach
         </tr>
         @endforeach

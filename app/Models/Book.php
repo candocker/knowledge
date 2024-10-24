@@ -77,7 +77,7 @@ class Book extends AbstractModel
 
     public function getCoverUrlAttribute()
     {
-        $url = $this->getRepositoryObj()->getAttachmentUrl(['info_table' => 'book', 'info_field' => 'cover', 'info_id' => $this->code]);
+        $url = $this->getRepositoryObj()->getAttachmentUrl(['app' => 'culture', 'info_table' => 'book', 'info_field' => 'cover', 'info_id' => $this->code]);
         $url = $url ? $url : 'http://ossfile.canliang.wang/book/cover_scholarism/0921a8be-f9e6-4a31-87e3-b31f023b96a0.jpg';
         return $url;
     }

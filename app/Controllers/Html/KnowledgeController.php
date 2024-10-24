@@ -4,6 +4,12 @@ namespace ModuleKnowledge\Controllers\Html;
 
 class KnowledgeController extends AbstractController
 {
+    public function ajaxRequest($navCode, $subCode)
+    {
+        $datas = $this->getSubjectServiceObj()->getPointDetail($navCode, $subCode);
+        return $this->customView('modal-baseinfo', $datas);
+    }
+
     public function entrance($navCode = '', $subCode = '')
     {
         $results = $this->getBookServiceObj()->_getVolumeBooks('all');
@@ -17,10 +23,16 @@ class KnowledgeController extends AbstractController
         $isMobile = $this->isMobile(true);
         $method = "_{$navCode}Datas";
         $datas['currentBigNavCode'] = $navCode;
-        $datas['currentNavCode'] = $subCode;
         $datas['isMobile'] = $isMobile;
 
         $service = $this->getSubjectServiceObj();
+        if ($navCode == 'bookstore' && in_array($subCode, ['philosophy', 'history', 'politics', 'economics', 'language', 'otheracademic'])) {
+            $datas['currentNavCode'] = 'shwhanyixueshu';
+            $datas['currentSubCode'] = $subCode;
+        } else {
+            $datas['currentNavCode'] = $subCode;
+            $datas['currentSubCode'] = '';
+        }
         $dDatas = $service->formatPointDatas($navCode, $subCode, $isMobile);
         $datas['detailDatas'] = $dDatas;//require(self_app_path($this->getAppCode(), "/resources/formatdata/{$navCode}-{$subCode}.php"));
         //print_r($datas);exit();
@@ -43,10 +55,9 @@ class KnowledgeController extends AbstractController
 
     public function wikiDetail($type, $code)
     {
-        $topNavs = $this->getBookServiceObj()->getBookCatalogs(null);
-        $results = $this->getBookServiceObj()->getVolumeBookListings($topNavs['currentNav'], null);
-        $datas = array_merge($topNavs, $results);
-        $datas['detailData'] = $this->getSubjectServiceObj()->getPointDetail($type, $code);
+        $datas = require(self_app_path($this->getAppCode(), '/resources/formatdata/nav.php'));
+        $datas['detailDatas'] = $this->getSubjectServiceObj()->getPointDetail($type, $code);
+        //print_r($datas);
         return $this->customView('develop-single', $datas);
     }
 
@@ -61,6 +72,7 @@ class KnowledgeController extends AbstractController
     public function testView($view)
     {
         $topNavs = $this->getBookServiceObj()->getBookCatalogs(null);
+        var_export($topNavs);
         $results = $this->getBookServiceObj()->getVolumeBookListings($topNavs['currentNav'], null);
         $datas = array_merge($topNavs, $results);
         return $this->customView($view, $datas, 'metronicsource');

@@ -15,7 +15,20 @@
       <ul class="sub-menu">
         @foreach ($pData['subDatas'] as $subData)
         <li @if ($datas['currentNavCode'] == $subData['code']) class="active" @endif>
+          @if (isset($subData['subDatas']) && !empty($subData['subDatas']))
+          <a class="active" href="javascript:;">
+            <span class="title">{{$subData['name']}}</span><span class="arrow "></span>
+          </a>
+          <ul class="sub-menu">
+            @foreach ($subData['subDatas'] as $subSubData)
+            <li @if ($datas['currentSubCode'] == $subSubData['code']) class="active" @endif>
+              <a href="{{$subSubData['url']}}">{{$subSubData['name']}}</a>
+            </li>
+            @endforeach
+          </ul>
+          @else
           <a href="{{$subData['url']}}">{{$subData['name']}}</a>
+          @endif
         </li>
         @endforeach
       </ul>
