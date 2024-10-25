@@ -13,7 +13,7 @@ class ReadController extends AbstractController
             'pageCode' => 'home',
             'bookDatas' => $bookDatas,
         ];
-        $datas['tdkData'] = $this->formatTdk();
+        $datas['tdkData']['title'] = '经典古籍在线阅读';
         //print_R($datas);exit();
         return $this->customView('list', $datas);
     }
@@ -24,10 +24,11 @@ class ReadController extends AbstractController
         $datas = $service->_bookDetail($code, false);
         $bookData = $datas['bookData'];
         $level = $bookData['code'] == 'shijing' ? 3 : 2;
+        $datas['chapterDatas'] = $service->getBookChapterDatas($bookData);
         $datas['chapterDatas'] = $service->formatChapterTreeDatas($datas['chapterDatas'], $level);
 
         $datas = array_merge([
-            'tdkData' => $this->formatTdk($bookData),
+            'tdkData' => ['title' => $bookData['name'] . '-' . '经典古籍阅读'],
             'name' => $bookData['name'],
             'brief' => $bookData['description'],
         ], $datas);
@@ -50,7 +51,6 @@ class ReadController extends AbstractController
         }
 
         $datas['bookCode'] = $bookCode;
-        $datas['tdkData'] = $this->formatTdk($datas);
 
         $pageCodes = [
             'yijing' => 'yijing',

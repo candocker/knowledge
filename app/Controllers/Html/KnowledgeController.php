@@ -10,29 +10,39 @@ class KnowledgeController extends AbstractController
         return $this->customView('modal-baseinfo', $datas);
     }
 
-    public function entrance($navCode = '', $subCode = '')
+    public function entrance($navCode = '', $subNavCode = '')
     {
         $navs = require(self_app_path($this->getAppCode(), '/resources/formatdata/nav.php'));
         $datas = $navs;
+        if (empty($navCode)) {
+            $dDatas = require(self_app_path($this->getAppCode(), '/resources/formatdata/homedetail.php'));
+            $dDatas['viewCode'] = 'simple';
+            $datas['detailDatas'] = $dDatas;
+            return $this->customView('develop-single', $datas);
+        }
+
+        $bigNav = $navs['topNavs'][$navCode];
+        $datas['currentBigNavCode'] = $navCode;
+
+        list($midCode, $subCode) = strpos($subNavCode, '_') !== false ? explode('_', $subNavCode) : [$subNavCode, ''];
+        $currentNav = $bigNav['subDatas'][$midCode];
+        $datas['currentNavCode'] = $midCode;
+        $tdkTitle = $currentNav['name'] . '-' . $bigNav['name'];
+        if (!empty($subCode)) {
+            $datas['currentSubCode'] = $subCode;
+            $currentNav = $currentNav['subDatas'][$subCode];
+            $tdkTitle = $currentNav['name'] . '-' . $tdkTitle;
+        }
+
+        $datas['tdkData'] = ['title' => $tdkTitle];
 
         $isMobile = $this->isMobile(true);
         $method = "_{$navCode}Datas";
-        $datas['currentBigNavCode'] = $navCode;
         $datas['isMobile'] = $isMobile;
 
         $service = $this->getSubjectServiceObj();
-        if ($navCode == 'bookstore' && in_array($subCode, ['philosophy', 'history', 'politics', 'economics', 'language', 'otheracademic'])) {
-            $datas['currentNavCode'] = 'shwhanyixueshu';
-            $datas['currentSubCode'] = $subCode;
-        } else {
-            $datas['currentNavCode'] = $subCode;
-            $datas['currentSubCode'] = '';
-        }
-        $dDatas = $service->formatPointDatas($navCode, $subCode, $isMobile);
-        //print_r($dDatas);
-        $datas['tdkData'] = ['title' => '知识库'];
-        //print_r($datas);exit();
-        $datas['detailDatas'] = $dDatas;//require(self_app_path($this->getAppCode(), "/resources/formatdata/{$navCode}-{$subCode}.php"));
+        $dDatas = $service->formatPointDatas($navCode, $currentNav, $isMobile);
+        $datas['detailDatas'] = $dDatas;
         //print_r($datas);exit();
         return $this->customView('develop-single', $datas);
         //\Storage::disk('local')->put('views/' . request()->path(), $view->render());
@@ -41,7 +51,10 @@ class KnowledgeController extends AbstractController
 
     public function bookList($bookCode = null)
     {
-        $datas = $this->getBookServiceObj()->_bookDetail($bookCode, true);
+        $service = $this->getBookServiceObj();
+        $datas = $service->_bookDetail($bookCode, true);
+        $datas['chapterDatas'] = $service->getBookChapterDatas($datas['bookData']);
+        $datas['tdkData'] = ['title' => $datas['bookData']['name'] . '-' . '经典古籍阅读'];
         return $this->customView('book.list', $datas);
     }
 

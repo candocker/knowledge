@@ -2,7 +2,7 @@
 
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=utf8">
-<title>{{$datas['currentChapterData']['name']}}</title>
+<title>{{$datas['tdkData']['title']}}</title>
 <style>
 <!--
 .part{font-size:12pt}.9{font-size:9pt}A:link{text-decoration:none;color:#0033CC}A:visited{text-decoration:none;color:#0033CC}A:active{text-decoration:none;color:#0000ff}A:hover{text-decoration:underline;color:#FF0000}

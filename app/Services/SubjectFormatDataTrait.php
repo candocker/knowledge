@@ -5,15 +5,12 @@ namespace ModuleKnowledge\Services;
 
 trait SubjectFormatDataTrait
 {
-    public function formatPointDatas($navCode, $subCode, $isMobile)
+    public function formatPointDatas($navCode, $subNav, $isMobile)
     {
-        if (empty($subCode)) {
-            $detailDatas = require(self_app_path($this->getAppCode(), '/resources/formatdata/homedetail.php'));
-            $detailDatas['viewCode'] = 'simple';
-            return $detailDatas;
-        }
-        if ($navCode == 'bookstore' && in_array($subCode, ['philosophy', 'history', 'politics', 'economics', 'language', 'otheracademic'])) {
-            $datas = $this->_getVolumeBooks([$subCode]);
+        $subCode = $subNav['code'];
+        if (isset($subNav['withVolume'])) {
+            $catalogCodes = $subNav['withVolume'] === true ? [$subCode] : $subNav['withVolume'];
+            $datas = $this->_getVolumeBooks($catalogCodes);
         } else {
             $method = '_' . $navCode . ucfirst($subCode);
             $datas = $this->$method($isMobile);
@@ -109,56 +106,6 @@ trait SubjectFormatDataTrait
         return ['simpleFixedDatas' => $results];
     }
 
-    public function _bookstoreLuxunold()
-    {
-        $catalogs = $this->getModelObj('bookCatalog')->where(['sort' => 'luxun'])->orderBy('orderlist', 'desc')->get();
-        $fixed = $simple = [];
-        foreach ($catalogs as $catalog) {
-            $rData = [
-                'name' => $catalog['name'],
-                'titles' => [],
-                'volumeId' => '',
-            ];
-            $volumes = $this->getModelObj('bookVolume')->where(['catalog_code' => $catalog['code']])->orderBy('orderlist', 'desc')->get();
-            $infos = [];
-            $iKey = 0;
-            foreach ($volumes as $volume) {
-                $books = $this->getModelObj('bookListing')->where(['catalog_volume_id' => $volume['id']])->orderBy('serial', 'asc')->get();
-                $elem = ['name' => "<b style='color:red'>{$volume['name']}</b>", 'url' => ''];
-                $infos[$iKey][] = $elem;
-                $num = 1;
-                foreach ($books as $book) {
-                    if ($num % 7 == 0) {
-                        $iKey++;
-                        $infos[$iKey][] = ['name' => '', 'url' => ''];
-                        $num++;
-                    }
-                    $bName = $book['name'] ?: $book->bookInfo['name'];
-                    $bCode = $book['book_code'];
-                    $elem = [
-                        'name' => $bName,
-                        'infoId' => $book['id'],
-                        'bookCode' => $bCode,
-                        'url' => $bCode ? "/wiki-book-{$bCode}.html" : '',
-                    ];
-                    $num++;
-                    $infos[$iKey][] = $elem;
-                }
-                $remain = 7 - count($infos[$iKey]);
-                if ($remain > 0) {
-                    for ($remain; $remain > 0; $remain--) {
-                        $infos[$iKey][] = ['name' => '', 'url' => ''];
-                    }
-                }
-                $iKey++;
-            }
-            $rData['infos'] = $infos;
-            $simple[] = $rData;
-        }
-        //print_r($simple);exit();
-        return ['simpleTableDatas' => $simple];
-    }
-
     public function _onlinereadXueshu()
     {
         $sorts = [
@@ -191,26 +138,6 @@ trait SubjectFormatDataTrait
         }
         //var_export($results);exit();
         return $results;
-    }
-
-    public function _bookstoreOther()
-    {
-        return $this->_getVolumeBooks(['goodworks']);
-    }
-
-    public function _bookstoreClassical()
-    {
-        return $this->_getVolumeBooks(['classical']);
-    }
-
-    public function _onlinereadOther()
-    {
-        return $this->_getVolumeBooks(['goodworks']);
-    }
-
-    public function _onlinereadLuxun()
-    {
-        return $this->_getVolumeBooks(['luxunyanjiu', 'luxunsingle']);
     }
 
     public function _getVolumeBooks($catalogs)
@@ -281,7 +208,7 @@ trait SubjectFormatDataTrait
         return $datas;
     }
 
-    protected function _writeOnlineFile($datas, $subCode)
+    /*protected function _writeOnlineFile($datas, $subCode)
     {
         $file = self_app_path($this->getAppCode(), '/resources/formatdata/onlineread-' . $subCode . '.php');
         if (file_exists($file)) {
@@ -325,5 +252,5 @@ trait SubjectFormatDataTrait
         file_put_contents($file, $fStr);
         return true;
         echo $fStr;
-    }
+    }*/
 }

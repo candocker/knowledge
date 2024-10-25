@@ -22,13 +22,15 @@
                 @php $noSub = !isset($subData['subDatas']) || empty($subData['subDatas']); $liClass = $noSub ? '' : 'dropdown-submenu'; @endphp
                 <li @if ($datas['currentNavCode'] == $subData['code'] && $datas['currentBigNavCode'] == $bCode) class="active {{$liClass}}" @endif class="{{$liClass}}">
                   @if ($noSub)
-                  <a href="{{$subData['url']}}">{{$subData['name']}}</a>
+                  @php $url = $subData['url'] ?? "/{$bCode}-{$subData['code']}"; @endphp
+                  <a href="{{$url}}">{{$subData['name']}}</a>
                   @else
                   <a href="javascript:;">{{$subData['name']}}<span class="arrow"></a>
                   <ul class="dropdown-menu">
                     @foreach ($subData['subDatas'] as $subSubData)
                     <li @if ($datas['currentSubCode'] == $subSubData['code'] && $datas['currentBigNavCode'] == $bCode) class="active" @endif>
-                      <a href="{{$subSubData['url']}}">{{$subSubData['name']}}</a>
+                      @php $url = $subData['url'] ?? "/{$bCode}-{$subData['code']}_{$subSubData['code']}"; @endphp
+                      <a href="{{$url}}">{{$subSubData['name']}}</a>
                     </li>
                     @endforeach
                   </ul>

@@ -21,22 +21,13 @@ abstract class AbstractController extends AbstractControllerBase
         $datas['currentNav'] = $datas['currentNav'] ?? '';
         $defaultTdkData = [
             'title' => '木知识',
+            'keywords' => '知识库、知识碎片、木知识',
             'description' => '知识库',
         ];
         $datas['tdkData'] = array_merge($defaultTdkData, $datas['tdkData'] ?? []);
         $datas = $this->resource->formatResultDatas($datas);
         //print_r($datas);exit();
         return view($view, ['datas' => $datas]);
-    }
-
-    protected function formatTdk($datas = [])
-    {
-        $tdkData = [
-            'title' => $datas['name'] ?? '经典古籍',
-            'keywords' => $datas['kewowrd'] ?? '',
-            'description' => $datas['brief'] ?? '',
-        ];
-        return $tdkData;
     }
 
     protected function viewPre()

@@ -30,13 +30,9 @@ class BookService extends AbstractService
         return $results;
     }
 
-    public function _bookDetail($bookCode, $withRelate = true)
+    public function getBookChapterDatas($bookData)
     {
-        $bookInfo = $this->getModelObj('book')->where(['code' => $bookCode])->first();
-        if (empty($bookInfo)) {
-            exit('no book');
-        }
-        $chapterInfos = $this->getModelObj('chapter')->where(['book_code' => $bookCode])->orderBy('serial', 'asc')->get();
+        $chapterInfos = $this->getModelObj('chapter')->where(['book_code' => $bookData['code']])->orderBy('serial', 'asc')->get();
         $chapterDatas = [];
         foreach ($chapterInfos as $cInfo) {
             $chapterDatas[] = [
@@ -51,6 +47,15 @@ class BookService extends AbstractService
                 'id' => $cInfo['id'],
                 'chapterId' => $cInfo['id'],
             ];
+        }
+        return $chapterDatas;
+    }
+
+    public function _bookDetail($bookCode, $withRelate = true)
+    {
+        $bookInfo = $this->getModelObj('book')->where(['code' => $bookCode])->first();
+        if (empty($bookInfo)) {
+            exit('no book');
         }
         $bookData = $bookInfo->toArray();
         if ($bookData['is_ancientread']) {
@@ -67,7 +72,6 @@ class BookService extends AbstractService
         $bookData['figure']= $figure;
         $datas = [
             'bookData' => $bookData,
-            'chapterDatas' => $chapterDatas,
             'relateChapters' => $withRelate ? $this->getRelateChapters(['book_code' => $bookData['code'], 'serial' => 0]) : [],
         ];
         return $datas;
@@ -105,6 +109,7 @@ class BookService extends AbstractService
         //print_r($contents);exit();
         $datas['contents'] = $contents;
         $datas['relateChapters'] = $this->getRelateChapters($chapterInfo);
+        $datas['tdkData']['title'] = $datas['currentChapterData']['name'] . '-' . $datas['bookData']['name'];
         //print_r($datas);exit();
         return $datas;
     }

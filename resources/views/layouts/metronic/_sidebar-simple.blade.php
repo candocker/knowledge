@@ -22,12 +22,14 @@
           <ul class="sub-menu">
             @foreach ($subData['subDatas'] as $subSubData)
             <li @if ($datas['currentSubCode'] == $subSubData['code']) class="active" @endif>
-              <a href="{{$subSubData['url']}}">{{$subSubData['name']}}</a>
+              @php $url = $subData['url'] ?? "/{$bCode}-{$subData['code']}_{$subSubData['code']}"; @endphp
+              <a href="{{$url}}">{{$subSubData['name']}}</a>
             </li>
             @endforeach
           </ul>
           @else
-          <a href="{{$subData['url']}}">{{$subData['name']}}</a>
+          @php $url = $subData['url'] ?? "/{$bCode}-{$subData['code']}"; @endphp
+          <a href="{{$url}}">{{$subData['name']}}</a>
           @endif
         </li>
         @endforeach
