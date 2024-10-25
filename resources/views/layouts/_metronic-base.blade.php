@@ -2,6 +2,8 @@
 $layoutDatas = $datas['layoutDatas'];
 $viewCode = $layoutDatas['viewCode'];
 $footerView = $layoutDatas['footerView'] ?? 'base';
+$tdkTitle = $datas['tdkData']['title'] ?? '';
+$tdkDescription = $datas['tdkData']['description'] ?? '';
 @endphp
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
@@ -10,9 +12,9 @@ $footerView = $layoutDatas['footerView'] ?? 'base';
 <!-- BEGIN HEAD -->
 <head>
   <meta charset="utf-8" />
-  <title>Metronic | Data Tables - Basic Tables</title>
+  <title>{{$tdkTitle}}</title>
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <meta content="" name="description" />
+  <meta content="" name="{{$tdkDescription}}" />
   <meta content="" name="author" />
   <!-- BEGIN GLOBAL MANDATORY STYLES -->
   <link href="{{$commonAssetUrl}}/metronic/media/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>

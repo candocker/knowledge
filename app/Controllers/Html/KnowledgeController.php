@@ -12,11 +12,6 @@ class KnowledgeController extends AbstractController
 
     public function entrance($navCode = '', $subCode = '')
     {
-        $results = $this->getBookServiceObj()->_getVolumeBooks('all');
-        $datas = [
-            'tdkData' => ['title' => '知识库'],
-            'sortBooks' => $results,
-        ];
         $navs = require(self_app_path($this->getAppCode(), '/resources/formatdata/nav.php'));
         $datas = $navs;
 
@@ -34,6 +29,9 @@ class KnowledgeController extends AbstractController
             $datas['currentSubCode'] = '';
         }
         $dDatas = $service->formatPointDatas($navCode, $subCode, $isMobile);
+        //print_r($dDatas);
+        $datas['tdkData'] = ['title' => '知识库'];
+        //print_r($datas);exit();
         $datas['detailDatas'] = $dDatas;//require(self_app_path($this->getAppCode(), "/resources/formatdata/{$navCode}-{$subCode}.php"));
         //print_r($datas);exit();
         return $this->customView('develop-single', $datas);

@@ -19,13 +19,11 @@ abstract class AbstractController extends AbstractControllerBase
         $datas['navDatas'] = $this->getNavDatas();
         $datas['bigNav'] = $datas['bigNav'] ?? '';
         $datas['currentNav'] = $datas['currentNav'] ?? '';
-        if (!isset($datas['tdkData'])) {
-            $datas['tdkData'] = [
-                'title' => 'title',
-                'keywords' => 'keywords',
-                'description' => 'description',
-            ];
-        }
+        $defaultTdkData = [
+            'title' => '木知识',
+            'description' => '知识库',
+        ];
+        $datas['tdkData'] = array_merge($defaultTdkData, $datas['tdkData'] ?? []);
         $datas = $this->resource->formatResultDatas($datas);
         //print_r($datas);exit();
         return view($view, ['datas' => $datas]);
