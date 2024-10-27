@@ -16,12 +16,12 @@ return [
 
             ],
         ],
-        'bigpeople' => [
+        /*'bigpeople' => [
             'name' => '名人传',
             'subDatas' => [
                 'luxun' => ['code' => 'luxun', 'name' => '鲁迅'],
             ],
-        ],
+        ],*/
         'subject' => [
             'name' => '专题',
             'subDatas' => [
@@ -40,7 +40,6 @@ return [
                 'shwhanyixueshu' => [
                     'code' => 'shwhanyixueshu',
                     'name' => '汉译学术名著',
-                    'subCodes' => ['philosophy', 'history', 'politics', 'economics', 'language', 'otheracademic'],
                     'subDatas' => [
                         'philosophy' => ['code' => 'philosophy', 'name' => '哲学 ( 285本 )', 'withVolume' => true],
                         'history' => ['code' => 'history', 'name' => '历史·地理 ( 172本 )', 'withVolume' => true],

@@ -93,6 +93,10 @@ class SubjectService extends AbstractService
 
     public function getPointDetail($type, $code)
     {
+        if ($type == 'special') {
+            $detailDatas = require($this->_specialKnowledgePath($code));
+            return $detailDatas;
+        }
         $info = $this->getPointKnowledgeInfo($type, $code);
         $detailDatas = $this->getKnowledgeDetail($info);
         $method = "_{$type}FormatDetail";
@@ -164,5 +168,15 @@ class SubjectService extends AbstractService
         $baseData['headerPicUrl'] = $info->coverUrl;
         $detailDatas['baseData'] = $baseData;
         return $detailDatas;
+    }
+
+    public function _specialKnowledgePath($sCode = null)
+    {
+        $base = $this->config->get('knowledge.knowledge_path');
+        $datas = [
+            'luxunworks' => $base . 'books/鲁迅著作/works.php',
+            'scholarism' => $base . 'books/学术名著/scholarism.php',
+        ];
+        return is_null($sCode) ? $datas : $datas[$sCode];
     }
 }

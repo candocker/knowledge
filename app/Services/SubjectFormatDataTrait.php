@@ -8,19 +8,35 @@ trait SubjectFormatDataTrait
     public function formatPointDatas($navCode, $subNav, $isMobile)
     {
         $subCode = $subNav['code'];
+        $pageData = [];
         if (isset($subNav['withVolume'])) {
             $catalogCodes = $subNav['withVolume'] === true ? [$subCode] : $subNav['withVolume'];
             $datas = $this->_getVolumeBooks($catalogCodes);
+            $catalogInfos = $this->getModelObj('bookCatalog')->whereIn('code', $catalogCodes)->get();
+            $pageTitle = $pageBrief = '';
+            foreach ($catalogInfos as $cInfo) {
+                $cTitle = $cInfo['title'] ?: $cInfo['name'];
+                $pageTitle .= $cTitle . ' // ';
+                $pageBrief .= $cInfo['brief'] . '  // ';
+            }
+            $pageData['title'] = trim($pageTitle, ' // ');
+            $pageData['brief'] = trim($pageBrief, '  // ');
         } else {
             $method = '_' . $navCode . ucfirst($subCode);
             $datas = $this->$method($isMobile);
         }
+
         if ($navCode == 'bookstore' && in_array($subCode, ['luxun'])) {
             return $datas;
         }
-        $detailDatas = [
-            'simpleTableDatas' => $this->_formatTableDatas($datas, $navCode, $isMobile),
-        ];
+
+        if (in_array($subCode, ['philosophy', 'history', 'politics', 'economics', 'language', 'otheracademic'])) {
+            $pageData['title'] = $pageData['title'] . "-<a href='wiki-special-scholarism.html'>汉译世界学术名著丛书</a>";
+            $detailDatas = ['simpleFixedDatas' => $this->_formatTableDatas($datas, $navCode, $isMobile, true)];
+        } else {
+            $detailDatas = ['simpleTableDatas' => $this->_formatTableDatas($datas, $navCode, $isMobile)];
+        }
+        $detailDatas['pageData'] = $pageData;
         return $detailDatas;
     }
 
@@ -103,7 +119,9 @@ trait SubjectFormatDataTrait
             }
             $result['fixed'] = $fixed;
         }
-        return ['simpleFixedDatas' => $results];
+
+        $pageData = ['title' => '鲁迅著作诸版本', 'brief' => '鲁迅作品重要版本和发行脉络', 'url' => 'wiki-special-luxunworks.html'];
+        return ['pageData' => $pageData, 'simpleFixedDatas' => $results];
     }
 
     public function _onlinereadXueshu()
@@ -153,7 +171,7 @@ trait SubjectFormatDataTrait
             $vData = [
                 'name' => $volume['name'],
                 'volumeId' => $volume['id'],
-                'titles' => ['name'],
+                'titles' => [],
             ];
             $subInfos = [];
             foreach ($books as $book) {
@@ -168,14 +186,11 @@ trait SubjectFormatDataTrait
             $results[] = $vData;
         }
         return $results;
-        //var_export($results);exit();
-        return true;
-        print_r($results);exit();
     }
 
-    protected function _formatTableDatas($datas, $navCode, $isMobile)
+    protected function _formatTableDatas($datas, $navCode, $isMobile, $withFixed = false)
     {
-        $num = $isMobile ? 2 : 5;
+        $num = $isMobile ? ($withFixed ? 4 : 2) : 5;
         foreach ($datas as & $data) {
             $i = 1;
             $key = 1;
@@ -204,6 +219,9 @@ trait SubjectFormatDataTrait
                 $i = $i + $step;
             }
             $data['infos'] = $newInfos;
+            if ($withFixed) {
+                $data['fixed'] = $newInfos;
+            }
         }
         return $datas;
     }

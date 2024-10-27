@@ -108,14 +108,14 @@ class KnowledgeController extends AbstractController
         return $this->customView('gather', $results);
     }
 
-    public function bookstore($catalogCode = null, $volumeId = null)
+    /*public function bookstore($catalogCode = null, $volumeId = null)
     {
         $topNavs = $this->getBookServiceObj()->getBookCatalogs($catalogCode);
         $results = $this->getBookServiceObj()->getVolumeBookListings($topNavs['currentNav'], $volumeId);
         $results = array_merge($topNavs, $results);
         //print_r($results);
         return $this->customView('gather', $results);
-    }
+    }*/
 
     public function formatPointData($navCode, $subCode)
     {

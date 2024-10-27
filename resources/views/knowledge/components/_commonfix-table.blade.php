@@ -26,14 +26,8 @@
       <tbody>
         @foreach ($tInfos as $pData)
         <tr>
-          @foreach ($pData as $vData)
-          <td @if (isset($vData['colspan'])) colspan="{{$vData['colspan']}}" @endif style="text-align: left;">
-            @if (!empty($vData['url']) || !empty($vData['modalUrl']))
-            <a href="{{$vData['url']}}" @if (isset($vData['modalUrl'])) modal-url="{{$vData['modalUrl']}}" class="modal_ajax_btn" @endif>{!!$vData['name']!!}</a>
-            @else
-            <span >{!!$vData['name']!!}</span>
-            @endif
-          </td>
+          @foreach ($pData as $vName)
+          <td>{!!$vName!!}</td>
           @endforeach
         </tr>
         @endforeach

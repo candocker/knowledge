@@ -10,11 +10,28 @@ $detailDatas = $datas['detailDatas'] ?? [];
 $baseData = $detailDatas['baseData'] ?? [];
 $simpleTableDatas = $detailDatas['simpleTableDatas'] ?? [];
 $simpleFixedDatas = $detailDatas['simpleFixedDatas'] ?? [];
+$commonTableDatas = $detailDatas['commonTableDatas'] ?? [];
+$commonFixedDatas = $detailDatas['commonFixedDatas'] ?? [];
 //print_r($detail);exit();
+$pageData = $datas['detailDatas']['pageData'] ?? [];
+$pageTitle = $pageData['title'] ?? '';
+if (isset($pageData['url'])) {
+    $pageTitle = "<a href='{$pageData['url']}'>{$pageData['title']}</a>";
+}
 @endphp
 @extends('layouts.metronic-simple')
 @section('content')
+
 <div class="page-content no-min-height">
+  @if (!empty($pageData))
+  <div class="container">
+    <div class="span12">
+      <h3 class="page-title" style="text-align: center; margin-bottom:0px">{!!$pageTitle!!} </h3>
+      @if (isset($pageData['brief']))<h3 class="page-title" style="text-align: center; margin-top:0px"> <small>{{$pageData['brief']}}</small></h3>@endif
+    </div>
+  </div>
+  @endif
+
   @if (!empty($baseData))
   <div class="container-fluid promo-page">
     <div class="row-fluid">
@@ -24,10 +41,24 @@ $simpleFixedDatas = $detailDatas['simpleFixedDatas'] ?? [];
     </div>
   </div>
   @endif
+  @if (!empty($commonTableDatas))
+  <div class="container">
+    <div class="row-fluid margin-bottom-20">
+      @include('knowledge.components._common-table', ['commonTableDatas' => $commonTableDatas, 'isMobile' => $isMobile])
+    </div>
+  </div>
+  @endif
   @if (!empty($simpleTableDatas))
   <div class="container">
     <div class="row-fluid margin-bottom-20">
       @include('knowledge.components._simple-table', ['simpleTableDatas' => $simpleTableDatas, 'isMobile' => $isMobile])
+    </div>
+  </div>
+  @endif
+  @if (!empty($commonFixedDatas))
+  <div class="container">
+    <div class="row-fluid margin-bottom-20">
+      @include('knowledge.components._commonfix-table', ['fixedDatas' => $commonFixedDatas, 'isMobile' => $isMobile])
     </div>
   </div>
   @endif
