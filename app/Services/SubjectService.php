@@ -91,7 +91,7 @@ class SubjectService extends AbstractService
         ];
     }
 
-    public function getPointDetail($type, $code)
+    public function getPointDetail($type, $code, $isMobile)
     {
         if ($type == 'special') {
             $detailDatas = require($this->_specialKnowledgePath($code));
@@ -101,7 +101,7 @@ class SubjectService extends AbstractService
         $detailDatas = $this->getKnowledgeDetail($info);
         $method = "_{$type}FormatDetail";
         if (method_exists($this, $method)) {
-            $detailDatas = $this->$method($detailDatas, $info);
+            $detailDatas = $this->$method($detailDatas, $info, $isMobile);
         }
         return $detailDatas;
     }
@@ -151,7 +151,7 @@ class SubjectService extends AbstractService
         return $detailDatas;
     }
 
-    public function _bookFormatDetail($detail, $info)
+    public function _bookFormatDetail($detail, $info, $isMobile)
     {
         $baseData = $detailDatas['baseData'] ?? [];
         if (empty($baseData)) {
@@ -160,6 +160,7 @@ class SubjectService extends AbstractService
                     '名称' => $info['name'],
                     '百科' => !empty($info['baidu_url']) ? "<a href='{$info['baidu_url']}'>百度百科</a>" : '',
                     '详情' => "<a href='/wiki-book-{$info['code']}.html'>详情</a>",
+                    '在线阅读' => $this->getBookReadUrl($info, $isMobile),
                 ],
                 'brief' => $info['name'],
                 'desc' => $info['description'],

@@ -6,7 +6,8 @@ class KnowledgeController extends AbstractController
 {
     public function ajaxRequest($navCode, $subCode)
     {
-        $datas = $this->getSubjectServiceObj()->getPointDetail($navCode, $subCode);
+        $isMobile = $this->isMobile(true);
+        $datas = $this->getSubjectServiceObj()->getPointDetail($navCode, $subCode, $isMobile);
         return $this->customView('modal-baseinfo', $datas);
     }
 
@@ -66,8 +67,9 @@ class KnowledgeController extends AbstractController
 
     public function wikiDetail($type, $code)
     {
+        $isMobile = $this->isMobile(true);
         $datas = require(self_app_path($this->getAppCode(), '/resources/formatdata/nav.php'));
-        $datas['detailDatas'] = $this->getSubjectServiceObj()->getPointDetail($type, $code);
+        $datas['detailDatas'] = $this->getSubjectServiceObj()->getPointDetail($type, $code, $isMobile);
         //print_r($datas);
         return $this->customView('develop-single', $datas);
     }
