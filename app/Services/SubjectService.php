@@ -5,7 +5,7 @@ namespace ModuleKnowledge\Services;
 
 class SubjectService extends AbstractService
 {
-    use SubjectFormatDataTrait;
+    use SubjectBookTrait;
 
     public function getSubjectSorts($subjectSort, $subjectCode)
     {
@@ -112,7 +112,7 @@ class SubjectService extends AbstractService
             'figure' => ['mCode' => 'figure', 'field' => 'code'],
             'book' => ['mCode' => 'book', 'field' => 'code'],
             'group' => ['mCode' => 'group', 'field' => 'code'],
-            'volume' => ['mCode' => 'book_volume', 'field' => 'id'],
+            'volume' => ['mCode' => 'bookVolume', 'field' => 'id'],
         ];
         $param = $params[$type];
         $info = $this->getModelObj($param['mCode'])->where([$param['field'] => $code])->first();

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace ModuleKnowledge\Services;
 
-trait SubjectFormatDataTrait
+trait SubjectBookTrait
 {
     public function formatPointDatas($navCode, $subNav, $isMobile)
     {
@@ -171,6 +171,7 @@ trait SubjectFormatDataTrait
             $vData = [
                 'name' => $volume['name'],
                 'volumeId' => $volume['id'],
+                'showUrl' => $volume['knowledge_path'] ? "/wiki-volume-{$volume['id']}.html" : '',
                 'titles' => [],
             ];
             $subInfos = [];
