@@ -8,6 +8,7 @@ class BookVolume extends AbstractModel
 {
     protected $table = 'book_volume';
     protected $guarded = ['id'];
+    public $timestamps = false;
 
     public function series()
     {

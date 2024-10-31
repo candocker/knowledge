@@ -1,7 +1,7 @@
 @php $commonTitles = $fixedDatas['titles'] ?? []; @endphp
 @foreach ($fixedDatas as $tData)
 @if (isset($tData['infos']))
-@php $tTitles = $tData['titles'] ?? $commonTitles; $tInfos = $tData['infos'] ?? $tData['fixed']; @endphp
+@php $tTitles = $tData['titles'] ?? $commonTitles; $tInfos = $tData['fixed'] ?? $tData['infos']; @endphp
 <div class="portlet box green">
   <div class="portlet-title">
     <div class="caption">
@@ -32,6 +32,9 @@
             <a href="{{$vData['url']}}" @if (isset($vData['modalUrl'])) modal-url="{{$vData['modalUrl']}}" class="modal_ajax_btn" @endif>{!!$vData['name']!!}</a>
             @else
             <span >{!!$vData['name']!!}</span>
+            @endif
+            @if (isset($vData['nameExt']))
+            <span >{!!$vData['nameExt']!!}</span>
             @endif
           </td>
           @endforeach

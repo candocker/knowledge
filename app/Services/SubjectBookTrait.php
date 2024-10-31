@@ -11,7 +11,7 @@ trait SubjectBookTrait
         $pageData = [];
         if (isset($subNav['withVolume'])) {
             $catalogCodes = $subNav['withVolume'] === true ? [$subCode] : $subNav['withVolume'];
-            $datas = $this->_getVolumeBooks($catalogCodes);
+            $datas = $this->_getVolumeBooks($catalogCodes, $subCode);
             $catalogInfos = $this->getModelObj('bookCatalog')->whereIn('code', $catalogCodes)->get();
             $pageTitle = $pageBrief = '';
             foreach ($catalogInfos as $cInfo) {
@@ -158,12 +158,13 @@ trait SubjectBookTrait
         return $results;
     }
 
-    public function _getVolumeBooks($catalogs)
+    public function _getVolumeBooks($catalogs, $subCode)
     {
         $results = [];
         $volumes = $this->getModelObj('bookVolume')->whereIn('catalog_code', $catalogs)->orderBy('orderlist', 'asc')->get();
         foreach ($volumes as $volume) {
-            $books = $this->getModelObj('bookListing')->where(['catalog_volume_id' => $volume['id']])->where('book_code', '<>', '')->orderBy('serial', 'asc')->get();
+            //$books = $this->getModelObj('bookListing')->where(['catalog_volume_id' => $volume['id']])->where('book_code', '<>', '')->orderBy('serial', 'asc')->get();
+            $books = $this->getModelObj('bookListing')->where(['catalog_volume_id' => $volume['id']])->orderBy('serial', 'asc')->get();
             if ($books->count() <= 0) {
                 continue;
             }
@@ -176,9 +177,15 @@ trait SubjectBookTrait
             ];
             $subInfos = [];
             foreach ($books as $book) {
-                $bName = $book['name'] ?: $book->bookInfo['name'];
+                $bInfo = $book->bookInfo;
+                $bName = $book['name'] ?: $bInfo['name'];
+                $nameExt = '';
+                if (in_array($subCode, ['philosophy', 'history', 'politics', 'economics', 'language', 'otheracademic'])) {
+                    $nameExt = $this->getBookFigureStr($book, $bInfo);
+                }
                 $subInfos[] = [
                     'name' => $bName,
+                    'nameExt' => $nameExt,
                     'infoId' => $book['id'],
                     'bookCode' => $book['book_code'],
                 ];
@@ -189,9 +196,24 @@ trait SubjectBookTrait
         return $results;
     }
 
+    public function getBookFigureStr($bookListing, $book)
+    {
+        if (empty($book)) {
+            return $bookListing['figure'];
+        }
+        $author = $book->authorData();
+        if (empty($author)) {
+            return $bookListing['figure'];
+        }
+        $nationalityStr = empty($book->nationality) ? '' : "({$book['nationality']})";
+        return "  [ {$nationalityStr}<a href='/wiki-figure-{$author['code']}.html'>{$author['name']}</a> ]";
+        print_r($book->toArray());
+        print_r($author->toArray());exit();
+    }
+
     protected function _formatTableDatas($datas, $navCode, $isMobile, $withFixed = false)
     {
-        $num = $isMobile ? ($withFixed ? 4 : 2) : 5;
+        $num = $isMobile ? ($withFixed ? 4 : 2) : 3;
         foreach ($datas as & $data) {
             $i = 1;
             $key = 1;

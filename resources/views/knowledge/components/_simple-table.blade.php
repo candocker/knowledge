@@ -24,6 +24,9 @@
             @else
             <span >{!!$vData['name']!!}</span>
             @endif
+            @if (isset($vData['nameExt']))
+            <span >{!!$vData['nameExt']!!}</span>
+            @endif
           </td>
           @endforeach
         </tr>

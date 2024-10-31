@@ -22,6 +22,64 @@ class TestController extends AbstractController
         exit();
     }
 
+    public function _testDealbooks()
+    {
+        $swbooks = require('/data/htmlwww/laravel-system/vendor/candocker/knowledge/resources/formatdata/swbooks.php');
+        //$elems = ['philosophy', 'history', 'politics', 'economics', 'language', 'otheracademic'];
+        $elems = ['otheracademic'];
+        foreach ($elems as $elem) {
+            //$volumes = $this->getModelObj('bookVolume')->where(['catalog_code' => $elem, 'extfield' => ''])->orderBy('orderlist', 'asc')->get();
+            $volumes = $this->getModelObj('bookVolume')->where(['catalog_code' => $elem])->orderBy('orderlist', 'asc')->get();
+            foreach ($volumes as $volume) {
+                $str = '';
+                echo '<br />' . '========================' . $volume['name'];
+                echo '<br />';
+                $infos = $this->getModelObj('bookListing')->where(['catalog_volume_id' => $volume['id']])->get();
+
+                foreach ($infos as $info) {
+                    $name = $info['name'];
+                    //$exists = $this->getModelObj('majorevent')->where(['knowledge_path' => $name])->where(['code' => ''])->get();
+                    $str .= $name . '-' . '[' . $info['nationality'] . ']' . $info['author'] . '-----<br />';
+                    $exists = $this->getModelObj('majorevent')->where(['knowledge_path' => $name])->get();
+                    foreach ($exists as $exist) {
+                        $exist->code = $info['book_code'];
+                        //$exist->save();
+                        //if ($exist['brief'] != '[' . $info['nationality'] . ']' . $info['author']) {
+                        $str .= $exist['knowledge_path'] . '-' . $exist['brief'] . '===' . '<br />';
+                        //}
+                    }
+                    $sql = "SELECT * FROM `wp_majorevent` WHERE `knowledge_path` LIkE '%{$name}%';";
+                    $eSql = "SELECT * FROM `wp_book_listing` WHERE `name` LIkE '%{$name}%';";
+                    $str .= '-----' . $sql . '    ' . $eSql . '<br />';
+                    //$str .= '-----' . $eSql . '<br />';
+                }
+                $volume->extfield = 'dealed';
+                //$volume->save();
+                echo $str;
+                var_dump($infos->count());
+            }
+            exit();
+        }
+        echo $str;exit();
+        foreach ($swbooks as $key => $books) {
+            foreach ($books as $book) {
+                if (!isset($book[1])) {
+                    print_r($book);
+                }
+            $aData = [
+                'baidu_url' => $key,
+                'knowledge_path' => trim($book[0]),
+                'brief' => trim($book[1]),
+            ];
+            //$this->getModelObj('majorevent')->create($aData);
+            }
+
+            var_dump($key);
+            var_dump(count($books));
+        }
+        print_r($swbooks);
+    }
+
     public function _testDealancient()
     {
         $datas = require('/data/database/material/booklist/guwenguanzhi_catalogue.php');
