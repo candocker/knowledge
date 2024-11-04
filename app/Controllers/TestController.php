@@ -24,6 +24,59 @@ class TestController extends AbstractController
 
     public function _testDealbooks()
     {
+        $infos = $this->getModelObj('majorevent')->where(['code' => ''])->get();
+        $results = [];
+        foreach ($infos as $info) {
+            $results[$info['baidu_url']][] = ['name' => $info['knowledge_path'], 'figure' => $info['brief']];
+        }
+        foreach ($results as $key => $books) {
+            $i = 0;
+            $nvData = [
+                'catalog_code' => $key,
+            ];
+            //$nVolume = $this->getModelObj('bookVolume')->create($nvData);
+            $vId = 1;//$nVolume['id'];
+            $limitNum = ceil(count($books) / 3);
+            var_dump($limitNum);var_dump(count($books));
+            foreach ($books as $book) {
+                if ($i == $limitNum) {
+                    $nvData = [
+                        'catalog_code' => $key,
+                    ];
+                    //$nVolume = $this->getModelObj('bookVolume')->create($nvData);
+                    //$vId = $nVolume['id'];
+                    $vId++;
+                    $i = 0;
+                }
+                $nbData = [
+                    'catalog_code' => $key,
+                    'catalog_volume_id' => $vId,
+                    'serial' => $i,
+                    'name' => $book['name'],
+                    'figure' => $book['figure'],
+                ];
+                //$this->getModelObj('bookListing')->create($nbData);
+                print_R($nbData);
+
+                $i++;
+            }
+        }
+        print_r($results);
+        exit();
+        $infos = $this->getModelObj('bookListing')->where(['extfield' => 'have'])->get();
+        $i = 1;
+        foreach ($infos as $info) {
+            $bInfo = $this->getModelObj('book')->where(['code' => $info['book_code']])->first();
+            if (empty($bInfo)) {
+                continue;
+            }
+            $mInfo = $this->getModelObj('majorevent')->where(['code' => $info['book_code']])->first();
+            $figure = $bInfo->formatAuthorData();
+            echo "$i = <a href='{$bInfo['baidu_url']}'>{$bInfo['name']}</a>-{$info['name']}-[{$info['nationality']}]{$info['author']}-{$mInfo['brief']}-{$figure}<br />";
+            //echo "--------------SELECT * FROM `wp_majorevent` WHERE `knowledge_path` LIkE '%{$info['name']}%' OR `brief` LIKE '%{$info['author']}%';<br />";
+            $i++;
+        }
+        exit();
         $swbooks = require('/data/htmlwww/laravel-system/vendor/candocker/knowledge/resources/formatdata/swbooks.php');
         //$elems = ['philosophy', 'history', 'politics', 'economics', 'language', 'otheracademic'];
         $elems = ['otheracademic'];
