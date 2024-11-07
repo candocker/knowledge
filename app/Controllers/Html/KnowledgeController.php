@@ -42,7 +42,11 @@ class KnowledgeController extends AbstractController
         $datas['isMobile'] = $isMobile;
 
         $service = $this->getSubjectServiceObj();
-        $dDatas = $service->formatPointDatas($navCode, $currentNav, $isMobile);
+        if ($navCode == 'subject') {
+            $dDatas = $service->formatSubjectDatas($currentNav, $isMobile);
+        } else {
+            $dDatas = $service->formatPointDatas($navCode, $currentNav, $isMobile);
+        }
         $datas['detailDatas'] = $dDatas;
         //print_r($datas);exit();
         return $this->customView('develop-single', $datas);

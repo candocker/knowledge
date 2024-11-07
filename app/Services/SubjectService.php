@@ -6,6 +6,7 @@ namespace ModuleKnowledge\Services;
 class SubjectService extends AbstractService
 {
     use SubjectBookTrait;
+    use SubjectDataTrait;
 
     public function getSubjectSorts($subjectSort, $subjectCode)
     {
@@ -139,7 +140,7 @@ class SubjectService extends AbstractService
             $baseData = [
                 'infos' => [
                     '姓名' => $info['name'],
-                    '百科' => $info['baidu_url'] ?: "<a href='{$info['baidu_url']}'>百度百科</a>",
+                    '百科' => !empty($info['baidu_url']) ? "<a href='{$info['baidu_url']}'>百度百科</a>" : '',
                     '详情' => $info['knowledge_path'] ?: "<a href='/wiki-book-{$info['code']}.html'>详情</a>",
                 ],
                 'brief' => $info['name'],
@@ -177,6 +178,7 @@ class SubjectService extends AbstractService
         $datas = [
             'luxunworks' => $base . 'books/鲁迅著作/works.php',
             'scholarism' => $base . 'books/学术名著/scholarism.php',
+            'ruxue' => $base . 'subject/儒学/base.php',
         ];
         return is_null($sCode) ? $datas : $datas[$sCode];
     }

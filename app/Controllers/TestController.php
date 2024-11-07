@@ -22,8 +22,159 @@ class TestController extends AbstractController
         exit();
     }
 
+    public function _testDealResource()
+    {
+        $basePath = '/data/htmlwww/resource/';
+        $service = $this->getServiceObj('dealResource');
+        $r = $service->checkLocalFiles('');
+        exit();
+
+        $infos = $this->getModelObj('resourceInfo')->where('info_table', 'navsort')->limit(1500)->get();
+        $riIds = $rdIds = '';
+        $command = '';
+        foreach ($infos as $info) {
+            $detail = $info->resourceDetailInfo;
+            $file = $basePath . $detail['filepath'];
+            //$file = 'http://39.106.102.45/resource/' . $detail['filepath'];
+            //echo '<br />' . $detail['name'] . '<br />';
+            //echo "<img src='{$file}' width='100px' height='200px'/>";
+            //$fileHash = $service->createFileHash($file);
+            //$info->file_hash = $fileHash;
+            //$info->resource_type = $fileHash;
+            //var_dump($fileHash . '--' . $file);
+            $command .= "rm -f {$file}\n";
+            //$info->save();
+            $riIds .= "{$info['id']},";
+            $rdIds .= "{$info['resource_id']},";
+        }
+        echo $command;
+        $riIds = trim($riIds, ',');
+        $rdIds = trim($rdIds, ',');
+        echo "DELETE FROM `wp_resource_info` WHERE `id` IN ({$riIds});<br />\n";
+        echo "DELETE FROM `wp_resource_detail` WHERE `id` IN ({$rdIds});<br />\n";
+        exit();
+
+        //$infos = $this->getModelObj('resourceDetail')->where('filepath', '<>', '')->where('resource_type', '')->limit(500)->get();
+        /*$infos = $this->getModelObj('resourceDetail')->where('filepath', '<>', '')->where('file_hash', '<>', '')->limit(1500)->get();
+        foreach ($infos as $info) {
+            $attachment = $this->getModelObj('passport-attachment')->where(['id' => $info['old_id']])->first();
+            if (empty($attachment)) {
+                print_r($info->toArray());
+                continue;
+            }
+            $attachment->extfield = 'dealed';
+            $attachment->save();
+            continue;
+            //$file = 'http://ossfile.canliang.wang/' . $attachment['filepath'];
+            $file = $basePath . $info['filepath'];
+            $fileHash = $service->createFileHash($file);
+            $info->file_hash = $fileHash;
+            //$info->resource_type = $fileHash;
+            var_dump($fileHash . '--' . $file);
+            $info->save();
+        }
+        exit();*/
+
+        /*$infos = $this->getModelObj('resourceDetail')->where('filepath', '')->where(['tag' => '人物'])->limit(1000)->get();
+        //echo $infos->count();
+        $command = '';
+        foreach ($infos as $info) {
+            $file = $basePath . $info['extfield1'];
+            //var_dump($file);
+            if (!file_exists($file)) {
+                var_dump($file);
+                //continue;
+            }
+            $rInfo = $this->getModelObj('resourceInfo')->where(['info_table' => 'figure', 'resource_id' => $info['id']])->first();
+            if (empty($rInfo)) {
+                continue;
+            }
+            $figure = $this->getModelObj('figure')->where(['code' => $rInfo['info_id']])->first();
+            if (empty($figure)) {
+                print_R($rInfo->toArray());
+                print_r($info->toArray());
+                continue;
+            }
+            $nationality = $figure['nationality'];
+            $nationality = str_replace(['(苏)'], [''], $nationality);
+            $nPath = in_array($nationality, ['俄罗斯', '外国历史人物', '德国', '日本', '法国', '美国', '英国']) ? $nationality : '其他';
+            $newPath = str_replace(['culture/figure2', 'culture/figure','culture'], ["figure/{$nPath}", "figure/{$nPath}", "figure/{$nPath}"], $info['extfield1']);
+            $newFile = $basePath . $newPath;
+            if (!is_dir(dirname($newFile))) {
+                //var_dump($newFile);
+            }
+            if (file_exists($newFile)) {
+            $info->filepath = $newPath;
+            $info->save();
+            }
+            $command .= "mv {$file} {$newFile};\n";
+            //var_dump($nationality . '--' . $newPath);
+            //print_r($rInfo->toArray());exit();
+            //$info->save();
+        }
+        //echo $command;
+        exit();*/
+
+        $infos = $this->getModelObj('resourceDetail')->where(['tag' => '书籍'])->where(['filepath' => ''])->orderBy('image_model', 'asc')->limit(1000)->get();
+$series = array(
+'philosophy' => '哲学',
+'history' => '历史·地理',
+'politics' => '政治·法律·社会',
+'economics' => '经济',
+'language' => '语言·文艺理论',
+'otheracademic' => '其他学术',
+'luxunmanuscript' => '鲁迅',
+'luxunsingle' => '鲁迅',
+'luxunyanjiu' => '鲁迅研究',
+'goodworks' => '其他著作',
+'classical' => '古籍',
+);
+        $command = '';
+        $sNums = $pathCommands = [];
+        $grade = 1;
+        foreach ($infos as $info) {
+            $code = $info['image_model'];
+            if (in_array($info['extfield1'], ['', 'no', 'nno'])) {
+                continue;
+            }
+            if (!in_array($code, array_keys($series))) {
+                continue;
+            }
+            if (isset($sNums[$code])) {
+                $sNums[$code] += 1;
+            } else {
+                $sNums[$code] = 1;
+            }
+            $pathNum = ceil($sNums[$code] / 50);
+            $newPath = 'bookcover/' . $series[$code] . '/cover' . $pathNum . '/';
+            $mPath = $basePath . $newPath;
+            if (!is_dir($mPath) && !in_array($mPath, $pathCommands)) {
+                //$command .= "mkdir {$newPath};\n";
+            }
+            $pathCommands[] = $mPath;
+            $old = $basePath . $info['extfield1'];
+            $old = str_replace('book', 'bookbak', $old);
+            if (!file_exists($old)) {
+                continue;
+            }
+            $old = str_replace(['(', ')', ' '], ['\(', '\)', "\ "], $old);
+            $newPath .= $info['filename'];
+            $newPath = str_replace(['(', ')', ' '], ['\(', '\)', "\ "], $newPath);
+            $new = $basePath . $newPath;
+            if (file_exists($new)) {
+                $info->filepath = $newPath;
+                $info->save();
+            } else {
+                $command .= "mv {$old} {$new};\n";
+            }
+        }
+        echo $command;
+        exit();
+    }
+
     public function _testDealbooks()
     {
+        return false;
         $infos = $this->getModelObj('majorevent')->where(['code' => ''])->get();
         $results = [];
         foreach ($infos as $info) {

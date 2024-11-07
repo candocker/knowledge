@@ -27,7 +27,7 @@ return [
             'subDatas' => [
                 'zgwenxueshi' => ['code' => 'zgwenxueshi', 'name' => '中国文学史'],
                 'wgwenxueshi' => ['code' => 'wgwenxueshi', 'name' => '外国文学史'],
-                'rujiashi' => ['code' => 'rujiashi', 'name' => '儒学历史'],
+                'ruxue' => ['code' => 'ruxue', 'name' => '儒学历史'],
                 'xfzhexueshi' => ['code' => 'xfzhexueshi', 'name' => '西方哲学史'],
                 //['code' => '', 'name' => ''],
             ],
