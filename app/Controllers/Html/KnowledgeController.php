@@ -42,7 +42,7 @@ class KnowledgeController extends AbstractController
         $datas['isMobile'] = $isMobile;
 
         $service = $this->getSubjectServiceObj();
-        if ($navCode == 'culture') {
+        if (in_array($navCode, ['wghistory', 'figure', 'zghistory', 'culture'])) {
             $dDatas = $service->formatSubjectDatas($currentNav, $isMobile);
         } else {
             $dDatas = $service->formatPointDatas($navCode, $currentNav, $isMobile);
