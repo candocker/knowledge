@@ -43,15 +43,26 @@ return [
                 'luxun' => ['code' => 'luxun', 'name' => '鲁迅'],
             ],
         ],*/
-        'knowledge' => [
+        'culture' => [
             'name' => '思想文化',
             'subDatas' => [
-                'ruxue' => ['code' => 'ruxue', 'name' => '儒学历史'],
-                'zgzhexue' => ['code' => 'zgzhexue', 'name' => '中国思想史'],
-                'xfzhexue' => ['code' => 'xfzhexue', 'name' => '西方哲学史'],
-                'qtzhexue' => ['code' => 'qtzhexue', 'name' => '宗教/其他哲学'],
-                'zgwenxue' => ['code' => 'zgwenxue', 'name' => '中国文学'],
-                'wgwenxue' => ['code' => 'wgwenxue', 'name' => '外国文学'],
+                'confucianism' => ['code' => 'confucianism', 'name' => '儒学历史'],
+                'zgculture' => ['code' => 'zgculture', 'name' => '中国思想史'],
+                'xfculture' => ['code' => 'xfculture', 'name' => '西方哲学史'],
+                'qtculture' => [
+                    'code' => 'qtculture',
+                    'name' => '宗教/其他文化',
+                    'subDatas' => [
+                        'judaism' => ['code' => 'judaism', 'name' => '犹太教'],
+                        'christianity' => ['code' => 'christianity', 'name' => '基督教'],
+                        'islam' => ['code' => 'islam', 'name' => '伊斯兰教'],
+                        'buddhism' => ['code' => 'buddhism', 'name' => '佛教'],
+                        'gydculture' => ['code' => 'gydculture', 'name' => '古代印度文化'],
+                        //'' => ['code' => '', 'name' => ''],
+                    ],
+                ],
+                'zgliterature' => ['code' => 'zgliterature', 'name' => '中国文学'],
+                'wgliterature' => ['code' => 'wgliterature', 'name' => '外国文学'],
                 //['code' => '', 'name' => ''],
             ],
         ],

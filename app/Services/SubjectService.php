@@ -178,12 +178,17 @@ class SubjectService extends AbstractService
         $datas = [
             'luxunworks' => $base . 'books/鲁迅著作/works.php',
             'scholarism' => $base . 'books/学术名著/scholarism.php',
-            'ruxue' => $base . 'subject/儒学/base.php',
-            'zgzhexue' => $base. 'subject/中国思想史/base.php',
-            'xfzhexue' => $base. 'subject/西方哲学史/base.php',
-            'qtzhexue' => $base. 'subject/其他/base.php',
-            'zgwenxue' => $base. 'subject/中国文学/base.php',
-            'wgwenxue' => $base. 'subject/外国文学/base.php',
+            'confucianism' => $base . 'culture/儒学/base.php',
+            'zgculture' => $base. 'culture/中国思想史/base.php',
+            'xfculture' => $base. 'culture/西方哲学史/base.php',
+            //'qtculture' => $base. 'culture/其他/base.php',
+            'judaism' => $base. 'culture/其他文化/犹太教/base.php',
+            'christianity' => $base. 'culture/其他文化/基督教/base.php',
+            'islam' => $base. 'culture/其他文化/伊斯兰教/base.php',
+            'buddhism' => $base. 'culture/其他文化/佛教/base.php',
+            'gydculture' => $base. 'culture/其他文化/古印度文化/base.php',
+            'zgliterature' => $base. 'culture/中国文学/base.php',
+            'wgliterature' => $base. 'culture/外国文学/base.php',
         ];
         return is_null($sCode) ? $datas : $datas[$sCode];
     }
