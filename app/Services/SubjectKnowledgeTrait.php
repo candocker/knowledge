@@ -38,7 +38,7 @@ trait SubjectKnowledgeTrait
     {
         $detailDatas = require($this->_specialKnowledgePath($currentNav['code']));
         $detailDatas['simpleTableDatas'][] = [
-            'name' => '儒学知识库',
+            'name' => $currentNav['name'],
             'infos' => array_chunk($this->_getKnowledgeDatas([$currentNav['code']]), 3),
         ];
         //print_r($detailDatas);exit();

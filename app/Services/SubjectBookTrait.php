@@ -222,7 +222,11 @@ trait SubjectBookTrait
                 //$info['name'] .= strlen($info['name']);
                 $bCode = $info['bookCode'];
                 if ($navCode == 'onlineread') {
-                    $url = $isMobile ? "http://book.canliang.wang/pages/book/info?book_code={$bCode}" : "/{$bCode}/list.html";
+                    if (!empty($bCode)) {
+                        $url = $isMobile ? "http://book.canliang.wang/pages/book/info?book_code={$bCode}" : "/{$bCode}/list.html";
+                    } else {
+                        $url = '';
+                    }
                 } else if ($navCode == 'bookstore') {
                     $url = 'javascript:;';
                     $info['modalUrl'] = "/ajax-book-{$bCode}.html";
