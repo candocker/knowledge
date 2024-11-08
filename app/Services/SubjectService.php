@@ -6,7 +6,7 @@ namespace ModuleKnowledge\Services;
 class SubjectService extends AbstractService
 {
     use SubjectBookTrait;
-    use SubjectDataTrait;
+    use SubjectKnowledgeTrait;
 
     public function getSubjectSorts($subjectSort, $subjectCode)
     {
@@ -179,6 +179,11 @@ class SubjectService extends AbstractService
             'luxunworks' => $base . 'books/鲁迅著作/works.php',
             'scholarism' => $base . 'books/学术名著/scholarism.php',
             'ruxue' => $base . 'subject/儒学/base.php',
+            'zgwenxue' => $base. 'subject/中国文学/base.php',
+            'wgwenxue' => $base. 'subject/外国文学/base.php',
+            'xfzhexue' => $base. 'subject/西方哲学/base.php',
+            'zgzhexue' => $base. 'subject/中国哲学/base.php',
+            'zhexue' => $base. 'subject/中国哲学/base.php',
         ];
         return is_null($sCode) ? $datas : $datas[$sCode];
     }

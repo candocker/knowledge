@@ -57,6 +57,13 @@ class TestController extends AbstractController
 
     public function _testDealbooks()
     {
+        $infos = $this->getModelObj('book')->where('id', '>=', 1056)->where('id', '<=', 1072)->get();
+        $code = '';
+        foreach ($infos as $info) {
+            $code .= "'{$info['code']}',";
+            //var_dump($info['name']);
+        }
+        echo trim($code, ',');
         return false;
         //$swbooks = require('/data/htmlwww/laravel-system/vendor/candocker/knowledge/resources/formatdata/swbooks.php');
     }

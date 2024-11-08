@@ -16,22 +16,6 @@ return [
 
             ],
         ],
-        /*'bigpeople' => [
-            'name' => '名人传',
-            'subDatas' => [
-                'luxun' => ['code' => 'luxun', 'name' => '鲁迅'],
-            ],
-        ],*/
-        'subject' => [
-            'name' => '专题',
-            'subDatas' => [
-                'zgwenxueshi' => ['code' => 'zgwenxueshi', 'name' => '中国文学史'],
-                'wgwenxueshi' => ['code' => 'wgwenxueshi', 'name' => '外国文学史'],
-                'ruxue' => ['code' => 'ruxue', 'name' => '儒学历史'],
-                'xfzhexueshi' => ['code' => 'xfzhexueshi', 'name' => '西方哲学史'],
-                //['code' => '', 'name' => ''],
-            ],
-        ],
         'bookstore' => [
             'name' => '书架',
             'subDatas' => [
@@ -51,6 +35,39 @@ return [
                 ],
                 'other' => ['code' => 'other', 'name' => '其他著作 ( 12本 )', 'withVolume' => ['goodworks']],
                 //['code' => '', 'name' => ''],
+            ],
+        ],
+        /*'bigpeople' => [
+            'name' => '名人传',
+            'subDatas' => [
+                'luxun' => ['code' => 'luxun', 'name' => '鲁迅'],
+            ],
+        ],*/
+        'knowledge' => [
+            'name' => '思想文化',
+            'subDatas' => [
+                'ruxue' => ['code' => 'ruxue', 'name' => '儒学历史'],
+                'zgzhexue' => ['code' => 'xfzhexue', 'name' => '中国思想史'],
+                'xfzhexue' => ['code' => 'xfzhexue', 'name' => '西方哲学史'],
+                'otherzhexue' => ['code' => 'otherzhe', 'name' => '宗教/其他哲学'],
+                'zgwenxue' => ['code' => 'zgwenxueshi', 'name' => '中国文学'],
+                'wgwenxue' => ['code' => 'wgwenxueshi', 'name' => '外国文学'],
+                //['code' => '', 'name' => ''],
+            ],
+        ],
+        'figure' => [
+            'name' => '名人录',
+            'subDatas' => [
+            ],
+        ],
+        'zhhistory' => [
+            'name' => '中国历史',
+            'subDatas' => [
+            ],
+        ],
+        'wghistory' => [
+            'name' => '外国和外国历史',
+            'subDatas' => [
             ],
         ],
     ],

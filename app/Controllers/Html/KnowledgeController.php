@@ -42,7 +42,7 @@ class KnowledgeController extends AbstractController
         $datas['isMobile'] = $isMobile;
 
         $service = $this->getSubjectServiceObj();
-        if ($navCode == 'subject') {
+        if ($navCode == 'knowledge') {
             $dDatas = $service->formatSubjectDatas($currentNav, $isMobile);
         } else {
             $dDatas = $service->formatPointDatas($navCode, $currentNav, $isMobile);
@@ -67,6 +67,27 @@ class KnowledgeController extends AbstractController
     {
         $datas = $this->getBookServiceObj()->getChapterDetail($bookCode, $chapterCode);
         return $this->customView('book.detail', $datas);
+    }
+
+    public function askKnowledgeDetail($code, $detail)
+    {
+        $service = $this->getSubjectServiceObj();
+        $datas = $service->getKnowledgeDetailContent($code, $detail);
+        return $this->customView('ajax-page', $datas);
+    }
+
+    public function askKnowledge($code = null)
+    {
+        $service = $this->getSubjectServiceObj();
+        $knowledge = $service->_knowledgeData($code);
+
+        $navs = require(self_app_path($this->getAppCode(), '/resources/formatdata/nav.php'));
+        $datas = $navs;
+        $datas['knowledge'] = $knowledge;
+        $datas['detailDatas'] = $service->getKnowledgeDetailDatas($knowledge);
+        //print_R($datas);exit();
+        $datas['tdkData'] = ['title' => $knowledge['name'] . '-' . '知识库'];
+        return $this->customView('askwiki', $datas);
     }
 
     public function wikiDetail($type, $code)
