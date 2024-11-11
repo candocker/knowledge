@@ -190,6 +190,8 @@ class SubjectService extends AbstractService
             'zgliterature' => $base. 'culture/中国文学/base.php',
             'wgliterature' => $base. 'culture/外国文学/base.php',
             'other' => $base. 'culture/外国文学/base.php',
+
+            'bigcountry' => $base. 'history/外国历史/大国历史/base.php',
         ];
         return is_null($sCode) ? $datas : $datas[$sCode] ?? $datas['other'];
     }

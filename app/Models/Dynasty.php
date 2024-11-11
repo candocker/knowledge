@@ -8,5 +8,6 @@ class Dynasty extends AbstractModel
 {
     protected $table = 'dynasty';
     protected $guarded = ['id'];
+    public $timestamps = false;
 
 }

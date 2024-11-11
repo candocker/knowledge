@@ -8,6 +8,7 @@ class Knowledge extends AbstractModel
 {
     //protected $table = '';
     protected $fillable = ['name'];
+    public $timestamps = false;
 
     public function getFullPathAttribute()
     {

@@ -62,7 +62,8 @@ $elems = [
     'nestable' => ['jquery.nestable.js', 'ui-nestable.js', 'app.js'],
     'modals' => ['bootstrap-modal.js', 'bootstrap-modalmanager.js', 'app.js', 'select2.min.js', 'ui-modals.js'],
     'pointsingle' => [
-        'bootstrap-modal.js', 'bootstrap-modalmanager.js', 'app.js', 'select2.min.js', 'self-ajax.js'
+        'bootstrap-modal.js', 'bootstrap-modalmanager.js', 'jquery.dataTables.min.js', 'DT_bootstrap.js', 
+        'app.js', 'table-advanced.js', 'select2.min.js', 'self-ajax.js'
     ],
     'jqueryui' => ['app.js', 'ui-jqueryui.js'],
     'uigeneral' => ['jquery.gritter.js', 'jquery.pulsate.min.js', 'jquery.bootpag.min.js', 'app.js', 'ui-general.js'],
@@ -100,6 +101,7 @@ jQuery(document).ready(function() {
   @elseif (in_array($viewCode, ['jqueryui']))
        UIJQueryUI.init();
   @elseif (in_array($viewCode, ['pointsingle']))
+       TableAdvanced.init();
        SelfAjax.init();
   @elseif (in_array($viewCode, ['modals']))
        UIModals.init();

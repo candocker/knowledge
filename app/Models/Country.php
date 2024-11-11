@@ -8,5 +8,6 @@ class Country extends AbstractModel
 {
     protected $table = 'country';
     protected $guarded = ['id'];
+    public $timestamps = false;
 
 }

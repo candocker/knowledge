@@ -8,5 +8,6 @@ class KnowledgeDetail extends AbstractModel
 {
     protected $table = 'knowledge_detail';
     protected $guarded = ['id'];
+    public $timestamps = false;
 
 }

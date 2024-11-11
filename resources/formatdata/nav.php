@@ -63,6 +63,7 @@ return [
             'name' => '名人录',
             'subDatas' => [
                 'luxun' => ['code' => 'luxun', 'name' => '鲁迅'],
+                'kongzi' => ['code' => 'kongzi', 'name' => '孔子'],
                 //'' => ['code' => '', 'name' => ''],
             ],
         ],

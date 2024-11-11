@@ -6,7 +6,7 @@ $elems = [
     'tableManaged' => ['select2_metro.css', 'DT_bootstrap.css'],
     'single' => ['promo.css', 'animate.css'],
     'pointsingle' => [
-        'promo.css', 'animate.css', 'profile.css','jquery-ui-1.10.1.custom.min.css', 'bootstrap-modal.css'
+        'promo.css', 'animate.css', 'profile.css','jquery-ui-1.10.1.custom.min.css', 'bootstrap-modal.css', 'DT_bootstrap.css'
     ],
     'login' => ['login.css'],
     'loginSoft' => ['login-soft.css'],

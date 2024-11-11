@@ -22,6 +22,38 @@ class TestController extends AbstractController
         exit();
     }
 
+    public function _testDealgroup()
+    {
+        $sorts = ['ancients', 'contemporary', 'contemporary', 'modern'];
+        $sorts = ['culture'];
+        $sorts = ['foreign'];
+        $sorts = ['dynasty'];
+        $sorts = ['subject', 'period'];
+        $subjectSorts = $this->getModelObj('subjectSort')->whereIn('code', $sorts)->get();
+        foreach ($subjectSorts as $sData) {
+            echo $sData['name'] . '--' . $sData['code'] . '<br />';
+            $subjects = $this->getModelObj('subject')->where(['subject_sort' => $sData['code']])->orderBy('orderlist', 'asc')->get();
+            foreach ($subjects as $subject) {
+                echo '---        ---' . $subject['name'] . '--' . $subject['code'] . '<br />';
+                $sgDatas = $this->getModelObj('groupSubject')->where(['subject_code' => $subject['code']])->orderBy('orderlist', 'asc')->get();
+                foreach ($sgDatas as $sgData) {
+                    echo '---        ---===---        ---' . $sgData->groupInfo['name'] . '--' . $sgData['group_code'] . '<br />';
+                    $kPath = "history/中国断代/{$subject['name']}/{$sgData->groupInfo['name']}/base";
+                    $nData = [
+                        'code' => $sgData['group_code'],
+                        'name' => $sgData->groupInfo['name'],
+                        'parent_code' => $subject['code'],
+                        'knowledge_path' => $kPath,
+                    ];
+                    //$this->getModelObj('dynasty')->create($nData);
+                    //$this->getModelObj('country')->create($nData);
+                    //print_r($nData);
+                }
+            }
+        }
+        exit();
+    }
+
     public function _testDealResource()
     {
         $basePath = '/data/htmlwww/resource/';
@@ -55,7 +87,7 @@ class TestController extends AbstractController
         exit();
     }
 
-    public function _testDealbooks()
+    public function _testDealnav()
     {
         $navs = require(self_app_path($this->getAppCode(), '/resources/formatdata/nav.php'));
         $i = 1;
