@@ -1,7 +1,7 @@
 @php $commonTitles = $commonTableDatas['titles'] ?? []; @endphp
 @foreach ($commonTableDatas as $tData)
 @if (isset($tData['infos']))
-@php $tTitles = $TData['titles'] ?? $commonTitles; @endphp
+@php $tTitles = $tData['titles'] ?? $commonTitles; @endphp
 <div class="portlet box green">
   <div class="portlet-title">
     <div class="caption">

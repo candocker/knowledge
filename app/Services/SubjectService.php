@@ -114,6 +114,7 @@ class SubjectService extends AbstractService
             'book' => ['mCode' => 'book', 'field' => 'code'],
             'group' => ['mCode' => 'group', 'field' => 'code'],
             'volume' => ['mCode' => 'bookVolume', 'field' => 'id'],
+            'country' => ['mCode' => 'country', 'field' => 'code'],
         ];
         $param = $params[$type];
         $info = $this->getModelObj($param['mCode'])->where([$param['field'] => $code])->first();
@@ -191,7 +192,7 @@ class SubjectService extends AbstractService
             'wgliterature' => $base. 'culture/外国文学/base.php',
             'other' => $base. 'culture/外国文学/base.php',
 
-            'bigcountry' => $base. 'history/外国历史/大国历史/base.php',
+            'bigcountry' => $base. 'history/外国历史/近代大国/base.php',
         ];
         return is_null($sCode) ? $datas : $datas[$sCode] ?? $datas['other'];
     }
