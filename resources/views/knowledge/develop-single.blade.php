@@ -12,6 +12,7 @@ $baseData = $detailDatas['baseData'] ?? [];
 $simpleTableDatas = $detailDatas['simpleTableDatas'] ?? [];
 $simpleFixedDatas = $detailDatas['simpleFixedDatas'] ?? [];
 $commonTableDatas = $detailDatas['commonTableDatas'] ?? [];
+$advancedDatas = $detailDatas['advancedDatas'] ?? [];
 $commonFixedDatas = $detailDatas['commonFixedDatas'] ?? [];
 $askwikiDatas = $detailDatas['askwikiDatas'] ?? [];
 //print_r($detail);exit();
@@ -47,6 +48,13 @@ if (isset($pageData['url'])) {
   <div class="container">
     <div class="row-fluid margin-bottom-20">
       @include('knowledge.components._common-table', ['commonTableDatas' => $commonTableDatas, 'isMobile' => $isMobile])
+    </div>
+  </div>
+  @endif
+  @if (!empty($advancedDatas))
+  <div class="container">
+    <div class="row-fluid margin-bottom-20">
+      @include('knowledge.components._advanced-table', ['advancedDatas' => $advancedDatas, 'isMobile' => $isMobile])
     </div>
   </div>
   @endif

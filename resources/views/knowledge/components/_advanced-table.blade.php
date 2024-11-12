@@ -1,79 +1,50 @@
-        <div class="row-fluid">
-          <div class="span12">
-            <!-- BEGIN EXAMPLE TABLE PORTLET-->
-            <div class="portlet box green">
-              <div class="portlet-title">
-                <div class="caption"><i class="icon-globe"></i>Responsive Table With Expandable details</div>
-                <div class="tools">
-                  <a href="javascript:;" class="reload"></a>
-                  <a href="javascript:;" class="remove"></a>
-                </div>
-              </div>
-              <div class="portlet-body">
-                <table class="table table-striped table-bordered table-hover table-full-width" id="table_self_advanced">
-                  <thead>
-                    <tr>
-                      <th>Reoondering engine</th>
-                      <th>Broiiwser</th>
-                      <th class="hidden-480">Platform(s)</th>
-                      <th class="hidden-480">ooooEngine version</th>
-                      <th class="hidden-480">CSS grade</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Trident</td>
-                      <td>Internet
-                        Explorer 4.0
-                      </td>
-                      <td >Woin 95+</td>
-                      <td class="hidden-480">4</td>
-                      <td class="hidden-480">X</td>
-                    </tr>
-                    <tr >
-                      <td>Trident</td>
-                      <td>Internet
-                        Explorer 5.0
-                      </td>
-                      <td class="hidden-480">Win 95+</td>
-                      <td class="hidden-480">5</td>
-                      <td class="hidden-480">C</td>
-                    </tr>
-                    <tr >
-                      <td>Trident</td>
-                      <td>Internet
-                        Explorer 5.5
-                      </td>
-                      <td class="hidden-480">Win 95+</td>
-                      <td class="hidden-480">5.5</td>
-                      <td class="hidden-480">A</td>
-                    </tr>
-                    <tr >
-                      <td>Trident</td>
-                      <td>Internet
-                        Explorer 6
-                      </td>
-                      <td class="hidden-480">Win 98+</td>
-                      <td class="hidden-480">6</td>
-                      <td class="hidden-480">A</td>
-                    </tr>
-                    <tr >
-                      <td>Trident</td>
-                      <td>Internet Explorer 7</td>
-                      <td class="hidden-480">Win XP SP2+</td>
-                      <td class="hidden-480">7</td>
-                      <td class="hidden-480">A</td>
-                    </tr>
-                    <tr >
-                      <td>Trident</td>
-                      <td>AOL browser (AOL desktop)</td>
-                      <td class="hidden-480">Win XP</td>
-                      <td class="hidden-480">6</td>
-                      <td class="hidden-480">A</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+@php $commonTitles = $advancedDatas['titles'] ?? []; @endphp
+@foreach ($advancedDatas as $tData)
+@if (isset($tData['infos']))
+@php $tTitles = $tData['titles'] ?? $commonTitles; @endphp
+<div class="row-fluid">
+  <div class="span12">
+    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+    <div class="portlet box green">
+      <div class="portlet-title">
+        <div class="caption">
+          <b>{{$tData['name']}}</b>
+          @if (isset($tData['brief']) && !empty($tData['brief']))
+          <small style="margin-left: 15px; color:red; font-weight:normal; text-decoration:underline; font-style:oblique;">{{$tData['brief']}}</small>
+          @endif
         </div>
+        <div class="tools">
+          @if (isset($tData['showUrl']) && !empty($tData['showUrl']))<a href="{{$tData['showUrl']}}" style="color:red;">详情</a>@endif
+        </div>
+      </div>
+
+
+      <div class="portlet-body">
+        <table class="table table-striped table-bordered table-hover table-full-width" id="table_self_advanced">
+          <thead>
+            <tr>
+              @php $i = 1; @endphp
+              @foreach ($tTitles as $tTitle)
+              <th @if ($i >2) class="hidden-480" @endif>{{$tTitle}}</th>
+              @php $i++; @endphp
+              @endforeach
+            </tr>
+          </thead>
+          <tbody>
+            @foreach ($tData['infos'] as $pData)
+            <tr>
+              @php $j = 1; @endphp
+              @foreach ($pData as $vName)
+              <td @if ($j >2) class="hidden-480" @endif>{!!$vName!!}</td>
+              @php $j++; @endphp
+              @endforeach
+            </tr>
+            @endforeach
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+@endif
+@endforeach

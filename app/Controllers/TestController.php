@@ -22,6 +22,62 @@ class TestController extends AbstractController
         exit();
     }
 
+    public function _testPotus()
+    {
+        $infos = \DB::connection()->select("SELECT * FROM `data_culture`.`wp_figure_resume`");
+        $results = [];
+        foreach ($infos as $info) {
+            $fCode = $info->figure_code;
+            $fInfo = $this->getModelObj('figure')->where(['code' => $fCode])->first();
+            $titles = $fInfo->getFtitleDatas();
+            foreach ($titles as $key => $t) {
+                if ($key != 'englishfull') {
+                    print_r($titles);
+                }
+            }
+            //print_r($titles);
+            $rData = [
+                'name' => $fInfo['name'],
+                'fullName' => $fInfo['name_card'],
+                'englishfull' => $titles['englishfull'][0],
+                'number' => $info->term,
+            ];
+            $dateInfos = $this->getModelObj('dateinfo')->where(['info_key' => $fCode])->get();
+            foreach ($dateInfos as $dInfo) {
+                if (!in_array($dInfo['type'], ['deathday', 'birthday'])) {
+                    print_r($dateInfos->toArray());
+                } else {
+                    $rData[$dInfo['type']] = $dInfo['year'] . ' / ' . $dInfo['month'] . ' / ' . $dInfo['day'];
+                }
+            }
+            $period = [
+                'period' => $info->period,
+                'party' => $info->party,
+            ];
+            $date1Infos = $this->getModelObj('dateinfo')->where(['info_key' => $info->id])->get();
+            foreach ($date1Infos as $dInfo) {
+                $period[$dInfo['type']] = $dInfo['year'] . ' / ' . $dInfo['month'] . ' / ' . $dInfo['day'];
+            }
+            //print_r($period);
+            //print_r($rData);exit();
+            if ($fCode == 'cleveland') {
+                //print_r($fInfo->toArray());
+                //print_r($date1Infos->toArray());
+            }
+            if (isset($results[$fCode])) {
+                $results[$fCode]['period'][$info->period] = $period;
+            } else {
+                $results[$fCode] = $rData;
+                $results[$fCode]['period'][$info->period] = $period;
+            }
+
+            //$dateinfos = $fInfo->getDateinfo($type, $result = 'format')
+        }
+        var_export($results);
+        exit();
+        print_r($infos);exit();
+    }
+
     public function _testDealgroup()
     {
         $sorts = ['ancients', 'contemporary', 'contemporary', 'modern'];
