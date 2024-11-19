@@ -22,6 +22,60 @@ class TestController extends AbstractController
         exit();
     }
 
+    public function _testKing()
+    {
+        $infos = file('/tmp/a.php');
+        $results = [];
+        $titles = [];
+        foreach ($infos as $info) {
+            $tmp = explode("\t", $info);
+            foreach ($tmp as $key => & $value) {
+                $value = trim($value);
+            }
+            if (empty($titles)) {
+                $titles = $tmp;
+                continue;
+            }
+            //print_r($titles);
+            //print_r($tmp);
+            if (count($tmp) < 7) {
+            //print_r($tmp);
+            //continue;
+            }
+            $name = $tmp[2];
+            $code = CommonTool::getSpellStr($name, '');
+            //var_dump($name);
+            //var_dump($code);
+            if (isset($results[$code])) {
+                $code .= '__' . rand(1, 1000);
+            }
+            if (isset($results[$code])) {
+                $code .= '__' . rand(1, 1000);
+            }
+            $rData = [];
+            foreach ($tmp as $nkey => $nvalue) {
+                if ($nkey == 0) {
+                    //continue;
+                }
+                $rData[$titles[$nkey]] = $nvalue;
+            }
+            print_R($tmp);
+            print_R($rData);
+            $results[$code] = $rData;
+        }
+        print_r($results);
+        //print_r($infos);
+        $content = "<?php\nreturn ";
+        $content .= var_export($results, true);
+        $content .= ';';
+        $file = '/data/database/knowledge/history/中国断代/';
+        //$file .= '先秦时期/战国/秦国帝王.php';
+        $file .= '隋唐五代/隋朝/帝王.php';
+        //file_put_contents($file, $content);
+
+        exit();
+    }
+
     public function _testPotus()
     {
         $infos = \DB::connection()->select("SELECT * FROM `data_culture`.`wp_figure_resume`");

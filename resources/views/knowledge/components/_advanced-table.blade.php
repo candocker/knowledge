@@ -28,16 +28,30 @@
               <th @if ($i >2) class="hidden-480" @endif>{{$tTitle}}</th>
               @php $i++; @endphp
               @endforeach
+
+              @if (isset($tData['titleExts']))
+              @foreach ($tData['titleExts'] as $eTitle)
+              <th style="display:none">{{$eTitle}}</th>
+              @endforeach
+              @endif
             </tr>
           </thead>
           <tbody>
             @foreach ($tData['infos'] as $pData)
             <tr>
-              @php $j = 1; @endphp
-              @foreach ($pData as $vName)
-              <td @if ($j >2) class="hidden-480" @endif>{!!$vName!!}</td>
+              @php $j = 1; $index = 0; @endphp
+              @foreach ($tTitles as $key => $tTitle)
+              @php $pStr = $pData[$key] ?? $pData[$index]; $index++; @endphp
+              <td @if ($j >2) class="hidden-480" @endif>{!!$pStr!!}</td>
               @php $j++; @endphp
               @endforeach
+
+              @if (isset($tData['titleExts']))
+              @foreach ($tData['titleExts'] as $key => $eTitle)
+              @php $pStr = $pData[$key] ?? ($pData[$index] ?? ''); $index++; @endphp
+              <td style="display:none">{!!$pStr!!}</td>
+              @endforeach
+              @endif
             </tr>
             @endforeach
           </tbody>
