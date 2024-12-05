@@ -5,6 +5,7 @@ namespace ModuleKnowledge\Services;
 
 class SubjectService extends AbstractService
 {
+    use OtherLoanTrait;
     use SubjectBookTrait;
     use SubjectKnowledgeTrait;
 
@@ -193,6 +194,7 @@ class SubjectService extends AbstractService
             'other' => $base. 'culture/外国文学/base.php',
 
             'bigcountry' => $base. 'history/外国历史/近代大国/base.php',
+            'gdempire' => $base. 'history/外国历史/帝国/base.php',
         ];
         return is_null($sCode) ? $datas : $datas[$sCode] ?? $datas['other'];
     }

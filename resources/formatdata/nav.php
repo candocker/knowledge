@@ -83,9 +83,10 @@ return [
             'subDatas' => [
                 'bigcountry' => ['code' => 'bigcountry', 'name' => '大国近代史'],
                 'jdpoliticsreform' => ['code' => 'jdpoliticsreform', 'name' => '近代政治革命'],
-                'gdgeneral' => ['code' => 'gdgeneral', 'name' => '古代战争和将领'],
-                'jdgeneral' => ['code' => 'zggeneral', 'name' => '近代战争和将领'],
+                'jdgeneral' => ['code' => 'jdgeneral', 'name' => '近代战争和将领'],
                 'gdempire' => ['code' => 'gdempire', 'name' => '古代帝国'],
+                //'gdpolitics' => ['code' => 'gdempire', 'name' => '古代政治和文化'],
+                'gdgeneral' => ['code' => 'gdgeneral', 'name' => '古代战争和将领'],
             ],
         ],
     ],

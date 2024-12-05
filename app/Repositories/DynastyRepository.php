@@ -45,4 +45,10 @@ class DynastyRepository extends AbstractRepository
             99 => '锁定',
         ];
     }
+
+    public function _categoriesKeyDatas()
+    {
+        return [
+        ];
+    }
 }

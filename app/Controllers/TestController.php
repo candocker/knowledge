@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace ModuleKnowledge\Controllers;
 
+use Symfony\Component\DomCrawler\Crawler;
 use Swoolecan\Foundation\Helpers\CommonTool;
 use Carbon\Carbon;
 
@@ -42,7 +43,7 @@ class TestController extends AbstractController
             //print_r($tmp);
             //continue;
             }
-            $name = $tmp[2];
+            $name = $tmp[0];
             $code = CommonTool::getSpellStr($name, '');
             //var_dump($name);
             //var_dump($code);
@@ -70,9 +71,105 @@ class TestController extends AbstractController
         $content .= ';';
         $file = '/data/database/knowledge/history/中国断代/';
         //$file .= '先秦时期/战国/秦国帝王.php';
-        $file .= '隋唐五代/隋朝/帝王.php';
-        //file_put_contents($file, $content);
+        $file .= '魏晋南北朝/东晋/帝王1.php';
+        file_put_contents($file, $content);
 
+        exit();
+    }
+
+    public function _testKing2old()
+    {
+        $datas = require('/tmp/a.php');
+        foreach ($datas as $data) {
+            foreach ($data['elems'] as $elem) {
+                $name = trim($elem[0]);
+                $nData = [
+                    'name' => $name,
+                    'figure_code' => CommonTool::getSpellStr($name, ''),
+                    'name_alias' => trim($elem[1]),
+                    'baidu_url' => trim($elem[2]),
+                    'spell' => isset($elem[3]) ? trim($elem[3]) : '',
+                    'posthumous_title' => isset($elem[4]) ? trim($elem[4]) : '',
+                    'office_start_end' => isset($elem[5]) ? trim($elem[5]) : '',
+                ];
+                print_r($nData);
+                $this->getModelObj('emperor')->create($nData);
+                //print_r($elem);exit();
+            }
+        }
+        exit();
+        print_R($datas);
+    }
+
+    public function _testKing2()
+    {
+        $file = '/tmp/b.php';
+        $crawler = new Crawler();
+        $content = file_get_contents($file);
+        $crawler->addContent($content);
+        $datas = [];
+        //$titles = ['dynasty', 'dynasty_sub', 'serial', 'first_emperor','begin_end'];
+        $titles = ['posthumous_title', 'serial', 'mausoleum', 'eraname', 'birth_death', 'office_start_end', 'name', 'office_start_end', 'office_duration', 'brief', 'brief2'];
+        $titles = ['dynastic_title', 'posthumous_title', 'name', 'office_start_end', 'eraname', 'mausoleum', 'brief', 'birth_death', 'brief2'];
+        //$titles = ['name', 'nationality', 'brief', 'first_emperor', 'brief2', 'begin_end', 'brief3', 'capital', 'brief4'];
+        $crawler->filter('tr')->each(function ($subCrawler) use (& $datas, $titles) {
+            $data = [];
+            $i = 0;
+            $subCrawler->filter('td')->each(function ($node) use (& $data, & $i, $titles) {
+                $aDom = $node->filter('a');
+                $url = '';
+                if ($aDom->count() > 0) {// && !isset($data['baidu_url']) && $i != 0) {
+                    $url = urldecode($aDom->attr('href'));
+                    if (strpos($url, '?') !== false) {
+                        $url = substr($url, 0, strpos($url, '?'));
+                    }
+                    if (strpos($url, '朱') !== false) {
+                    $data['baidu_url'] = 'https://baike.baidu.com/' . trim($url, '/');
+                    }
+                }
+                $text = $node->text();
+                $text = trim($text, '-');
+                //$text = trim($text, '—');
+                //$text = str_replace(['- [90]', '-'], ['', ''], $text);
+                $text = str_replace(['不详'], [''], $text);
+                $title = $titles[$i] ?? '';
+                $data[$title] = $text;
+                if ($title == 'name') {
+                    $data['figure_code'] = CommonTool::getSpellStr($data[$title], '');
+                    //$data['code'] = CommonTool::getSpellStr($data[$title], '');
+                }
+                $i++;
+            });
+            if (!empty($data)) {
+                $datas[] = $data;
+            }
+        });
+        $sql = "INSERT INT `wp_dynasty` (`" . implode('`,`', $titles) . "`) VALUES \n";
+        //$sql = "INSERT INTO `wp_dynasty` (`name`, `code`, `parent_code`, `begin_end`, `brief`, `baidu_url`) VALUES \n";
+        //$sql = "INSERT INTO `wp_emperor` (`name`, `figure_code`, `dynasty`, `office_start_end`, `brief`, `office_duration`, `posthumous_title`, `baidu_url`) VALUES \n";
+        foreach ($datas as & $data) {
+            if (!isset($data['name']) || in_array($data['name'], ['', '君主', '—', '姓名'])) {//!isset($data['baidu_url'])) {
+                continue;
+            }
+            if (empty($data['figure_code'])) {
+                $data['figure_code'] = isset($data['posthumous_title']) ? CommonTool::getSpellStr($data['posthumous_title'], '') : '';
+            }
+            $data['dynasty'] = 'qingchao';
+            //$data['dynasty_sub'] = '后金';
+            if (isset($data['brief2'])) {
+                $data['brief'] = "{$data['brief']}。{$data['brief2']}";
+                //$data['brief'] = "传{$data['brief']}帝，末代君主{$data['brief2']}亡于{$data['brief4']}。{$data['brief3']}";
+                //$data['brief'] = trim($data['brief'], '。');
+                unset($data['brief2']);
+            }
+            $sql .= "('" . implode("','", $data) . "')\n";
+            //$sql .= "('{$data['name']}', '{$data['code']}', 'zhou', '{$data['begin_end']}', '{$data['brief']}-{$data['brief2']}', '{$data['baidu_url']}')\n";
+            print_r($data);
+            //$this->getModelObj('dynasty')->create($data);
+            //$this->getModelObj('emperor')->create($data);
+        }
+        //echo $sql;exit();
+        //print_r($datas);
         exit();
     }
 
@@ -138,23 +235,38 @@ class TestController extends AbstractController
         $sorts = ['culture'];
         $sorts = ['foreign'];
         $sorts = ['dynasty'];
-        $sorts = ['subject', 'period'];
+        //$sorts = ['subject', 'period'];
         $subjectSorts = $this->getModelObj('subjectSort')->whereIn('code', $sorts)->get();
         foreach ($subjectSorts as $sData) {
             echo $sData['name'] . '--' . $sData['code'] . '<br />';
-            $subjects = $this->getModelObj('subject')->where(['subject_sort' => $sData['code']])->orderBy('orderlist', 'asc')->get();
+            $subjects = $this->getModelObj('subject')->where(['subject_sort' => $sData['code']])->orderBy('orderlist', 'desc')->get();
             foreach ($subjects as $subject) {
                 echo '---        ---' . $subject['name'] . '--' . $subject['code'] . '<br />';
-                $sgDatas = $this->getModelObj('groupSubject')->where(['subject_code' => $subject['code']])->orderBy('orderlist', 'asc')->get();
+                $sgDatas = $this->getModelObj('groupSubject')->where(['subject_code' => $subject['code']])->orderBy('orderlist', 'desc')->get();
+
+                $kPath = "history/中国断代/{$subject['name']}/base";
+                $nData = [
+                    'county' => 'ancientchina',
+                    'nationality' => 'huaxia',
+                    'code' => $subject['code'],
+                    'name' => $subject['name'],
+                    'parent_code' => '',
+                    'knowledge_path' => $kPath,
+                ];
+                print_r($nData);
+                //$this->getModelObj('dynasty')->create($nData);
                 foreach ($sgDatas as $sgData) {
                     echo '---        ---===---        ---' . $sgData->groupInfo['name'] . '--' . $sgData['group_code'] . '<br />';
                     $kPath = "history/中国断代/{$subject['name']}/{$sgData->groupInfo['name']}/base";
                     $nData = [
+                        'county' => 'ancientchina',
+                        'nationality' => 'huaxia',
                         'code' => $sgData['group_code'],
                         'name' => $sgData->groupInfo['name'],
                         'parent_code' => $subject['code'],
                         'knowledge_path' => $kPath,
                     ];
+                    print_r($nData);
                     //$this->getModelObj('dynasty')->create($nData);
                     //$this->getModelObj('country')->create($nData);
                     //print_r($nData);

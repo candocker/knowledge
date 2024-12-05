@@ -4,12 +4,12 @@ declare(strict_types = 1);
 
 namespace ModuleKnowledge\Repositories;
 
-class CountryRepository extends AbstractRepository
+class EmperorRepository extends AbstractRepository
 {
     protected function _sceneFields()
     {
         return [
-            'list' => ['id', 'code', 'sort', 'name', 'brief', 'baidu_url', 'created_at', 'updated_at', 'status'],
+            'list' => ['id', '', 'figure_code'],
             'listSearch' => ['id', 'name'],
             'add' => ['name'],
             'update' => ['name'],
@@ -26,14 +26,14 @@ class CountryRepository extends AbstractRepository
     public function getSearchFields()
     {
         return [
-            //'type' => ['type' => 'select'],
+            //'type' => ['type' => 'select', 'infos' => $this->getKeyValues('type')],
         ];
     }
 
     public function getFormFields()
     {
         return [
-            //'type' => ['type' => 'select'],
+            //'type' => ['type' => 'select', 'infos' => $this->getKeyValues('type')],
         ];
     }
 
@@ -44,11 +44,5 @@ class CountryRepository extends AbstractRepository
             1 => '使用中',
             99 => '锁定',
         ];
-    }
-
-    public function _nationalitiesKeyDatas()
-    {
-        return [
-            'huaxia' => '华夏民族'
     }
 }

@@ -150,6 +150,75 @@ class KnowledgeController extends AbstractController
         $service->formatPointDatas($navCode, $subCode);
     }
 
+    public function houseLoan()
+    {
+        $this->viewPre();
+        $datas = $this->getSubjectServiceObj()->myLoan();
+        $gTitles = ['利率', '月数', '每月额度', '起始月', '截止月', '本金', '利息', '总计'];
+        $dTitles = ['序号', '月份', '本金', '利息', '月度', '剩余本金'];
+        $results = $gathers = $details = $currentDetails = [];
+        //$details = ['titles' => $dTitles, 'name' => '明细'];
+        //$currentDetails = ['titles' => $dTitles, 'name' => '当前周期明细'];
+        $gathers = ['titles' => $gTitles, 'name' => '利率明细'];
+        foreach ($datas['results'] as $data) {
+            $gData = [];
+            $gData[] = $data['base']['interestRate'];
+            $gData[] = $data['base']['loanNum'];
+            $gData[] = $data['gatherData']['monthlyPaymentValue'];
+            $gData[] = $data['gatherData']['firstMonth'];
+            $gData[] = $data['gatherData']['endMonth'];
+            $gData[] = $data['gatherData']['principalTotal'];
+            $gData[] = $data['gatherData']['interestTotal'];
+            $gData[] = $data['gatherData']['monthlyPaymentTotal'];
+            $gathers['infos'][] = $gData;
+
+            $fInfos = [];
+            foreach ($data['infos'] as $info) {
+                $fInfos[] = [
+                    $info['month'],
+                    $info['monthValue'],
+                    $info['principal'],
+                    $info['interest'],
+                    $info['monthlyPayment'],
+                    $info['remainingAmount'],
+                ];
+            }
+            $fName = "{$data['base']['interestRate']}|{$data['base']['loanNum']}|{$data['gatherData']['principalTotal']}|{$data['gatherData']['interestTotal']}|{$data['gatherData']['monthlyPaymentTotal']}";
+            if ($data['gatherData']['running']) {
+                $currentDetails['cDetails'] = [
+                    'titles' => $dTitles,
+                    'name' => $fName,
+                    'infos' => $fInfos,
+                ];
+            }
+            $details[] = [
+                'titles' => $dTitles,
+                'name' => $fName,
+                'infos' => $fInfos,
+            ];
+        }
+        $tgData = $datas['totalGatherData'];
+        $totalData = [
+            'titles' => ['已完结', '负债', '总计', '占比'],
+            'name' => '汇总',
+            'infos' => [
+                [$tgData['principalDealed'], $tgData['principal'], $tgData['principalTotal'], (round($tgData['principalDealed'] / $tgData['principalTotal'], 3) * 100) . '%'],
+                [$tgData['interestDealed'], $tgData['interest'], $tgData['interestTotal'], (round($tgData['interestDealed'] / $tgData['interestTotal'], 3) * 100) . '%'],
+                [$tgData['monthlyPaymentDealed'], $tgData['monthlyPayment'], $tgData['monthlyPaymentTotal'], (round($tgData['monthlyPaymentDealed'] / $tgData['monthlyPaymentTotal'], 3) * 100) . '%'],
+            ],
+        ];
+
+        $results = [
+            'tdkData' => ['title' => 'title'],
+            'commonFixedDatas' => array_merge(['totalData' => $totalData, 'gathers' => $gathers], $currentDetails, $details),
+        ];
+        //print_r($results);exit();
+        //print_r($datas); exit();
+        //$view = view('simple.loan', ['datas' => $datas]);
+        $view = view('simple.simple', ['datas' => $results]);
+        return $view;
+    }
+
     protected function viewPath()
     {
         return 'knowledge';
