@@ -23,10 +23,15 @@ trait OtherLoanTrait
             ['interestRate' => 4.2, 'loanNum' => 9, 'loanAmount' => '1735021.45'],
             ['interestRate' => 4.28, 'loanNum' => 1, 'loanAmount' => '1730432.42'],
             ['interestRate' => 3.9, 'loanNum' => 2],
-            ['interestRate' => 3.30, 'loanNum' => 28],
+            ['interestRate' => 3.30, 'loanNum' => 16],
+            ['interestRate' => 3.30, 'loanNum' => 36],
+            ['interestRate' => 3.30, 'loanNum' => 36],
+            ['interestRate' => 3.30, 'loanNum' => 48],
+            ['interestRate' => 3.30, 'loanNum' => 108],
+            /*['interestRate' => 3.30, 'loanNum' => 28],
             ['interestRate' => 3.30, 'loanNum' => 36],
             ['interestRate' => 3.30, 'loanNum' => 60],
-            ['interestRate' => 3.30, 'loanNum' => 120],
+            ['interestRate' => 3.30, 'loanNum' => 120],*/
         ];
         $totalGahterData = [];
         $results = [];
@@ -69,16 +74,19 @@ trait OtherLoanTrait
             }
 
             $dealed = false;
-            if ($monthObj->lt($currentMonthObj)) {
+            if ($monthObj->lte($currentMonthObj)) {
                 $dealed = true;
+                $totalGatherData['monthNumDealed'] = isset($totalGatherData['monthNumDealed']) ? $totalGatherData['monthNumDealed'] + 1 : 1;
             }
             if ($monthObj->gt($currentMonthObj)) {
                 $nodealed = true;
+                $totalGatherData['monthNum'] = isset($totalGatherData['monthNum']) ? $totalGatherData['monthNum'] + 1 : 1;
             }
             if (!isset($gatherData['firstMonth'])) {
                 $gatherData['firstMonth'] = $monthValue;
             }
             $gatherData['endMonth'] = $monthValue;
+            $totalGatherData['monthNumTotal'] = isset($totalGatherData['monthNumTotal']) ? $totalGatherData['monthNumTotal'] + 1 : 1;
             //var_dump($data['monthlyPayment']);
             $gatherData['monthlyPaymentValue'] = $data['monthlyPayment'];
 

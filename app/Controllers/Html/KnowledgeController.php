@@ -198,10 +198,12 @@ class KnowledgeController extends AbstractController
             ];
         }
         $tgData = $datas['totalGatherData'];
+        //print_r($tgData);exit();
         $totalData = [
             'titles' => ['已完结', '负债', '总计', '占比'],
             'name' => '汇总',
             'infos' => [
+                [$tgData['monthNumDealed'], $tgData['monthNum'], $tgData['monthNumTotal'], (round($tgData['monthNumDealed'] / $tgData['monthNumTotal'], 3) * 100) . '%'],
                 [$tgData['principalDealed'], $tgData['principal'], $tgData['principalTotal'], (round($tgData['principalDealed'] / $tgData['principalTotal'], 3) * 100) . '%'],
                 [$tgData['interestDealed'], $tgData['interest'], $tgData['interestTotal'], (round($tgData['interestDealed'] / $tgData['interestTotal'], 3) * 100) . '%'],
                 [$tgData['monthlyPaymentDealed'], $tgData['monthlyPayment'], $tgData['monthlyPaymentTotal'], (round($tgData['monthlyPaymentDealed'] / $tgData['monthlyPaymentTotal'], 3) * 100) . '%'],

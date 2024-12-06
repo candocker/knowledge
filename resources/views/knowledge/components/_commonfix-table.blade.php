@@ -19,7 +19,7 @@
       <thead class="flip-content">
         <tr>
           @foreach ($tTitles as $tName)
-          <th>{{$tName}}</th>
+          <th>{!!$tName!!}</th>
           @endforeach
         </tr>
       </thead>

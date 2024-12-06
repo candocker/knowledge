@@ -193,6 +193,7 @@ class SubjectService extends AbstractService
             'wgliterature' => $base. 'culture/外国文学/base.php',
             'other' => $base. 'culture/外国文学/base.php',
 
+            'zgdynasty' => $base. 'history/中国断代/base.php',
             'bigcountry' => $base. 'history/外国历史/近代大国/base.php',
             'gdempire' => $base. 'history/外国历史/帝国/base.php',
         ];

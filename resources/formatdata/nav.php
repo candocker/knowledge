@@ -43,7 +43,7 @@ return [
                 'confucianism' => ['code' => 'confucianism', 'name' => '儒学历史'],
                 'zgculture' => ['code' => 'zgculture', 'name' => '中国思想史'],
                 'xfculture' => ['code' => 'xfculture', 'name' => '西方哲学史'],
-                'qtculture' => [
+                /*'qtculture' => [
                     'code' => 'qtculture',
                     'name' => '宗教/其他文化',
                     'subDatas' => [
@@ -54,27 +54,27 @@ return [
                         'gydculture' => ['code' => 'gydculture', 'name' => '古代印度文化'],
                         //'' => ['code' => '', 'name' => ''],
                     ],
-                ],
+                ],*/
                 'zgliterature' => ['code' => 'zgliterature', 'name' => '中国文学'],
                 'wgliterature' => ['code' => 'wgliterature', 'name' => '外国文学'],
             ],
         ],
-        'figure' => [
+        /*'figure' => [
             'name' => '名人录',
             'subDatas' => [
                 'luxun' => ['code' => 'luxun', 'name' => '鲁迅'],
                 'kongzi' => ['code' => 'kongzi', 'name' => '孔子'],
                 //'' => ['code' => '', 'name' => ''],
             ],
-        ],
+        ],*/
         'zghistory' => [
             'name' => '中国历史',
             'subDatas' => [
                 'zgdynasty' => ['code' => 'zgdynasty', 'name' => '断代史'],
                 'zgemperor' => ['code' => 'zgemperor', 'name' => '历代帝王'],
-                'zggeneral' => ['code' => 'zggeneral', 'name' => '战争和将领'],
-                'zgminister' => ['code' => 'zgminister', 'name' => '历代显贵'],
-                'zgpoliticsreform' => ['code' => 'zgpoliticsreform', 'name' => '政治制度和变法'],
+                //'zggeneral' => ['code' => 'zggeneral', 'name' => '战争和将领'],
+                //'zgminister' => ['code' => 'zgminister', 'name' => '历代显贵'],
+                //'zgpoliticsreform' => ['code' => 'zgpoliticsreform', 'name' => '政治制度和变法'],
                 //'' => ['code' => '', 'name' => ''],
             ],
         ],
@@ -83,10 +83,10 @@ return [
             'subDatas' => [
                 'bigcountry' => ['code' => 'bigcountry', 'name' => '大国近代史'],
                 'jdpoliticsreform' => ['code' => 'jdpoliticsreform', 'name' => '近代政治革命'],
-                'jdgeneral' => ['code' => 'jdgeneral', 'name' => '近代战争和将领'],
+                //'jdgeneral' => ['code' => 'jdgeneral', 'name' => '近代战争和将领'],
                 'gdempire' => ['code' => 'gdempire', 'name' => '古代帝国'],
                 //'gdpolitics' => ['code' => 'gdempire', 'name' => '古代政治和文化'],
-                'gdgeneral' => ['code' => 'gdgeneral', 'name' => '古代战争和将领'],
+                //'gdgeneral' => ['code' => 'gdgeneral', 'name' => '古代战争和将领'],
             ],
         ],
     ],
