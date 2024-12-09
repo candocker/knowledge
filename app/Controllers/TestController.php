@@ -112,21 +112,35 @@ class TestController extends AbstractController
         $titles = ['posthumous_title', 'serial', 'mausoleum', 'eraname', 'birth_death', 'office_start_end', 'name', 'office_start_end', 'office_duration', 'brief', 'brief2'];
         $titles = ['dynastic_title', 'posthumous_title', 'name', 'office_start_end', 'eraname', 'mausoleum', 'brief', 'birth_death', 'brief2'];
         //$titles = ['name', 'nationality', 'brief', 'first_emperor', 'brief2', 'begin_end', 'brief3', 'capital', 'brief4'];
+        $titles = ['serial', 'name', 'author', 'brief', 'publish_at', 'begin_end', 'brief3', 'capital', 'brief4'];
         $crawler->filter('tr')->each(function ($subCrawler) use (& $datas, $titles) {
             $data = [];
             $i = 0;
             $subCrawler->filter('td')->each(function ($node) use (& $data, & $i, $titles) {
-                $aDom = $node->filter('a');
+                //echo $node->html();
+                $j = 0;
+                $node->filter('a')->each(function ($subNode) use (& $data, & $j) {
+                    $url = urldecode($subNode->attr('href'));
+                    if (strpos($url, '?') !== false) {
+                        $url = substr($url, 0, strpos($url, '?'));
+                    }
+                    //var_dump($url . '==' . $j);
+                    if (!isset($data['baidu_url'])) {
+                    $data['baidu_url'] = 'https://baike.baidu.com/' . trim($url, '/');
+                    } else {
+                    $data['baidu_url' . $j] = 'https://baike.baidu.com/' . trim($url, '/');
+                    }
+                    $j++;
+                });
+                /*$aDom = $node->filter('a');
                 $url = '';
                 if ($aDom->count() > 0) {// && !isset($data['baidu_url']) && $i != 0) {
                     $url = urldecode($aDom->attr('href'));
                     if (strpos($url, '?') !== false) {
                         $url = substr($url, 0, strpos($url, '?'));
                     }
-                    if (strpos($url, '朱') !== false) {
-                    $data['baidu_url'] = 'https://baike.baidu.com/' . trim($url, '/');
-                    }
-                }
+                    $data['baidu_url' . rand(10, 100)] = 'https://baike.baidu.com/' . trim($url, '/');
+                }*/
                 $text = $node->text();
                 $text = trim($text, '-');
                 //$text = trim($text, '—');
@@ -135,8 +149,8 @@ class TestController extends AbstractController
                 $title = $titles[$i] ?? '';
                 $data[$title] = $text;
                 if ($title == 'name') {
-                    $data['figure_code'] = CommonTool::getSpellStr($data[$title], '');
-                    //$data['code'] = CommonTool::getSpellStr($data[$title], '');
+                    //$data['figure_code'] = CommonTool::getSpellStr($data[$title], '');
+                    $data['code'] = CommonTool::getSpellStr($data[$title], '');
                 }
                 $i++;
             });
@@ -147,6 +161,9 @@ class TestController extends AbstractController
         $sql = "INSERT INT `wp_dynasty` (`" . implode('`,`', $titles) . "`) VALUES \n";
         //$sql = "INSERT INTO `wp_dynasty` (`name`, `code`, `parent_code`, `begin_end`, `brief`, `baidu_url`) VALUES \n";
         //$sql = "INSERT INTO `wp_emperor` (`name`, `figure_code`, `dynasty`, `office_start_end`, `brief`, `office_duration`, `posthumous_title`, `baidu_url`) VALUES \n";
+        $sql = "INSERT INTO `wp_book` (`code`, `name`, `orderlist`, `description`, `baidu_url`, `author`, `publish_at`) VALUES ";
+        $sql = "INSERT INTO `wp_book_listing` (`book_code`, `catalog_code`, `catalog_volume_id`, `serial`, `name`, `brief`, `author`) VALUES ";
+
         foreach ($datas as & $data) {
             if (!isset($data['name']) || in_array($data['name'], ['', '君主', '—', '姓名'])) {//!isset($data['baidu_url'])) {
                 continue;
@@ -162,13 +179,15 @@ class TestController extends AbstractController
                 //$data['brief'] = trim($data['brief'], '。');
                 unset($data['brief2']);
             }
-            $sql .= "('" . implode("','", $data) . "')\n";
+            //$sql .= "('" . implode("','", $data) . "')\n";
             //$sql .= "('{$data['name']}', '{$data['code']}', 'zhou', '{$data['begin_end']}', '{$data['brief']}-{$data['brief2']}', '{$data['baidu_url']}')\n";
-            print_r($data);
+            //$sql .= "('{$data['code']}', '{$data['name']}', '{$data['serial']}', '{$data['brief']}', '{$data['baidu_url']}', '{$data['author']}', '{$data['publish_at']}'),\n";
+            $sql .= "('{$data['code']}', 'classical', 215, '{$data['serial']}', '{$data['name']}', '{$data['brief']}', '{$data['author']}'),\n";
+            //print_r($data);
             //$this->getModelObj('dynasty')->create($data);
             //$this->getModelObj('emperor')->create($data);
         }
-        //echo $sql;exit();
+        echo $sql;exit();
         //print_r($datas);
         exit();
     }

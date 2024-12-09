@@ -19,7 +19,7 @@ return [
         'bookstore' => [
             'name' => '书架',
             'subDatas' => [
-                'classical' => ['code' => 'classical', 'name' => '中国古籍 ( 37本 )', 'withVolume' => true],
+                'classical' => ['code' => 'classical', 'name' => '中国古籍 ( 61本 )', 'withVolume' => true],
                 'luxun' => ['code' => 'luxun', 'name' => '鲁迅著作'],
                 'shwhanyixueshu' => [
                     'code' => 'shwhanyixueshu',

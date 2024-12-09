@@ -48,7 +48,7 @@
 
               @if (isset($tData['titleExts']))
               @foreach ($tData['titleExts'] as $key => $eTitle)
-              @php $pStr = $pData[$key] ?? ($pData[$index] ?? ''); $index++; @endphp
+              @php $pStr = $pData[$index] ?? ''; $index++; @endphp
               <td style="display:none">{!!$pStr!!}</td>
               @endforeach
               @endif

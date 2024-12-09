@@ -37,7 +37,7 @@ trait SubjectKnowledgeTrait
     public function formatSubjectDatas($currentNav, $isMobile)
     {
         $detailDatas = require($this->_specialKnowledgePath($currentNav['code']));
-        $pointDatas = $this->getPointSubjectDatas($currentNav);
+        $pointDatas = $this->getPointSubjectDatas($currentNav, $isMobile, $detailDatas);
         $detailDatas = array_merge($detailDatas, $pointDatas);
         //print_r($detailDatas);exit();
         return $detailDatas;
@@ -68,18 +68,18 @@ trait SubjectKnowledgeTrait
         return $file;
     }
 
-    public function getPointSubjectDatas($currentNav)
+    public function getPointSubjectDatas($currentNav, $isMobile, & $baseDatas)
     {
         $code = $currentNav['code'];
         $method = "_{$code}PointSubjectDatas";
         $datas = [];
         if (method_exists($this, $method)) {
-            $datas = $this->$method($currentNav);
+            $datas = $this->$method($currentNav, $isMobile, $baseDatas);
         }
         return $datas;
     }
 
-    public function _confucianismPointSubjectDatas($currentNav)
+    public function _confucianismPointSubjectDatas($currentNav, $isMobile, $baseDatas)
     {
         $data['simpleTableDatas'][] = [
             'name' => $currentNav['name'],
@@ -88,38 +88,90 @@ trait SubjectKnowledgeTrait
         return $data;
     }
 
-    public function _zgdynastyPointSubjectDatas($currentNav)
+    public function _zgdynastyPointSubjectDatas($currentNav, $isMobile, & $baseDatas)
     {
         $dynasties = $this->getModelObj('dynasty')->where(['sort' => 'top'])->orderBy('orderlist', 'asc')->get();
         $titles = [];
-        foreach ($dynasties as $dynasty) {
-            $tName = $dynasty['name'];
-            if (!empty($dynasty['knowledge_path'])) {
-                $tName = "<a href='/wiki-dynasty-{$dynasty['code']}.html'>{$tName}</a>";
-            }
-            if (!empty($dynasty['baidu_url'])) {
-                $tName .= "( <a href='{$dynasty['baidu_url']}'>百科</a> )";
-            }
-            $titles[] = $tName;
-        }
-
-        $infos = [];
-        $dynasties = $this->getModelObj('dynasty')->get();
         $i = 0;
+        $fixKey = 1;
+        $commonFixedDatas[1] = ['name' => '中国朝代', 'titles' => [], 'max' => 0, 'infos' => [], 'tmpInfos' => []];
+        if (!$isMobile) {
+            $commonFixedDatas[2] = ['name' => '中国朝代2', 'titles' => [], 'max' => 0, 'infos' => [], 'tmpInfos' => []];
+        }
+        $details = [];
         foreach ($dynasties as $dynasty) {
-            if ($i == count($titles)) {
-                $i = 1;
-                $infos[] = $subInfos;
-                $subInfos = [];
+            if (!$isMobile) {
+                $fixKey = $i == 8 ? $fixKey + 1 : $fixKey;
             }
-            $subInfos[] = $dynasty['name'];
+            $tCode = $dynasty['code'];
+            $subInfos = $this->getModelObj('dynasty')->where(['parent_code' => $tCode])->orderBy('orderlist', 'asc')->get();
+            $details[$dynasty->name] = $dynasty;
+            //echo "        ['{$dynasty['name']}', '', ''],\n";
+            foreach ($subInfos as $subInfo) {
+                //echo "        ['{$subInfo['name']}', '', ''],\n";
+                $details[$subInfo->name] = $subInfo;
+            }
+            $commonFixedDatas[$fixKey]['titles'][$tCode] = $dynasty->formatName;
+            $commonFixedDatas[$fixKey]['max'] = max($commonFixedDatas[$fixKey]['max'], $subInfos->count());
+            $commonFixedDatas[$fixKey]['tmpInfos'][$tCode] = $subInfos;
             $i++;
         }
-        $data['commonFixedDatas'][] = [
-            'name' => '中国朝代',
-            'titles' => $titles,
-            'infos' => $infos,
-        ];
+        foreach ($commonFixedDatas as & $cData) {
+            for ($i = 0; $i <= $cData['max']; $i++ ) {
+                $tInfos = [];
+                foreach ($cData['titles'] as $tCode => $cTitle) {
+                    if (isset($cData['tmpInfos'][$tCode][$i])) {
+                        $tInfos[] = $cData['tmpInfos'][$tCode][$i]->formatName;
+                    } else {
+                        $tInfos[] = '<span style="color:white;">占位符</span>';
+                    }
+                }
+                $cData['infos'][] = $tInfos;
+            }
+            unset($cData['tmpInfos']);
+            unset($cData['max']);
+        }
+        //print_r($details);
+        $sourceDatas = $baseDatas['commonTableDatas']['base']['infos'];
+        foreach ($sourceDatas as $key => & $sData) {
+            $tmpData = $sData;
+            $fExts = [];
+            if (isset($tmpData['fExts'])) {
+                $fExts = $tmpData['fExts'];
+                unset($tmpData['fExts']);
+            }
+            $lastData = false;
+            $count = count($tmpData);
+            foreach ($tmpData as $key => & $value) {
+                if (isset($details[$value])) {
+                    $rData = $details[$value];
+                    $value = $rData->simpleName;
+                    if ($key == $count - 1) {
+                        $lastData = $rData;
+                    }
+                }
+            }
+            $beginEnd = $lastData ? $lastData['begin_end'] : '';
+            //$beginEnd = str_replace(['公元前', '公元', '约前', '前', '年', '约'], ['B', '', 'B', 'B', '', ''], $beginEnd);
+            $tmpData[] = $lastData ? $lastData['first_emperor'] : '';
+            $tmpData[] = $beginEnd;
+            if (!empty($fExts)) {
+                $tmpData['fExts'] = $fExts;
+            }
+            $sData = $tmpData;
+        }
+        $baseDatas['commonTableDatas']['base']['infos'] = $sourceDatas;
+        //print_r($sourceDatas);exit();
+        //print_r($baseDatas);exit();
+
+        $data['commonFixedDatas'] = $commonFixedDatas;
+        /*$data['commonFixedDatas']['details'] = [
+            'name' => '朝代明细',
+            'titles' => ['名称', '起止时间', '开国皇帝', '国祚'],
+            //'titleExts' => ['首都', '简介'],
+            'infos' => $details,
+        ];*/
+        //var_export($details);exit();
         //print_r($data);exit();
         return $data;
         //$titles = $this->getRepositoryObj('dynasty')->

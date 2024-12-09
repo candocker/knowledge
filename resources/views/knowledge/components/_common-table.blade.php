@@ -1,3 +1,6 @@
+@php
+$colors = ['#c8dade', '#6dc1d3'];
+@endphp
 @php $commonTitles = $commonTableDatas['titles'] ?? []; @endphp
 @foreach ($commonTableDatas as $tData)
 @if (isset($tData['infos']))
@@ -18,16 +21,18 @@
     <table class="table table-striped table-bordered table-hover table-advance">
       <thead>
         <tr>
-          @foreach ($tTitles as $tTitle)
-          <th>{{$tTitle}}</th>
+          @php $fExts = []; if (isset($tTitles['fExts'])) { $fExts = $tTitles['fExts']; unset($tTitles['fExts']); } @endphp
+          @foreach ($tTitles as $pIndex => $tTitle)
+          <th @if (isset($fExts[$pIndex . '_col'])) colspan="{{$fExts[$pIndex . '_col']}}" @endif  @if (isset($fExts[$pIndex . '_row'])) rowspan="{{$fExts[$pIndex . '_row']}}" @endif style="text-align: center; border-left-width:1px;vertical-align:middle;">{!!$tTitle!!}</th>
           @endforeach
         </tr>
       </thead>
       <tbody>
         @foreach ($tData['infos'] as $pData)
+        @php $fExts = []; if (isset($pData['fExts'])) { $fExts = $pData['fExts']; unset($pData['fExts']); } @endphp
         <tr>
-          @foreach ($pData as $vName)
-          <th>{!!$vName!!}</th>
+          @foreach ($pData as $pIndex => $vName)
+          <td @if (isset($fExts[$pIndex . '_col'])) colspan="{{$fExts[$pIndex . '_col']}}" @endif  @if (isset($fExts[$pIndex . '_row'])) rowspan="{{$fExts[$pIndex . '_row']}}" @endif style="text-align: center; border-left-width:1px;vertical-align:middle;">{!!$vName!!}</td>
           @endforeach
         </tr>
         @endforeach

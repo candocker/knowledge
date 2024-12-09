@@ -183,6 +183,9 @@ trait SubjectBookTrait
                 if (in_array($subCode, ['philosophy', 'history', 'politics', 'economics', 'language', 'otheracademic'])) {
                     $nameExt = $this->getBookFigureStr($book, $bInfo);
                 }
+                if (in_array($subCode, ['classical']) && $volume['id'] == 215) {
+                    $nameExt = "(<a href='{$bInfo['baidu_url']}'>{$book['author']}</a>)";//{$book['brief']}卷
+                }
                 $subInfos[] = [
                     'name' => $bName,
                     'nameExt' => $nameExt,
