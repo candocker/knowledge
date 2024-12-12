@@ -115,7 +115,9 @@ trait BookstoreTrait
             $cTables = require($catalog['knowledge_path'] . '/tables.php');
         }
         if ($volume->full_knowledge_path) {
-            $vTables = require($volume->full_knowledge_path . '/tables.php');
+            $file = $volume->full_knowledge_path . '/tables.php';
+
+            $vTables = file_exists($file) ? require($file) : [];
         }
         return array_merge(array_values($cTables), array_values($vTables));
     }

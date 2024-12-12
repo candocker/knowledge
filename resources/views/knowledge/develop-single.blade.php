@@ -15,6 +15,7 @@ $commonTableDatas = $detailDatas['commonTableDatas'] ?? [];
 $advancedDatas = $detailDatas['advancedDatas'] ?? [];
 $commonFixedDatas = $detailDatas['commonFixedDatas'] ?? [];
 $askwikiDatas = $detailDatas['askwikiDatas'] ?? [];
+$modalDatas = $detailDatas['modalDatas'] ?? [];
 //print_r($detail);exit();
 $pageData = $datas['detailDatas']['pageData'] ?? [];
 $pageTitle = $pageData['title'] ?? '';
@@ -89,6 +90,9 @@ if (isset($pageData['url'])) {
       @include('knowledge.components._askwiki', ['askwikiDatas' => $askwikiDatas, 'isMobile' => $isMobile])
   @endif
 
+  @if (!empty($modalDatas))
+    @include('knowledge.components._modal', ['modalDatas' => $modalDatas, 'isMobile' => $isMobile])
+  @endif
   <div class="ajax-modal modal container hide fade" tabindex="-1"></div>
 </div>
 @endsection

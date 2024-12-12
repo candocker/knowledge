@@ -110,7 +110,6 @@ class KnowledgeController extends AbstractController
     public function testView($view)
     {
         $topNavs = $this->getBookServiceObj()->getBookCatalogs(null);
-        var_export($topNavs);
         $results = $this->getBookServiceObj()->getVolumeBookListings($topNavs['currentNav'], null);
         $datas = array_merge($topNavs, $results);
         return $this->customView($view, $datas, 'metronicsource');

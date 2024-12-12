@@ -28,6 +28,16 @@ class Figure extends AbstractModel
         return true;
     }
 
+    public function getFullNameAttribute()
+    {
+        $tName = $this->name;
+        $tName = "<a href='/wiki-dynasty-{$this->code}.html'>{$tName}</a>";
+        if (!empty($this->baidu_url)) {
+            $tName .= "<a href='{$this->baidu_url}'> (百)</a>";
+        }
+        return $tName;
+    }
+
     public function getFtitle($type = 'all')
     {
         $titles = $this->getFtitleDatas();

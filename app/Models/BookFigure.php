@@ -17,11 +17,6 @@ class BookFigure extends AbstractModel
         return $this->hasOne(Book::class, 'code', 'book_code');
     }
 
-    public function figure()
-    {
-        return $this->hasOne(Figure::class, 'code', 'figure_code');
-    }
-
     public function recordCreative($string, $bookCode)
     {
         $this->where('book_code', $bookCode)->delete();

@@ -45,7 +45,7 @@ class Book extends AbstractModel
         if (empty($data)) {
             return new BookFigure();
         }
-        return $data->figure;
+        return $data->figureInfo;
     }
 
     public function authorInfo()

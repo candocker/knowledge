@@ -19,7 +19,7 @@
                 <table class="table table-hover table-striped table-bordered">
                   <tr>
                     <td>Responsive</td>
-                    <td><a class="btn blue" data-toggle="modal" href="#responsive">View Demo</a></td>
+                    <td><a class="btn blue" data-toggle="modal" href="#responsives">View Demo</a></td>
                   </tr>
                   <tr>
                     <td>Stackable</td>
@@ -42,7 +42,7 @@
                     <td><a class=" btn blue btn-large" data-toggle="modal" href="#long">View Demo</a></td>
                   </tr>
                 </table>
-                <div id="responsive" class="modal hide fade" tabindex="-1" data-width="760">
+                <div id="responsives" class="modal hide fade" tabindex="-1" data-width="760">
                   <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                     <h3>Responsive</h3>

@@ -15,6 +15,11 @@ class AbstractModel extends AbstractModelBase
         return 'knowledge';
     }
 
+    public function figureInfo()
+    {
+        return $this->hasOne(Figure::class, 'code', 'figure_code');
+    }
+
     public function getFullKnowledgePathAttribute()
     {
         $base = $this->config->get('knowledge.knowledge_path');

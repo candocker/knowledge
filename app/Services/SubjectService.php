@@ -97,14 +97,17 @@ class SubjectService extends AbstractService
     {
         if ($type == 'special') {
             $detailDatas = require($this->_specialKnowledgePath($code));
-            return $detailDatas;
+        } else {
+            $info = $this->getPointKnowledgeInfo($type, $code);
+            $detailDatas = $this->getKnowledgeDetail($info);
+            $method = "_{$type}FormatDetail";
+            if (method_exists($this, $method)) {
+                $detailDatas = $this->$method($detailDatas, $info, $isMobile);
+            }
         }
-        $info = $this->getPointKnowledgeInfo($type, $code);
-        $detailDatas = $this->getKnowledgeDetail($info);
-        $method = "_{$type}FormatDetail";
-        if (method_exists($this, $method)) {
-            $detailDatas = $this->$method($detailDatas, $info, $isMobile);
-        }
+
+        $pData = $this->getPointSubjectDatas(['code' => $code], $isMobile, $detailDatas);
+        $detailDatas = array_merge($detailDatas, $pData);
         return $detailDatas;
     }
 
@@ -196,7 +199,61 @@ class SubjectService extends AbstractService
             'zgdynasty' => $base. 'history/中国断代/base.php',
             'bigcountry' => $base. 'history/外国历史/近代大国/base.php',
             'gdempire' => $base. 'history/外国历史/帝国/base.php',
+
+            'usasession' => $base . 'history/外国历史/近代大国/美国/总统/session.php',
         ];
         return is_null($sCode) ? $datas : $datas[$sCode] ?? $datas['other'];
+    }
+
+    public function _americanpotusPointSubjectDatas($currentNav, $isMobile, & $baseDatas)
+    {
+        $modalDatas = [];
+        $infos = $this->getModelObj('figureTitle')->where(['type' => 'usapresident'])->get();
+        $sessions = require($this->_specialKnowledgePath('usasession'));
+        $cases = [
+            'illness' => 'blue',
+            'attacked' => 'red',
+            'replace' => 'green',
+            'impeach' => 'orange',
+        ];
+        foreach ($sessions as & $session) {
+            $case = $session['case'] ?? '';
+            if (!empty($case)) {
+                $session['term'] = "<span style='color:{$cases[$case]}'>{$session['term']}</span>";
+            }
+        }
+        $details = [];
+        foreach ($infos as $info) {
+            $fData = $info->figureInfo;
+            $details[$fData['name']] = "<a  data-toggle='modal' data-target='#responsives'>{$fData['name']}</a>";
+            $modalDatas[$info['code']] = [
+                '名字' => $fData->fullName,
+                'abc' => 'efg',
+            ];
+        }
+        //print_r($baseDatas);exit();
+        //print_r($details);
+        $sourceDatas = $baseDatas['commonTableDatas']['base']['infos'];
+        foreach ($sourceDatas as $key => & $sData) {
+            foreach ($sData as & $sValue) {
+                if (is_array($sValue)) {
+                    continue;
+                }
+                if (isset($sessions[$sValue])) {
+                    $session = $sessions[$sValue];
+                    $sStr = $session['term'];
+                    $sValue = $sStr;
+                    continue;
+                }
+                $oValue = strip_tags($sValue);
+                if (isset($details[$oValue])) {
+                    $sValue = str_replace($oValue, $details[$oValue], $sValue);
+                }
+            }
+        }
+        //print_r($sourceDatas);exit();
+        $baseDatas['commonTableDatas']['base']['infos'] = $sourceDatas;
+        $baseDatas['modalDatas'] = $modalDatas;
+        return [];
     }
 }
