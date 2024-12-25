@@ -8,7 +8,7 @@ class KnowledgeController extends AbstractController
     {
         $isMobile = $this->isMobile(true);
         $datas = $this->getSubjectServiceObj()->getPointDetail($navCode, $subCode, $isMobile);
-        return $this->customView('modal-baseinfo', $datas);
+        return $this->customView('modal-ajax', $datas);
     }
 
     public function entrance($navCode = '', $subNavCode = '')

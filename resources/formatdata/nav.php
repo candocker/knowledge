@@ -40,10 +40,10 @@ return [
         'culture' => [
             'name' => '思想文化',
             'subDatas' => [
-                'confucianism' => ['code' => 'confucianism', 'name' => '儒学历史'],
+                //'confucianism' => ['code' => 'confucianism', 'name' => '儒学历史'],
                 'zgculture' => ['code' => 'zgculture', 'name' => '中国思想史'],
                 'xfculture' => ['code' => 'xfculture', 'name' => '西方哲学史'],
-                /*'qtculture' => [
+                'qtculture' => [
                     'code' => 'qtculture',
                     'name' => '宗教/其他文化',
                     'subDatas' => [
@@ -54,7 +54,7 @@ return [
                         'gydculture' => ['code' => 'gydculture', 'name' => '古代印度文化'],
                         //'' => ['code' => '', 'name' => ''],
                     ],
-                ],*/
+                ],
                 'zgliterature' => ['code' => 'zgliterature', 'name' => '中国文学'],
                 'wgliterature' => ['code' => 'wgliterature', 'name' => '外国文学'],
             ],

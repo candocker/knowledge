@@ -183,7 +183,6 @@ class SubjectService extends AbstractService
         $datas = [
             'luxunworks' => $base . 'books/鲁迅著作/works.php',
             'scholarism' => $base . 'books/学术名著/scholarism.php',
-            'confucianism' => $base . 'culture/儒学/base.php',
             'zgculture' => $base. 'culture/中国思想史/base.php',
             'xfculture' => $base. 'culture/西方哲学史/base.php',
             //'qtculture' => $base. 'culture/其他/base.php',
@@ -225,7 +224,8 @@ class SubjectService extends AbstractService
         $details = [];
         foreach ($infos as $info) {
             $fData = $info->figureInfo;
-            $details[$fData['name']] = "<a  data-toggle='modal' data-target='#responsives'>{$fData['name']}</a>";
+            //$details[$fData['name']] = "<a data-toggle='modal' data-target='#responsives'>{$fData['name']}</a>";
+            $details[$fData['name']] = "<a href='javascript:;' modal-url='/ajax-figure-{$fData['code']}.html' class='modal_ajax_btn'>{$fData['name']}</a>";
             $modalDatas[$info['code']] = [
                 '名字' => $fData->fullName,
                 'abc' => 'efg',

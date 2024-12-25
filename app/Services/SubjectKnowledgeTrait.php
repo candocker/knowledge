@@ -79,11 +79,11 @@ trait SubjectKnowledgeTrait
         return $datas;
     }
 
-    public function _confucianismPointSubjectDatas($currentNav, $isMobile, $baseDatas)
+    public function _zgculturePointSubjectDatas($currentNav, $isMobile, $baseDatas)
     {
         $data['simpleTableDatas'][] = [
             'name' => $currentNav['name'],
-            'infos' => array_chunk($this->_getKnowledgeDatas([$currentNav['code']]), 3),
+            'infos' => array_chunk($this->_getKnowledgeDatas(['confucianism']), 3),
         ];
         return $data;
     }
