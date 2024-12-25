@@ -32,9 +32,9 @@ trait SubjectBookTrait
 
         if (in_array($subCode, ['philosophy', 'history', 'politics', 'economics', 'language', 'otheracademic'])) {
             $pageData['title'] = $pageData['title'] . "-<a href='wiki-special-scholarism.html'>汉译世界学术名著丛书</a>";
-            $detailDatas = ['simpleFixedDatas' => $this->_formatTableDatas($datas, $navCode, $isMobile, true)];
+            $detailDatas = ['simpleFixed' => $this->_formatTableDatas($datas, $navCode, $isMobile, true)];
         } else {
-            $detailDatas = ['simpleTableDatas' => $this->_formatTableDatas($datas, $navCode, $isMobile)];
+            $detailDatas = ['simpleTable' => $this->_formatTableDatas($datas, $navCode, $isMobile)];
         }
         $detailDatas['pageData'] = $pageData;
         return $detailDatas;
@@ -121,7 +121,7 @@ trait SubjectBookTrait
         }
 
         $pageData = ['title' => '鲁迅著作诸版本', 'brief' => '鲁迅作品重要版本和发行脉络', 'url' => 'wiki-special-luxunworks.html'];
-        return ['pageData' => $pageData, 'simpleFixedDatas' => $results];
+        return ['pageData' => $pageData, 'simpleFixed' => $results];
     }
 
     public function _onlinereadXueshu()

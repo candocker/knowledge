@@ -26,6 +26,10 @@ if (isset($pageData['url'])) {
     </div>
   </div>
 
-  @include('knowledge.components._askwiki', ['askDatas' => $detailDatas, 'isMobile' => $isMobile])
+  <div class="container">
+    <div class="row-fluid margin-bottom-20">
+      @include('knowledge.components._askwiki', ['askwikiDatas' => $detailDatas, 'isMobile' => $isMobile])
+    </div>
+  </div>
 </div>
 @endsection

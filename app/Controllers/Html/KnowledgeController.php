@@ -211,7 +211,7 @@ class KnowledgeController extends AbstractController
 
         $results = [
             'tdkData' => ['title' => 'title'],
-            'commonFixedDatas' => array_merge(['totalData' => $totalData, 'gathers' => $gathers], $currentDetails, $details),
+            'commonFixed' => array_merge(['totalData' => $totalData, 'gathers' => $gathers], $currentDetails, $details),
         ];
         //print_r($results);exit();
         //print_r($datas); exit();

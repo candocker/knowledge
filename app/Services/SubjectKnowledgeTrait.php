@@ -81,7 +81,7 @@ trait SubjectKnowledgeTrait
 
     public function _zgculturePointSubjectDatas($currentNav, $isMobile, $baseDatas)
     {
-        $data['simpleTableDatas'][] = [
+        $data['simpleTable'][] = [
             'name' => $currentNav['name'],
             'infos' => array_chunk($this->_getKnowledgeDatas(['confucianism']), 3),
         ];
@@ -94,9 +94,9 @@ trait SubjectKnowledgeTrait
         $titles = [];
         $i = 0;
         $fixKey = 1;
-        $commonFixedDatas[1] = ['name' => '中国朝代', 'titles' => [], 'max' => 0, 'infos' => [], 'tmpInfos' => []];
+        $commonFixed[1] = ['name' => '中国朝代', 'titles' => [], 'max' => 0, 'infos' => [], 'tmpInfos' => []];
         if (!$isMobile) {
-            $commonFixedDatas[2] = ['name' => '中国朝代2', 'titles' => [], 'max' => 0, 'infos' => [], 'tmpInfos' => []];
+            $commonFixed[2] = ['name' => '中国朝代2', 'titles' => [], 'max' => 0, 'infos' => [], 'tmpInfos' => []];
         }
         $details = [];
         foreach ($dynasties as $dynasty) {
@@ -111,12 +111,12 @@ trait SubjectKnowledgeTrait
                 //echo "        ['{$subInfo['name']}', '', ''],\n";
                 $details[$subInfo->name] = $subInfo;
             }
-            $commonFixedDatas[$fixKey]['titles'][$tCode] = $dynasty->formatName;
-            $commonFixedDatas[$fixKey]['max'] = max($commonFixedDatas[$fixKey]['max'], $subInfos->count());
-            $commonFixedDatas[$fixKey]['tmpInfos'][$tCode] = $subInfos;
+            $commonFixed[$fixKey]['titles'][$tCode] = $dynasty->formatName;
+            $commonFixed[$fixKey]['max'] = max($commonFixed[$fixKey]['max'], $subInfos->count());
+            $commonFixed[$fixKey]['tmpInfos'][$tCode] = $subInfos;
             $i++;
         }
-        foreach ($commonFixedDatas as & $cData) {
+        foreach ($commonFixed as & $cData) {
             for ($i = 0; $i <= $cData['max']; $i++ ) {
                 $tInfos = [];
                 foreach ($cData['titles'] as $tCode => $cTitle) {
@@ -132,7 +132,7 @@ trait SubjectKnowledgeTrait
             unset($cData['max']);
         }
         //print_r($details);
-        $sourceDatas = $baseDatas['commonTableDatas']['base']['infos'];
+        $sourceDatas = $baseDatas['commonTable']['base']['infos'];
         foreach ($sourceDatas as $key => & $sData) {
             $tmpData = $sData;
             $fExts = [];
@@ -160,12 +160,12 @@ trait SubjectKnowledgeTrait
             }
             $sData = $tmpData;
         }
-        $baseDatas['commonTableDatas']['base']['infos'] = $sourceDatas;
+        $baseDatas['commonTable']['base']['infos'] = $sourceDatas;
         //print_r($sourceDatas);exit();
         //print_r($baseDatas);exit();
 
-        $data['commonFixedDatas'] = $commonFixedDatas;
-        /*$data['commonFixedDatas']['details'] = [
+        $data['commonFixed'] = $commonFixed;
+        /*$data['commonFixed']['details'] = [
             'name' => '朝代明细',
             'titles' => ['名称', '起止时间', '开国皇帝', '国祚'],
             //'titleExts' => ['首都', '简介'],

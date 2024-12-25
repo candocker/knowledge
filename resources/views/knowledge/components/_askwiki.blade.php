@@ -1,16 +1,14 @@
 @php
 //print_r($askwikiDatas);exit();
 @endphp
-<div class="container">
-  <div class="row-fluid margin-bottom-20">
     <div class="row-fluid profile">
       <div class="span12">
         <div class="tabbable tabbable-custom tabbable-full-width">
-          @if (count($askDatas) > 1)
+          @if (count($askwikiDatas) > 1)
           <ul class="nav nav-tabs">
             @php $i = 1; @endphp
-            @foreach ($askDatas as $askData)
-            @php $topData = $askData['topData']; $topKey = $topData['code'] ?? $i; $topName = $topData['name'] ?? '大分类' . $i; @endphp
+            @foreach ($askwikiDatas as $askwikiData)
+            @php $topData = $askwikiData['topData']; $topKey = $topData['code'] ?? $i; $topName = $topData['name'] ?? '大分类' . $i; @endphp
             <li @if ($i == 1) class="active" @endif><a href="#toptab_{{$topKey}}" data-toggle="tab">{{$topName}}</a></li>
             @php $i++; @endphp
             @endforeach
@@ -18,16 +16,16 @@
           @endif
           <div class="tab-content">
             @php $i = 1; @endphp
-            @foreach ($askDatas as $askData)
-            @php $topData = $askData['topData']; $topKey = $topData['code'] ?? $i; $topName = $topData['name'] ?? '分类' . $i; @endphp
+            @foreach ($askwikiDatas as $askwikiData)
+            @php $topData = $askwikiData['topData']; $topKey = $topData['code'] ?? $i; $topName = $topData['name'] ?? '分类' . $i; @endphp
             <div class="tab-pane row-fluid @if ($i == 1) active @endif" id="toptab_{{$topKey}}">
               <div class="row-fluid">
                 <div class="span12">
                   <div class="span3">
-                    @if (count($askData['secondDatas']) > 1)
+                    @if (count($askwikiData['secondDatas']) > 1)
                     <ul class="ver-inline-menu tabbable margin-bottom-10">
                       @php $j = 1; @endphp
-                      @foreach ($askData['secondDatas'] as $secondData)
+                      @foreach ($askwikiData['secondDatas'] as $secondData)
                       @php $bigData = $secondData['bigData']; $bigKey = isset($bigData['code']) && !empty($bigData['code']) ? $bigData['code'] : $j; $bigName = isset($bigData['name']) ? $bigData['name'] : '默认'; @endphp
                       <li @if ($j == 1) class="active" @endif>
                         <a href="#bigtab_{{$bigKey}}" data-toggle="tab">
@@ -43,7 +41,7 @@
                   <div class="span9">
                     <div class="tab-content">
                       @php $j = 1; @endphp
-                      @foreach ($askData['secondDatas'] as $secondData)
+                      @foreach ($askwikiData['secondDatas'] as $secondData)
                       @php $bigData = $secondData['bigData']; $bigKey = isset($bigData['code']) && !empty($bigData['code']) ? $bigData['code'] : $j; $bigName = isset($bigData['name']) ? $bigData['name'] : '默认'; @endphp
                       <div id="bigtab_{{$bigKey}}" class="tab-pane @if ($j == 1) active @endif">
                         <div style="height: auto;" id="accordion{{$bigKey}}" class="accordion collapse">
@@ -77,5 +75,3 @@
         </div>
       </div>
     </div>
-  </div>
-</div>

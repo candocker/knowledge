@@ -233,7 +233,7 @@ class SubjectService extends AbstractService
         }
         //print_r($baseDatas);exit();
         //print_r($details);
-        $sourceDatas = $baseDatas['commonTableDatas']['base']['infos'];
+        $sourceDatas = $baseDatas['commonTable']['base']['infos'];
         foreach ($sourceDatas as $key => & $sData) {
             foreach ($sData as & $sValue) {
                 if (is_array($sValue)) {
@@ -252,7 +252,7 @@ class SubjectService extends AbstractService
             }
         }
         //print_r($sourceDatas);exit();
-        $baseDatas['commonTableDatas']['base']['infos'] = $sourceDatas;
+        $baseDatas['commonTable']['base']['infos'] = $sourceDatas;
         $baseDatas['modalDatas'] = $modalDatas;
         return [];
     }
