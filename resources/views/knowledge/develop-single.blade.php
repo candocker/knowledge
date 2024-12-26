@@ -1,17 +1,15 @@
 @php
 $datas['layoutDatas'] = [
-'viewCode' => 'pointsingle',
-'bodyClass' => 'page-header-fixed page-full-width',
-'footerView' => 'center'
+  'viewCode' => 'pointsingle',
+  'bodyClass' => 'page-header-fixed page-full-width',
+  'footerView' => 'center'
 ];
 
 $isMobile = $datas['isMobile'] ?? false;
 $detailDatas = $datas['detailDatas'] ?? [];
+//print_r($detailDatas);exit();
 
 $baseData = $detailDatas['baseData'] ?? [];
-$simpleFixedDatas = $detailDatas['simpleFixedDatas'] ?? [];
-$advancedDatas = $detailDatas['advancedDatas'] ?? [];
-$commonFixedDatas = $detailDatas['commonFixedDatas'] ?? [];
 $pageData = $datas['detailDatas']['pageData'] ?? [];
 $pageTitle = $pageData['title'] ?? '';
 if (isset($pageData['url'])) {
@@ -41,33 +39,15 @@ if (isset($pageData['url'])) {
   @endif
 
   @foreach ($detailDatas as $ddKey => $ddDatas)
-  @switch ($ddKey)
-  @case ('simpleTable')
-  @case ('askwiki')
-  @case ('commonFixed')
-  @case ('advanced')
-  @case ('commonTable')
+  @php if ($ddKey == 'simpleFixed') { $ddKey = $isMobile ? 'simpleFixed' : 'simpleTable'; } @endphp
+  @if (in_array($ddKey, ['simpleTable', 'askwiki', 'commonFixed', 'advanced', 'commonTable', 'simpleFixed']))
   <div class="container">
     <div class="row-fluid margin-bottom-20">
       @include('knowledge.components._' . $ddKey, [$ddKey . 'Datas' => $ddDatas, 'isMobile' => $isMobile])
     </div>
   </div>
-  @break
-  @endswitch
-  @endforeach
-
-
-  @if (!empty($simpleFixedDatas))
-  <div class="container">
-    <div class="row-fluid margin-bottom-20">
-      @if ($isMobile)
-      @include('knowledge.components._fix-table', ['fixedDatas' => $simpleFixedDatas, 'isMobile' => $isMobile])
-      @else
-      @include('knowledge.components._simpleTable', ['simpleTableDatas' => $simpleFixedDatas, 'isMobile' => $isMobile])
-      @endif
-    </div>
-  </div>
   @endif
+  @endforeach
 
 
   @if (isset($detailDatas['modal']) && !empty($detailDatas['modal']))

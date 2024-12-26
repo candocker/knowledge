@@ -1,8 +1,8 @@
 @php
 $datas['layoutDatas'] = [
-'viewCode' => 'pointsingle',
-'bodyClass' => 'page-header-fixed page-full-width',
-'footerView' => 'center'
+  'viewCode' => 'pointsingle',
+  'bodyClass' => 'page-header-fixed page-full-width',
+  'footerView' => 'center'
 ];
 
 $isMobile = $datas['isMobile'] ?? false;

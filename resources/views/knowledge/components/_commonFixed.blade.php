@@ -1,5 +1,5 @@
-@php $commonTitles = $fixedDatas['titles'] ?? []; @endphp
-@foreach ($fixedDatas as $tData)
+@php $commonTitles = $commonFixedDatas['titles'] ?? []; @endphp
+@foreach ($commonFixedDatas as $tData)
 @if (isset($tData['infos']))
 @php $tTitles = $tData['titles'] ?? $commonTitles; $tInfos = $tData['infos'] ?? $tData['fixed']; @endphp
 <div class="portlet box green">

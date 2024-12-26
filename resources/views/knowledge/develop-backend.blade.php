@@ -1,4 +1,9 @@
-@php $datas['layoutDatas'] = ['viewCode' => '', 'bodyClass' => 'page-header-fixed']; @endphp
+@php
+$datas['layoutDatas'] = [
+  'viewCode' => '',
+  'bodyClass' => 'page-header-fixed'
+];
+@endphp
 @extends('layouts._metronic-base')
 @section('layoutcontent')
 
