@@ -119,6 +119,7 @@ class SubjectService extends AbstractService
             'group' => ['mCode' => 'group', 'field' => 'code'],
             'volume' => ['mCode' => 'bookVolume', 'field' => 'id'],
             'country' => ['mCode' => 'country', 'field' => 'code'],
+            'dynasty' => ['mCode' => 'dynasty', 'field' => 'code'],
         ];
         $param = $params[$type];
         $info = $this->getModelObj($param['mCode'])->where([$param['field'] => $code])->first();

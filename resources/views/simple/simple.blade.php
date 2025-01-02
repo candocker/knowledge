@@ -7,8 +7,8 @@ $datas['layoutDatas'] = [
 
 $isMobile = $datas['isMobile'] ?? false;
 
-$commonTableDatas = $datas['commonTableDatas'] ?? [];
-$commonFixedDatas = $datas['commonFixedDatas'] ?? [];
+$commonTableDatas = $datas['commonTable'] ?? [];
+$commonFixedDatas = $datas['commonFixed'] ?? [];
 //print_r($commonFixedDatas);exit();
 $pageData = $datas['datas']['pageData'] ?? [];
 $pageTitle = $pageData['title'] ?? '';
@@ -32,7 +32,7 @@ if (isset($pageData['url'])) {
   @if (!empty($commonFixedDatas))
   <div class="container">
     <div class="row-fluid margin-bottom-20">
-      @include('knowledge.components._commonfix-table', ['fixedDatas' => $commonFixedDatas, 'isMobile' => $isMobile])
+      @include('knowledge.components._commonFixed', ['commonFixedDatas' => $commonFixedDatas, 'isMobile' => $isMobile])
     </div>
   </div>
   @endif
@@ -40,7 +40,7 @@ if (isset($pageData['url'])) {
   @if (!empty($commonTableDatas))
   <div class="container">
     <div class="row-fluid margin-bottom-20">
-      @include('knowledge.components._common-table', ['commonTableDatas' => $commonTableDatas, 'isMobile' => $isMobile])
+      @include('knowledge.components._commonTable', ['commonTableDatas' => $commonTableDatas, 'isMobile' => $isMobile])
     </div>
   </div>
   @endif

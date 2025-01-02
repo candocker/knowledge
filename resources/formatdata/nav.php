@@ -59,14 +59,14 @@ return [
                 'wgliterature' => ['code' => 'wgliterature', 'name' => '外国文学'],
             ],
         ],
-        /*'figure' => [
+        'figure' => [
             'name' => '名人录',
             'subDatas' => [
-                'luxun' => ['code' => 'luxun', 'name' => '鲁迅'],
-                'kongzi' => ['code' => 'kongzi', 'name' => '孔子'],
+                //'luxun' => ['code' => 'luxun', 'name' => '鲁迅'],
+                //'kongzi' => ['code' => 'kongzi', 'name' => '孔子'],
                 //'' => ['code' => '', 'name' => ''],
             ],
-        ],*/
+        ],
         'zghistory' => [
             'name' => '中国历史',
             'subDatas' => [

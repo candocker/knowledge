@@ -9,6 +9,7 @@ trait OtherLoanTrait
     public function myLoan()
     {
         $monthObj = DatetimeTool::getCarbonObj('2019-05');
+        //$currentMonthObj = DatetimeTool::getCarbonObj('2024-12-09');
         $currentMonthObj = DatetimeTool::getCarbonObj();
 
         $firstInterest = '281.55';
@@ -61,12 +62,14 @@ trait OtherLoanTrait
             }
         }
         $totalGatherData = empty($totalGatherData) ? $gatherData : $totalGatherData;
+        $nextMonth = clone $currentMonthObj;
+        $nextMonth->addMonth(1);
 
         $nodealed = $newperiod = $running = $dealed = false;
         foreach ($result as & $data) {
             $monthObj = $monthObj->addMonth(1);
             $monthValue = $monthObj->format('Y-m');
-            if (empty($running) && $monthValue == $currentMonthObj->format('Y-m')) {
+            if (empty($running) && $monthValue == $nextMonth->format('Y-m')) {
                 $running = true;
             }
 

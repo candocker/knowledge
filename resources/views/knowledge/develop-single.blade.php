@@ -40,7 +40,7 @@ if (isset($pageData['url'])) {
 
   @foreach ($detailDatas as $ddKey => $ddDatas)
   @php if ($ddKey == 'simpleFixed') { $ddKey = $isMobile ? 'simpleFixed' : 'simpleTable'; } @endphp
-  @if (in_array($ddKey, ['simpleTable', 'askwiki', 'commonFixed', 'advanced', 'commonTable', 'simpleFixed']))
+  @if (in_array($ddKey, ['simpleTable', 'askwiki', 'commonFixed', 'advanced', 'commonTable', 'simpleFixed', 'timeline']))
   <div class="container">
     <div class="row-fluid margin-bottom-20">
       @include('knowledge.components._' . $ddKey, [$ddKey . 'Datas' => $ddDatas, 'isMobile' => $isMobile])
