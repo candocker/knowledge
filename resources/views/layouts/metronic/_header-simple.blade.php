@@ -3,7 +3,8 @@
   <div class="navbar-inner">
     <div class="{{$headerClass?? 'container-fluid'}}">
       <a class="brand" href="/">
-        <img src="{{$commonAssetUrl}}/metronic/media/image/logo.png" alt="logo" />
+        <p style="color:#ebebed; margin: 3px 0 5px 0;">木知识</p>
+        <!--<img src="{{$commonAssetUrl}}/metronic/media/image/logo.png" alt="logo" />-->
       </a>
 
       <div class="navbar hor-menu hidden-phone hidden-tablet">

@@ -32,7 +32,7 @@ if (isset($pageData['url'])) {
   <div class="container-fluid promo-page">
     <div class="row-fluid">
       <div class="span12">
-        @include('knowledge.components._baseinfo', ['baseData' => $baseData])
+        @include('knowledge.components._baseinfo', ['baseData' => $baseData, 'isMobile' => $isMobile])
       </div>
     </div>
   </div>

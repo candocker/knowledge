@@ -1,11 +1,11 @@
 @php
-$colors = ['blue', 'grey', 'yellow', 'green', 'purple'];
+$colors = ['green', 'grey'];//, 'yellow', 'blue', 'purple'];
 $icons = ['trophy', 'facetime-video', 'comments', 'rss', 'time', 'chart', 'music'];
 @endphp
 @foreach ($timelineDatas as $tData)
 <div class="row-fluid">
   <div class="span12">
-    <div class="portlet box green">
+    <div class="portlet box blue">
       <div class="portlet-title">
         <div class="caption">
           <b>{{$tData['name']}}</b>
@@ -17,8 +17,8 @@ $icons = ['trophy', 'facetime-video', 'comments', 'rss', 'time', 'chart', 'music
     </div>
     <ul class="timeline">
       @foreach ($tData['infos'] as $tKey => $tInfo)
-      @php $descs = $tData['descs'][$tKey] ?? []; @endphp
-      <li class="timeline-{{$colors[rand(0,4)]}}">
+      @php $descs = $tData['descs'][$tKey] ?? []; $color = $colors[$tKey % 2]; @endphp
+      <li class="timeline-{{$color}}">
         <div class="timeline-time">
           <span class="time" style="margin-top:10px;font-size:14px">{!!$tInfo['name']!!}</span>
           <span class="date" style="margin-top:10px;color:#588fae;font-size:12px">{!!$tInfo['brief']!!}</span>

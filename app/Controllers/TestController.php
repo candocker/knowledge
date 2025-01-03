@@ -187,8 +187,8 @@ class TestController extends AbstractController
             //$this->getModelObj('dynasty')->create($data);
             //$this->getModelObj('emperor')->create($data);
         }
-        echo $sql;exit();
-        //print_r($datas);
+        //echo $sql;exit();
+        print_r($datas);
         exit();
     }
 

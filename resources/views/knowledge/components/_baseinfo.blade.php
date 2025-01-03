@@ -1,14 +1,15 @@
 <div class="block-yellow" style="background-color:#cbcac6">
   <div class="container">
+    <div class="portlet-title">
+      <div class="caption">{!!$baseData['brief']!!}</div>
+    </div>
     <div class="row-fluid">
+    <div @if (empty($isMobile)) style="display: flex; justify-content: center; align-items: center;" @endif>
       <div class="span5 margin-bottom-20" style="display: flex; justify-content: center; align-items: center;">
-        <a href="index.html"><img src="{{$baseData['headerPicUrl']}}" width="300px" height="800px" alt=""></a>
+        <a ><img src="{{$baseData['headerPicUrl']}}" width="300px" height="100%" alt=""></a>
       </div>
       <div class="span6" style="">
         <div class="portlet sale-summary">
-          <div class="portlet-title">
-            <div class="caption">{!!$baseData['brief']!!}</div>
-          </div>
           <ul class="unstyled">
             @foreach ($baseData['infos'] as $bKey => $bValue)
             <li>
@@ -21,6 +22,7 @@
         </div>
         <!--<div style="font-size:18px;margin-bottom:10px"><p>{{$baseData['desc']}}</p></div>-->
       </div>
+    </div>
     </div>
   </div>
 </div>

@@ -141,20 +141,19 @@ class SubjectService extends AbstractService
 
     public function _figureFormatDetail($detailDatas, $info)
     {
-        $baseData = $detailDatas['baseData'] ?? [];
-        if (empty($baseData)) {
-            $baseData = [
-                'infos' => [
-                    '姓名' => $info['name'],
-                    '百科' => !empty($info['baidu_url']) ? "<a href='{$info['baidu_url']}'>百度百科</a>" : '',
-                    '详情' => $info['knowledge_path'] ?: "<a href='/wiki-book-{$info['code']}.html'>详情</a>",
-                ],
-                'brief' => $info['name'],
-                'desc' => $info['description'],
-            ];
-        }
+        $baseData = [
+            'infos' => [
+                '姓名' => $info['name'],
+                '百科' => !empty($info['baidu_url']) ? "<a href='{$info['baidu_url']}'>百度百科</a>" : '',
+                '详情' => $info['knowledge_path'] ? "<a href='/wiki-figure-{$info['code']}.html'>详情</a>" : '',
+            ],
+            'brief' => $info['name'],
+            'desc' => $info['description'],
+        ];
+        $formatBaseData = $detailDatas['baseData'] ?? [];
+        $formatBaseData['infos'] = array_merge($baseData['infos'], $formatBaseData['infos'] ?? []);
         $baseData['headerPicUrl'] = $info->photoUrl;
-        $detailDatas['baseData'] = $baseData;
+        $detailDatas['baseData'] = array_merge($baseData, $formatBaseData);
         return $detailDatas;
     }
 
