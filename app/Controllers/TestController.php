@@ -23,84 +23,6 @@ class TestController extends AbstractController
         exit();
     }
 
-    public function _testKing()
-    {
-        $infos = file('/tmp/a.php');
-        $results = [];
-        $titles = [];
-        foreach ($infos as $info) {
-            $tmp = explode("\t", $info);
-            foreach ($tmp as $key => & $value) {
-                $value = trim($value);
-            }
-            if (empty($titles)) {
-                $titles = $tmp;
-                continue;
-            }
-            //print_r($titles);
-            //print_r($tmp);
-            if (count($tmp) < 7) {
-            //print_r($tmp);
-            //continue;
-            }
-            $name = $tmp[0];
-            $code = CommonTool::getSpellStr($name, '');
-            //var_dump($name);
-            //var_dump($code);
-            if (isset($results[$code])) {
-                $code .= '__' . rand(1, 1000);
-            }
-            if (isset($results[$code])) {
-                $code .= '__' . rand(1, 1000);
-            }
-            $rData = [];
-            foreach ($tmp as $nkey => $nvalue) {
-                if ($nkey == 0) {
-                    //continue;
-                }
-                $rData[$titles[$nkey]] = $nvalue;
-            }
-            print_R($tmp);
-            print_R($rData);
-            $results[$code] = $rData;
-        }
-        print_r($results);
-        //print_r($infos);
-        $content = "<?php\nreturn ";
-        $content .= var_export($results, true);
-        $content .= ';';
-        $file = '/data/database/knowledge/history/中国断代/';
-        //$file .= '先秦时期/战国/秦国帝王.php';
-        $file .= '魏晋南北朝/东晋/帝王1.php';
-        file_put_contents($file, $content);
-
-        exit();
-    }
-
-    public function _testKing2old()
-    {
-        $datas = require('/tmp/a.php');
-        foreach ($datas as $data) {
-            foreach ($data['elems'] as $elem) {
-                $name = trim($elem[0]);
-                $nData = [
-                    'name' => $name,
-                    'figure_code' => CommonTool::getSpellStr($name, ''),
-                    'name_alias' => trim($elem[1]),
-                    'baidu_url' => trim($elem[2]),
-                    'spell' => isset($elem[3]) ? trim($elem[3]) : '',
-                    'posthumous_title' => isset($elem[4]) ? trim($elem[4]) : '',
-                    'office_start_end' => isset($elem[5]) ? trim($elem[5]) : '',
-                ];
-                print_r($nData);
-                $this->getModelObj('emperor')->create($nData);
-                //print_r($elem);exit();
-            }
-        }
-        exit();
-        print_R($datas);
-    }
-
     public function _testKing2()
     {
         $file = '/tmp/b.php';
@@ -183,12 +105,12 @@ class TestController extends AbstractController
             //$sql .= "('{$data['name']}', '{$data['code']}', 'zhou', '{$data['begin_end']}', '{$data['brief']}-{$data['brief2']}', '{$data['baidu_url']}')\n";
             //$sql .= "('{$data['code']}', '{$data['name']}', '{$data['serial']}', '{$data['brief']}', '{$data['baidu_url']}', '{$data['author']}', '{$data['publish_at']}'),\n";
             $sql .= "('{$data['code']}', 'classical', 215, '{$data['serial']}', '{$data['name']}', '{$data['brief']}', '{$data['author']}'),\n";
-            //print_r($data);
-            //$this->getModelObj('dynasty')->create($data);
+            print_r($data);
+            $this->getModelObj('country')->create($data);
             //$this->getModelObj('emperor')->create($data);
         }
         //echo $sql;exit();
-        print_r($datas);
+        //print_r($datas);
         exit();
     }
 

@@ -12,19 +12,6 @@ abstract class AbstractService extends AbstractServiceBase
         return 'knowledge';
     }
 
-    public function getBookReadUrl($info, $isMobile)
-    {
-        $bCode = $info['code'];
-        if ($info['is_ancientread']) {
-            $url = "http://read.canliang.wang/book-{$bCode}";
-        } elseif ($info['is_onlineread']) {
-            $url = $isMobile ? "http://book.canliang.wang/pages/book/info?book_code={$bCode}" : "/{$bCode}/list.html";
-        } else {
-            $url = '';
-        }
-        return $url ? "<a href='{$url}'>在线阅读</a>" : '';
-    }
-
     public function formatChapterTreeDatas($chapters, $level = 2)
     {
         $top = $big = $small = $common = '';

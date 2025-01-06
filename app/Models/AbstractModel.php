@@ -26,6 +26,22 @@ class AbstractModel extends AbstractModelBase
         return $this->knowledge_path ? $base . $this->knowledge_path : '';
     }
 
+    public function formatBaseData($baseData, $isMobile)
+    {
+        $data = $this->_formatBaseData($isMobile);
+        if (empty($baseData)) {
+            return $data;
+        }
+        $baseData['infos'] = array_merge($data['infos'] ?? [], $baseData['infos'] ?? []);
+        $baseData['headerPicUrl'] = $data['headerPicUrl'] ?? '';
+        return $baseData;
+    }
+
+    public function _formatBaseData($isMobile)
+    {
+        return [];
+    }
+
     /*public function getDateinfo($type, $result = 'format')
     {
         $keyField = $this->getKeyField();

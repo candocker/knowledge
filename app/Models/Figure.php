@@ -114,4 +114,19 @@ class Figure extends AbstractModel
             'deathStr' => $deathStr,//'逝世日期:' . 
         ];
     }
+
+    public function _formatBaseData($isMobile)
+    {
+        $data = [
+            'infos' => [
+                '姓名' => $this->name,
+                '百科' => !empty($this->baidu_url) ? "<a href='{$this->baidu_url}'>百科</a>" : '',
+                '详情' => $this->knowledge_path ? "<a href='/wiki-figure-{$this->code}.html'>详情</a>" : '',
+            ],
+            'brief' => $this->name,
+            'desc' => $this->description,
+            'headerPicUrl' => $this->photoUrl,
+        ];
+        return $data;
+    }
 }

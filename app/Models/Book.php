@@ -123,6 +123,35 @@ class Book extends AbstractModel
         return $results;
     }
 
+    public function _formatBaseData($isMobile)
+    {
+        $data = [
+            'infos' => [
+                '名称' => $this->name,
+                '百科' => !empty($this->baidu_url) ? "<a href='{$this->baidu_url}'>百科</a>" : '',
+                '详情' => $this->knowledge_path ? "<a href='/wiki-book-{$this->code}.html'>详情</a>" : '',
+                '在线阅读' => $this->getBookReadUrl($isMobile),
+            ],
+            'brief' => $this->name,
+            'desc' => $this->description,
+            'headerPicUrl' => $this->coverUrl,
+        ];
+        return $data;
+    }
+
+    public function getBookReadUrl($isMobile)
+    {
+        $bCode = $this->code;
+        if ($this->is_ancientread) {
+            $url = "http://read.canliang.wang/book-{$bCode}";
+        } elseif ($this->is_onlineread) {
+            $url = $isMobile ? "http://book.canliang.wang/pages/book/info?book_code={$bCode}" : "/{$bCode}/list.html";
+        } else {
+            $url = '';
+        }
+        return $url ? "<a href='{$url}'>在线阅读</a>" : '';
+    }
+
     /**
      * 获取模型的可搜索数据
      *

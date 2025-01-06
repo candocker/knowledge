@@ -100,10 +100,7 @@ class SubjectService extends AbstractService
         } else {
             $info = $this->getPointKnowledgeInfo($type, $code);
             $detailDatas = $this->getKnowledgeDetail($info);
-            $method = "_{$type}FormatDetail";
-            if (method_exists($this, $method)) {
-                $detailDatas = $this->$method($detailDatas, $info, $isMobile);
-            }
+            $detailDatas['baseData'] = $info->formatBaseData($detailDatas['baseData'] ?? [], $isMobile);
         }
 
         $pData = $this->getPointSubjectDatas(['code' => $code], $isMobile, $detailDatas);
@@ -154,26 +151,6 @@ class SubjectService extends AbstractService
         $formatBaseData['infos'] = array_merge($baseData['infos'], $formatBaseData['infos'] ?? []);
         $baseData['headerPicUrl'] = $info->photoUrl;
         $detailDatas['baseData'] = array_merge($baseData, $formatBaseData);
-        return $detailDatas;
-    }
-
-    public function _bookFormatDetail($detail, $info, $isMobile)
-    {
-        $baseData = $detailDatas['baseData'] ?? [];
-        if (empty($baseData)) {
-            $baseData = [
-                'infos' => [
-                    '名称' => $info['name'],
-                    '百科' => !empty($info['baidu_url']) ? "<a href='{$info['baidu_url']}'>百度百科</a>" : '',
-                    '详情' => "<a href='/wiki-book-{$info['code']}.html'>详情</a>",
-                    '在线阅读' => $this->getBookReadUrl($info, $isMobile),
-                ],
-                'brief' => $info['name'],
-                'desc' => $info['description'],
-            ];
-        }
-        $baseData['headerPicUrl'] = $info->coverUrl;
-        $detailDatas['baseData'] = $baseData;
         return $detailDatas;
     }
 

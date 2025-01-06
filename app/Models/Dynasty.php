@@ -44,4 +44,19 @@ class Dynasty extends AbstractModel
     {
         return [$this->formatName, $this->first_emperor, $this->begin_end, $this->duration];
     }
+
+    public function _formatBaseData($isMobile)
+    {
+        $data = [
+            'infos' => [
+                '名称' => $this->name,
+                '百科' => !empty($this->baidu_url) ? "<a href='{$this->baidu_url}'>百科</a>" : '',
+                '详情' => "<a href='/wiki-dynasty-{$this->code}.html'>详情</a>",
+            ],
+            'brief' => $this->name,
+            'desc' => $this->description,
+            'headerPicUrl' => '',
+        ];
+        return $data;
+    }
 }
