@@ -71,7 +71,7 @@ return [
             'name' => '中国历史',
             'subDatas' => [
                 'zgdynasty' => ['code' => 'zgdynasty', 'name' => '断代史'],
-                'zgemperor' => ['code' => 'zgemperor', 'name' => '历代帝王'],
+                //'zgemperor' => ['code' => 'zgemperor', 'name' => '历代帝王'],
                 //'zggeneral' => ['code' => 'zggeneral', 'name' => '战争和将领'],
                 //'zgminister' => ['code' => 'zgminister', 'name' => '历代显贵'],
                 //'zgpoliticsreform' => ['code' => 'zgpoliticsreform', 'name' => '政治制度和变法'],
@@ -82,7 +82,7 @@ return [
             'name' => '外国和外国历史',
             'subDatas' => [
                 'bigcountry' => ['code' => 'bigcountry', 'name' => '大国近代史'],
-                'jdpoliticsreform' => ['code' => 'jdpoliticsreform', 'name' => '近代政治革命'],
+                //'jdpoliticsreform' => ['code' => 'jdpoliticsreform', 'name' => '近代政治革命'],
                 //'jdgeneral' => ['code' => 'jdgeneral', 'name' => '近代战争和将领'],
                 'gdempire' => ['code' => 'gdempire', 'name' => '古代帝国'],
                 //'gdpolitics' => ['code' => 'gdempire', 'name' => '古代政治和文化'],

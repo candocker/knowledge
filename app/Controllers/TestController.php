@@ -30,10 +30,8 @@ class TestController extends AbstractController
         $content = file_get_contents($file);
         $crawler->addContent($content);
         $datas = [];
-        //$titles = ['dynasty', 'dynasty_sub', 'serial', 'first_emperor','begin_end'];
-        $titles = ['posthumous_title', 'serial', 'mausoleum', 'eraname', 'birth_death', 'office_start_end', 'name', 'office_start_end', 'office_duration', 'brief', 'brief2'];
+        //$titles = ['posthumous_title', 'serial', 'mausoleum', 'eraname', 'birth_death', 'office_start_end', 'name', 'office_start_end', 'office_duration', 'brief', 'brief2'];
         $titles = ['dynastic_title', 'posthumous_title', 'name', 'office_start_end', 'eraname', 'mausoleum', 'brief', 'birth_death', 'brief2'];
-        //$titles = ['name', 'nationality', 'brief', 'first_emperor', 'brief2', 'begin_end', 'brief3', 'capital', 'brief4'];
         $titles = ['serial', 'name', 'author', 'brief', 'publish_at', 'begin_end', 'brief3', 'capital', 'brief4'];
         $crawler->filter('tr')->each(function ($subCrawler) use (& $datas, $titles) {
             $data = [];
@@ -41,32 +39,15 @@ class TestController extends AbstractController
             $subCrawler->filter('td')->each(function ($node) use (& $data, & $i, $titles) {
                 //echo $node->html();
                 $j = 0;
-                $node->filter('a')->each(function ($subNode) use (& $data, & $j) {
-                    $url = urldecode($subNode->attr('href'));
-                    if (strpos($url, '?') !== false) {
-                        $url = substr($url, 0, strpos($url, '?'));
-                    }
-                    //var_dump($url . '==' . $j);
-                    if (!isset($data['baidu_url'])) {
-                    $data['baidu_url'] = 'https://baike.baidu.com/' . trim($url, '/');
-                    } else {
-                    $data['baidu_url' . $j] = 'https://baike.baidu.com/' . trim($url, '/');
-                    }
-                    $j++;
-                });
-                /*$aDom = $node->filter('a');
                 $url = '';
-                if ($aDom->count() > 0) {// && !isset($data['baidu_url']) && $i != 0) {
+                if ($aDom->count() > 0) {
                     $url = urldecode($aDom->attr('href'));
                     if (strpos($url, '?') !== false) {
                         $url = substr($url, 0, strpos($url, '?'));
                     }
                     $data['baidu_url' . rand(10, 100)] = 'https://baike.baidu.com/' . trim($url, '/');
-                }*/
+                }
                 $text = $node->text();
-                $text = trim($text, '-');
-                //$text = trim($text, '—');
-                //$text = str_replace(['- [90]', '-'], ['', ''], $text);
                 $text = str_replace(['不详'], [''], $text);
                 $title = $titles[$i] ?? '';
                 $data[$title] = $text;
@@ -81,93 +62,17 @@ class TestController extends AbstractController
             }
         });
         $sql = "INSERT INT `wp_dynasty` (`" . implode('`,`', $titles) . "`) VALUES \n";
-        //$sql = "INSERT INTO `wp_dynasty` (`name`, `code`, `parent_code`, `begin_end`, `brief`, `baidu_url`) VALUES \n";
-        //$sql = "INSERT INTO `wp_emperor` (`name`, `figure_code`, `dynasty`, `office_start_end`, `brief`, `office_duration`, `posthumous_title`, `baidu_url`) VALUES \n";
-        $sql = "INSERT INTO `wp_book` (`code`, `name`, `orderlist`, `description`, `baidu_url`, `author`, `publish_at`) VALUES ";
-        $sql = "INSERT INTO `wp_book_listing` (`book_code`, `catalog_code`, `catalog_volume_id`, `serial`, `name`, `brief`, `author`) VALUES ";
 
         foreach ($datas as & $data) {
-            if (!isset($data['name']) || in_array($data['name'], ['', '君主', '—', '姓名'])) {//!isset($data['baidu_url'])) {
+            if (!isset($data['name']) || in_array($data['name'], ['', '君主', '—', '姓名'])) {
                 continue;
             }
-            if (empty($data['figure_code'])) {
-                $data['figure_code'] = isset($data['posthumous_title']) ? CommonTool::getSpellStr($data['posthumous_title'], '') : '';
-            }
             $data['dynasty'] = 'qingchao';
-            //$data['dynasty_sub'] = '后金';
-            if (isset($data['brief2'])) {
-                $data['brief'] = "{$data['brief']}。{$data['brief2']}";
-                //$data['brief'] = "传{$data['brief']}帝，末代君主{$data['brief2']}亡于{$data['brief4']}。{$data['brief3']}";
-                //$data['brief'] = trim($data['brief'], '。');
-                unset($data['brief2']);
-            }
-            //$sql .= "('" . implode("','", $data) . "')\n";
-            //$sql .= "('{$data['name']}', '{$data['code']}', 'zhou', '{$data['begin_end']}', '{$data['brief']}-{$data['brief2']}', '{$data['baidu_url']}')\n";
-            //$sql .= "('{$data['code']}', '{$data['name']}', '{$data['serial']}', '{$data['brief']}', '{$data['baidu_url']}', '{$data['author']}', '{$data['publish_at']}'),\n";
-            $sql .= "('{$data['code']}', 'classical', 215, '{$data['serial']}', '{$data['name']}', '{$data['brief']}', '{$data['author']}'),\n";
-            print_r($data);
-            $this->getModelObj('country')->create($data);
-            //$this->getModelObj('emperor')->create($data);
+            //$this->getModelObj('country')->create($data);
         }
         //echo $sql;exit();
         //print_r($datas);
         exit();
-    }
-
-    public function _testPotus()
-    {
-        $infos = \DB::connection()->select("SELECT * FROM `data_culture`.`wp_figure_resume`");
-        $results = [];
-        foreach ($infos as $info) {
-            $fCode = $info->figure_code;
-            $fInfo = $this->getModelObj('figure')->where(['code' => $fCode])->first();
-            $titles = $fInfo->getFtitleDatas();
-            foreach ($titles as $key => $t) {
-                if ($key != 'englishfull') {
-                    print_r($titles);
-                }
-            }
-            //print_r($titles);
-            $rData = [
-                'name' => $fInfo['name'],
-                'fullName' => $fInfo['name_card'],
-                'englishfull' => $titles['englishfull'][0],
-                'number' => $info->term,
-            ];
-            $dateInfos = $this->getModelObj('dateinfo')->where(['info_key' => $fCode])->get();
-            foreach ($dateInfos as $dInfo) {
-                if (!in_array($dInfo['type'], ['deathday', 'birthday'])) {
-                    print_r($dateInfos->toArray());
-                } else {
-                    $rData[$dInfo['type']] = $dInfo['year'] . ' / ' . $dInfo['month'] . ' / ' . $dInfo['day'];
-                }
-            }
-            $period = [
-                'period' => $info->period,
-                'party' => $info->party,
-            ];
-            $date1Infos = $this->getModelObj('dateinfo')->where(['info_key' => $info->id])->get();
-            foreach ($date1Infos as $dInfo) {
-                $period[$dInfo['type']] = $dInfo['year'] . ' / ' . $dInfo['month'] . ' / ' . $dInfo['day'];
-            }
-            //print_r($period);
-            //print_r($rData);exit();
-            if ($fCode == 'cleveland') {
-                //print_r($fInfo->toArray());
-                //print_r($date1Infos->toArray());
-            }
-            if (isset($results[$fCode])) {
-                $results[$fCode]['period'][$info->period] = $period;
-            } else {
-                $results[$fCode] = $rData;
-                $results[$fCode]['period'][$info->period] = $period;
-            }
-
-            //$dateinfos = $fInfo->getDateinfo($type, $result = 'format')
-        }
-        var_export($results);
-        exit();
-        print_r($infos);exit();
     }
 
     public function _testDealgroup()

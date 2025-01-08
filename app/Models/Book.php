@@ -125,12 +125,15 @@ class Book extends AbstractModel
 
     public function _formatBaseData($isMobile)
     {
+        $jumpUrl = !empty($this->baidu_url) ? "<a href='{$this->baidu_url}'>百科</a>" : '';
+        $jumpUrl .= $this->douban_url ? "---<a href='{$this->douban_url}'>豆瓣</a>" : '';
+        $jumpUrl .= $this->knowledge_path ? "---<a href='/wiki-book-{$this->code}.html'>详情</a>" : '';
+        $jumpUrl .= '---' . $this->getBookReadUrl($isMobile);
+        $jumpUrl = trim($jumpUrl, '---');
         $data = [
             'infos' => [
-                '名称' => $this->name,
-                '百科' => !empty($this->baidu_url) ? "<a href='{$this->baidu_url}'>百科</a>" : '',
-                '详情' => $this->knowledge_path ? "<a href='/wiki-book-{$this->code}.html'>详情</a>" : '',
-                '在线阅读' => $this->getBookReadUrl($isMobile),
+                '书名' => $this->name,
+                '跳转地址' => $jumpUrl,
             ],
             'brief' => $this->name,
             'desc' => $this->description,
@@ -145,7 +148,8 @@ class Book extends AbstractModel
         if ($this->is_ancientread) {
             $url = "http://read.canliang.wang/book-{$bCode}";
         } elseif ($this->is_onlineread) {
-            $url = $isMobile ? "http://book.canliang.wang/pages/book/info?book_code={$bCode}" : "/{$bCode}/list.html";
+            //$url = $isMobile ? "http://book.canliang.wang/pages/book/info?book_code={$bCode}" : "/{$bCode}/list.html";
+            $url = "/{$bCode}/list.html";
         } else {
             $url = '';
         }

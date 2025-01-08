@@ -24,7 +24,8 @@ class ReadController extends AbstractController
         $datas = $service->_bookDetail($code, false);
         $bookData = $datas['bookData'];
         $level = $bookData['code'] == 'shijing' ? 3 : 2;
-        $datas['chapterDatas'] = $service->getBookChapterDatas($bookData);
+        $isMobile = $this->isMobile(true);
+        $datas['chapterDatas'] = $service->getBookChapterDatas($bookData, $isMobile);
         $datas['chapterDatas'] = $service->formatChapterTreeDatas($datas['chapterDatas'], $level);
 
         $datas = array_merge([

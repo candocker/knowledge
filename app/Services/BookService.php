@@ -30,7 +30,7 @@ class BookService extends AbstractService
         return $results;
     }
 
-    public function getBookChapterDatas($bookData)
+    public function getBookChapterDatas($bookData, $isMobile)
     {
         $chapterInfos = $this->getModelObj('chapter')->where(['book_code' => $bookData['code']])->orderBy('serial', 'asc')->get();
         $chapterDatas = [];
@@ -45,6 +45,7 @@ class BookService extends AbstractService
                 'title' => $cInfo['title'],
                 'author' => $cInfo['author'],
                 'id' => $cInfo['id'],
+                'url' => empty($cInfo['code']) ? '' : ($isMobile ? "http://book.canliang.wang/pages/book/reader?book_code={$cInfo['book_code']}&chapter_code={$cInfo['code']}" : "/{$cInfo['book_code']}/{$cInfo['code']}.html"),
                 'chapterId' => $cInfo['id'],
             ];
         }

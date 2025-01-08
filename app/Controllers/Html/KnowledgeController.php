@@ -58,9 +58,12 @@ class KnowledgeController extends AbstractController
     {
         $service = $this->getBookServiceObj();
         $datas = $service->_bookDetail($bookCode, true);
-        $datas['chapterDatas'] = $service->getBookChapterDatas($datas['bookData']);
+        $navs = require(self_app_path($this->getAppCode(), '/resources/formatdata/nav.php'));
+        $datas = array_merge($datas, $navs);
+        $isMobile = $this->isMobile(true);
+        $datas['chapterDatas'] = $service->getBookChapterDatas($datas['bookData'], $isMobile);
         $datas['tdkData'] = ['title' => $datas['bookData']['name'] . '-' . '经典古籍阅读'];
-        return $this->customView('book.list', $datas);
+        return $this->customView('book.listnew', $datas);
     }
 
     public function bookDetail($bookCode, $chapterCode)

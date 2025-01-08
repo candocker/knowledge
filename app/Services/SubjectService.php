@@ -181,6 +181,40 @@ class SubjectService extends AbstractService
         return is_null($sCode) ? $datas : $datas[$sCode] ?? $datas['other'];
     }
 
+    public function _gdempirePointSubjectDatas($currentNav, $isMobile, & $baseDatas)
+    {
+        $sorts = [];
+        $results = [
+            'ancient' => ['name' => '古代文明', 'infos' => []],
+            'classical' => ['name' => '古典文明', 'infos' => []],
+            'empire' => ['name' => '帝国', 'infos' => []],
+        ];
+        $num = $isMobile ? 50 : 7;
+        foreach ($results as $sort => & $sData) {
+            $i = 1;
+            $key = 1;
+            $newInfos = [];
+            $infos = $this->getModelObj('country')->where('sort', $sort)->orderBy('orderlist', 'asc')->get();
+            foreach ($infos as $info) {
+                //$info['name'] .= strlen($info['name']);
+                $bCode = $info['code'];
+                $url = "/wiki-country-{$bCode}.html";
+                $info['url'] = $url;
+                $newInfos[$key][] = ['name' => $info['name'], 'url' => $url];
+                if ($i % $num == 0) {
+                    $key++;
+                }
+                $step = 1;
+                $i = $i + $step;
+            }
+            $sData['infos'] = $newInfos;
+            $sData['fixed'] = $newInfos;
+        }
+
+        return ['simpleFixed' => $results];
+
+    }
+
     public function _americanpotusPointSubjectDatas($currentNav, $isMobile, & $baseDatas)
     {
         $modalDatas = [];

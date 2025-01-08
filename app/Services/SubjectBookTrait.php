@@ -226,7 +226,8 @@ trait SubjectBookTrait
                 $bCode = $info['bookCode'];
                 if ($navCode == 'onlineread') {
                     if (!empty($bCode)) {
-                        $url = $isMobile ? "http://book.canliang.wang/pages/book/info?book_code={$bCode}" : "/{$bCode}/list.html";
+                        //$url = $isMobile ? "http://book.canliang.wang/pages/book/info?book_code={$bCode}" : "/{$bCode}/list.html";
+                        $url = "/{$bCode}/list.html";
                     } else {
                         $url = '';
                     }
