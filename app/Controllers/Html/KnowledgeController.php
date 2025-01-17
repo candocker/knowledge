@@ -97,7 +97,13 @@ class KnowledgeController extends AbstractController
     {
         $isMobile = $this->isMobile(true);
         $datas = require(self_app_path($this->getAppCode(), '/resources/formatdata/nav.php'));
-        $datas['detailDatas'] = $this->getSubjectServiceObj()->getPointDetail($type, $code, $isMobile);
+        $detailDatas = $this->getSubjectServiceObj()->getPointDetail($type, $code, $isMobile);
+        if (isset($detailDatas['tdkData'])) {
+            $datas['tdkData'] = $detailDatas['tdkData'];
+            unset($detailDatas['tdkData']);
+        }
+        $datas['detailDatas'] =$detailDatas; 
+
         $datas['isMobile'] = $isMobile;
         //print_r($datas);
         return $this->customView('develop-single', $datas);

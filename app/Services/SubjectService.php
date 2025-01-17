@@ -99,8 +99,13 @@ class SubjectService extends AbstractService
             $detailDatas = require($this->_specialKnowledgePath($code));
         } else {
             $info = $this->getPointKnowledgeInfo($type, $code);
-            $detailDatas = $this->getKnowledgeDetail($info);
-            $detailDatas['baseData'] = $info->formatBaseData($detailDatas['baseData'] ?? [], $isMobile);
+            $knowledgePath = $info->full_knowledge_path;
+            $detailDatas = empty($knowledgePath) ? [] : require($knowledgePath . '.php');
+
+            $fData = $info->formatBaseData($detailDatas['baseData'] ?? [], $isMobile);
+            $detailDatas['tdkData'] = $fData['tdkData'] ?? [];
+            $detailDatas['pageData'] = $fData['pageData'] ?? [];
+            $detailDatas['baseData'] = $fData['baseData'] ?? [];
         }
 
         $pData = $this->getPointSubjectDatas(['code' => $code], $isMobile, $detailDatas);
@@ -124,34 +129,6 @@ class SubjectService extends AbstractService
             $this->resource->throwException(400, '信息不存在-' . $code);
         }
         return $info;
-    }
-
-    public function getKnowledgeDetail($info)
-    {
-        $knowledgePath = $info->full_knowledge_path;
-        if (empty($knowledgePath)) {
-            //$this->resource->throwException(400, '知识文件不存在-' . $info['name']);
-            return [];
-        }
-        return require($knowledgePath . '.php');
-    }
-
-    public function _figureFormatDetail($detailDatas, $info)
-    {
-        $baseData = [
-            'infos' => [
-                '姓名' => $info['name'],
-                '百科' => !empty($info['baidu_url']) ? "<a href='{$info['baidu_url']}'>百度百科</a>" : '',
-                '详情' => $info['knowledge_path'] ? "<a href='/wiki-figure-{$info['code']}.html'>详情</a>" : '',
-            ],
-            'brief' => $info['name'],
-            'desc' => $info['description'],
-        ];
-        $formatBaseData = $detailDatas['baseData'] ?? [];
-        $formatBaseData['infos'] = array_merge($baseData['infos'], $formatBaseData['infos'] ?? []);
-        $baseData['headerPicUrl'] = $info->photoUrl;
-        $detailDatas['baseData'] = array_merge($baseData, $formatBaseData);
-        return $detailDatas;
     }
 
     public function _specialKnowledgePath($sCode = null)
@@ -185,17 +162,26 @@ class SubjectService extends AbstractService
     {
         $sorts = [];
         $results = [
-            'ancient' => ['name' => '古代文明', 'infos' => []],
-            'classical' => ['name' => '古典文明', 'infos' => []],
             'empire' => ['name' => '帝国', 'infos' => []],
         ];
         $num = $isMobile ? 50 : 7;
+        $details = [];
         foreach ($results as $sort => & $sData) {
             $i = 1;
             $key = 1;
             $newInfos = [];
-            $infos = $this->getModelObj('country')->where('sort', $sort)->orderBy('orderlist', 'asc')->get();
+            $infos = $this->getModelObj('country')->where('sort', '<>', 'bigcountry')->orderBy('orderlist', 'asc')->get();
             foreach ($infos as $info) {
+                $name = $info['name'];
+                if (!empty($info['begin_end'])) {
+                    $name .= "( {$info['begin_end']} )";
+                }
+                $name = "<a href='/wiki-country-{$info['code']}.html'>{$name}</a>";
+                $details[$info['name']] = $name;
+                if (!empty($info['sort'])) {
+                    continue;
+                }
+
                 //$info['name'] .= strlen($info['name']);
                 $bCode = $info['code'];
                 $url = "/wiki-country-{$bCode}.html";
@@ -210,6 +196,20 @@ class SubjectService extends AbstractService
             $sData['infos'] = $newInfos;
             $sData['fixed'] = $newInfos;
         }
+        //print_r($details);
+        $sourceDatas = $baseDatas['commonTable']['empires']['infos'];
+        foreach ($sourceDatas as $key => & $sData) {
+            foreach ($sData as & $sValue) {
+                if (is_array($sValue)) {
+                    continue;
+                }
+                $oValue = strip_tags($sValue);
+                if (isset($details[$oValue])) {
+                    $sValue = str_replace($oValue, $details[$oValue], $sValue);
+                }
+            }
+        }
+        $baseDatas['commonTable']['empires']['infos'] = $sourceDatas;
 
         return ['simpleFixed' => $results];
 

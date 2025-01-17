@@ -32,9 +32,12 @@ class AbstractModel extends AbstractModelBase
         if (empty($baseData)) {
             return $data;
         }
-        $baseData['infos'] = array_merge($data['infos'] ?? [], $baseData['infos'] ?? []);
-        $baseData['headerPicUrl'] = $data['headerPicUrl'] ?? '';
-        return $baseData;
+
+        $baseData['infos'] = array_merge($data['baseData']['infos'] ?? [], $baseData['infos'] ?? []);
+        $baseData['headerPicUrl'] = $baseData['headerPicUrl'] ?? ($data['headerPicUrl'] ?? '');
+        $data['baseData'] = $baseData;
+        //print_r($data);exit();
+        return $data;
     }
 
     public function _formatBaseData($isMobile)

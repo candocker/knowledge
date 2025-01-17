@@ -10,7 +10,7 @@ $detailDatas = $datas['detailDatas'] ?? [];
 //print_r($detailDatas);exit();
 
 $baseData = $detailDatas['baseData'] ?? [];
-$pageData = $datas['detailDatas']['pageData'] ?? [];
+$pageData = $detailDatas['pageData'] ?? [];
 $pageTitle = $pageData['title'] ?? '';
 if (isset($pageData['url'])) {
     $pageTitle = "<a href='{$pageData['url']}'>{$pageData['title']}</a>";
@@ -29,7 +29,7 @@ if (isset($pageData['url'])) {
   </div>
   @endif
   @if (!empty($baseData))
-  <div class="container-fluid promo-page">
+  <div class="container container-fluid promo-page">
     <div class="row-fluid">
       <div class="span12">
         @include('knowledge.components._baseinfo', ['baseData' => $baseData, 'isMobile' => $isMobile])
@@ -40,7 +40,7 @@ if (isset($pageData['url'])) {
 
   @foreach ($detailDatas as $ddKey => $ddDatas)
   @php if ($ddKey == 'simpleFixed') { $ddKey = $isMobile ? 'simpleFixed' : 'simpleTable'; } @endphp
-  @if (in_array($ddKey, ['simpleTable', 'askwiki', 'commonFixed', 'advanced', 'commonTable', 'simpleFixed', 'timeline']))
+  @if (in_array($ddKey, ['simpleTable', 'askwiki', 'commonFixed', 'advanced', 'commonTable', 'simpleFixed', 'timeline', 'simpleText']))
   <div class="container">
     <div class="row-fluid margin-bottom-20">
       @include('knowledge.components._' . $ddKey, [$ddKey . 'Datas' => $ddDatas, 'isMobile' => $isMobile])

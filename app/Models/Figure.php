@@ -117,16 +117,24 @@ class Figure extends AbstractModel
 
     public function _formatBaseData($isMobile)
     {
-        $data = [
+        $jumpUrl = !empty($this->baidu_url) ? "<a href='{$this->baidu_url}'>百科</a>" : '';
+        //$jumpUrl .= $this->knowledge_path ? "---<a href='/wiki-figure-{$this->code}.html'>详情</a>" : '';
+        $jumpUrl = trim($jumpUrl, '---');
+        $baseData = [
             'infos' => [
                 '姓名' => $this->name,
-                '百科' => !empty($this->baidu_url) ? "<a href='{$this->baidu_url}'>百科</a>" : '',
-                '详情' => $this->knowledge_path ? "<a href='/wiki-figure-{$this->code}.html'>详情</a>" : '',
+                '跳转' => $jumpUrl,
             ],
             'brief' => $this->name,
             'desc' => $this->description,
             'headerPicUrl' => $this->photoUrl,
         ];
-        return $data;
+        $result = [
+            'tdkData' => ['title' => $this->name, 'description' => $this->description],
+            'pageData' => ['title' => $this->name . " （ {$jumpUrl} ）", 'brief' => $this->description],
+            'baseData' => $baseData,
+            'headerPicUrl' => $this->photoUrl,
+        ];
+        return $result;
     }
 }

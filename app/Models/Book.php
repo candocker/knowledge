@@ -127,10 +127,10 @@ class Book extends AbstractModel
     {
         $jumpUrl = !empty($this->baidu_url) ? "<a href='{$this->baidu_url}'>百科</a>" : '';
         $jumpUrl .= $this->douban_url ? "---<a href='{$this->douban_url}'>豆瓣</a>" : '';
-        $jumpUrl .= $this->knowledge_path ? "---<a href='/wiki-book-{$this->code}.html'>详情</a>" : '';
+        //$jumpUrl .= $this->knowledge_path ? "---<a href='/wiki-book-{$this->code}.html'>详情</a>" : '';
         $jumpUrl .= '---' . $this->getBookReadUrl($isMobile);
         $jumpUrl = trim($jumpUrl, '---');
-        $data = [
+        /*$baseData = [
             'infos' => [
                 '书名' => $this->name,
                 '跳转地址' => $jumpUrl,
@@ -138,8 +138,14 @@ class Book extends AbstractModel
             'brief' => $this->name,
             'desc' => $this->description,
             'headerPicUrl' => $this->coverUrl,
+        ];*/
+        $result = [
+            'tdkData' => ['title' => $this->name, 'description' => $this->description],
+            'pageData' => ['title' => $this->name . " （ {$jumpUrl} ）", 'brief' => $this->description],
+            //'headerPicUrl' => $this->coverUrl,
+            //'baseData' => $baseData,
         ];
-        return $data;
+        return $result;
     }
 
     public function getBookReadUrl($isMobile)
