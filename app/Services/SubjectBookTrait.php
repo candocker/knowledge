@@ -231,7 +231,7 @@ trait SubjectBookTrait
                     } else {
                         $url = '';
                     }
-                } else if ($navCode == 'bookstore') {
+                } else if ($navCode == 'bookstore-no') {
                     $url = 'javascript:;';
                     $info['modalUrl'] = "/ajax-book-{$bCode}.html";
                 } else {

@@ -1,8 +1,8 @@
-<div class="block-yellow" style="background-color:#cbcac6">
+<div class="block-yellow" style="background-color:#cbcac6; padding: 30px 10px 0px 10px;">
   <div class="container">
-    <div class="portlet-title">
-      <div class="caption">{!!$baseData['brief']!!}</div>
-    </div>
+    <!--<div class="portlet-title">
+      @if (isset($baseData['brief'])) <div class="caption">{!!$baseData['brief']!!}</div> @endif
+    </div>-->
     <div class="row-fluid">
     <div @if (empty($isMobile)) style="display: flex; justify-content: center; align-items: center;" @endif>
       <div class="span5 margin-bottom-20" style="display: flex; justify-content: center; align-items: center;">
@@ -20,7 +20,7 @@
             <li>
           </ul>
         </div>
-        <!--<div style="font-size:18px;margin-bottom:10px"><p>{{$baseData['desc']}}</p></div>-->
+        @if (isset($baseData['brief'])) <!--<div style="font-size:18px;margin-bottom:10px"><p>{{$baseData['desc']}}</p></div>--> @endif
       </div>
     </div>
     </div>

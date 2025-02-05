@@ -141,7 +141,7 @@ class Book extends AbstractModel
         ];*/
         $result = [
             'tdkData' => ['title' => $this->name, 'description' => $this->description],
-            'pageData' => ['title' => $this->name . " （ {$jumpUrl} ）", 'brief' => $this->description],
+            'pageData' => ['title' => $this->name, 'brief' => $this->description . " （ {$jumpUrl} ）"],
             //'headerPicUrl' => $this->coverUrl,
             //'baseData' => $baseData,
         ];
