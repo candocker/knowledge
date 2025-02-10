@@ -23,6 +23,27 @@ class TestController extends AbstractController
         exit();
     }
 
+    public function _testBook()
+    {
+        $infos = $this->getModelObj('book')->where('name', 'like', '% %')->get();
+        foreach ($infos as $info) {
+            //print_r($info->toArray());
+            $oName = $info->name;
+            $bName = str_replace(' ', '', $info->name);
+            $uData = ['name' => $bName];
+            $this->getModelObj('bookListing')->where(['name' => $oName])->update($uData);
+            //$this->getModelObj('bookFigure')->where(['name' => $oName])->update($uData);
+            var_dump($bName);var_dump($info->name);
+            $exist = $this->getModelObj('book')->where(['name' => $bName])->where('id', '<>', $info->id)->first();
+            $info->name = $bName;
+            $info->save();
+            if ($exist) {
+                print_r($exist->toArray());
+            }
+        }
+        exit();
+    }
+
     public function _testKing2()
     {
         $file = '/tmp/b.php';

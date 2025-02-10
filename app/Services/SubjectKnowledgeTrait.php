@@ -153,7 +153,10 @@ trait SubjectKnowledgeTrait
             }
             $beginEnd = $lastData ? $lastData['begin_end'] : '';
             //$beginEnd = str_replace(['公元前', '公元', '约前', '前', '年', '约'], ['B', '', 'B', 'B', '', ''], $beginEnd);
-            $tmpData[] = $lastData ? $lastData['first_emperor'] : '';
+            if (!empty($lastData['first_emperor'])) {
+                $beginEnd .= ' (' . $lastData['first_emperor'] . ')';
+            }
+            //$tmpData[] = $lastData ? $lastData['first_emperor'] : '';
             $tmpData[] = $beginEnd;
             if (!empty($fExts)) {
                 $tmpData['fExts'] = $fExts;

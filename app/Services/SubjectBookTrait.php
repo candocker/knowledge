@@ -170,7 +170,7 @@ trait SubjectBookTrait
             }
             //print_r($volume->toArray()); print_r($books->toArray());exit();
             $vData = [
-                'name' => $volume['name'],
+                'name' => $volume['name'] . ' ( ' . $books->count() . ' )',
                 'volumeId' => $volume['id'],
                 'showUrl' => $volume['knowledge_path'] ? "/wiki-volume-{$volume['id']}.html" : '',
                 'titles' => [],
