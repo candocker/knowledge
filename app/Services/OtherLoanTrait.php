@@ -10,12 +10,14 @@ trait OtherLoanTrait
     {
         $monthObj = DatetimeTool::getCarbonObj('2019-05');
         //$currentMonthObj = DatetimeTool::getCarbonObj('2024-12-09');
-        $currentMonthObj = DatetimeTool::getCarbonObj();
+        $pointMonth = request()->input('point_month', '');
+        $currentMonthObj = $pointMonth ? DatetimeTool::getCarbonObj($pointMonth) : DatetimeTool::getCarbonObj();
 
         $firstInterest = '281.55';
         $loanAmount = 1970000;
         $loanPeriod = 312;
-        $rRate = '3.30';
+        $pointRate = request()->input('point_rate');
+        $rRate = $pointRate ?? '3.30';
         $loans = [
             ['interestRate' => 5.145, 'loanNum' => 20, 'loanAmount' => '1907133.24'],
             ['interestRate' => 4.995, 'loanNum' => 24, 'loanAmount' => '1822537.11'],
@@ -25,7 +27,8 @@ trait OtherLoanTrait
             ['interestRate' => 4.2, 'loanNum' => 9, 'loanAmount' => '1735021.45'],
             ['interestRate' => 4.28, 'loanNum' => 1, 'loanAmount' => '1730432.42'],
             ['interestRate' => 3.9, 'loanNum' => 2],
-            ['interestRate' => $rRate, 'loanNum' => 16],
+            ['interestRate' => '3.3', 'loanNum' => 6],
+            ['interestRate' => $rRate, 'loanNum' => 10],
             ['interestRate' => $rRate, 'loanNum' => 36],
             ['interestRate' => $rRate, 'loanNum' => 36],
             ['interestRate' => $rRate, 'loanNum' => 48],

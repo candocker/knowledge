@@ -193,18 +193,19 @@ class KnowledgeController extends AbstractController
                 ];
             }
             $fName = "{$data['base']['interestRate']}|{$data['base']['loanNum']}|{$data['gatherData']['principalTotal']}|{$data['gatherData']['interestTotal']}|{$data['gatherData']['monthlyPaymentTotal']}";
-            if ($data['gatherData']['running']) {
-                $currentDetails['cDetails'] = [
+            if ($data['gatherData']['running'] || empty($data['gatherData']['dealed'])) {
+                $currentDetails[] = [
+                    'titles' => $dTitles,
+                    'name' => $fName,
+                    'infos' => $fInfos,
+                ];
+            } else {
+                $details[] = [
                     'titles' => $dTitles,
                     'name' => $fName,
                     'infos' => $fInfos,
                 ];
             }
-            $details[] = [
-                'titles' => $dTitles,
-                'name' => $fName,
-                'infos' => $fInfos,
-            ];
         }
         $tgData = $datas['totalGatherData'];
         //print_r($tgData);exit();

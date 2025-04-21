@@ -23,6 +23,55 @@ class TestController extends AbstractController
         exit();
     }
 
+    public function _testCountry()
+    {
+        $datas = require('/tmp/d.php');
+        //print_R($datas);
+        foreach ($datas as $subData) {
+            foreach ($subData as $key => $data) {
+                if ($key != 'infos') {
+                    var_dump($key . '-' . $data);
+                    continue;
+                }
+                //print_r($data);
+                foreach ($data as $cData) {
+                    foreach ($cData as $c => $cUrl) {
+                    var_dump($c . '-' . $cUrl);
+                    }
+                }
+                //print_r($key);
+                //print_r($data);
+            }
+        }
+        exit();
+        $datas = require('/tmp/sql.php');
+        $tmp = require('/tmp/b.php');
+        $tmp1 = require('/tmp/c.php');
+        $i = 0;
+        $str = '';
+        //print_r($datas);
+        foreach ($datas as $data) {
+            $name = $tmp[$data[2]] ?? ($tmp1[$data[2]] ?? '');
+            $nData = [
+                'code' => strtolower(trim($data[3])),
+                'name' => trim($name),
+                'name_english' => trim($data[2]),
+                'area' => str_replace(',', '', trim($data[4])),
+                'population' => str_replace(',', '', trim($data[6])),
+            ];
+            print_r($nData);
+            if (empty($name)) {
+                $str .= "{$data[2]}\n";
+                $i++;
+            print_r($nData);
+            }
+            //$this->getModelObj('country')->create($nData);
+        }
+        echo $str;
+        var_dump($i);
+        exit();
+    }
+
     public function _testBook()
     {
         $infos = $this->getModelObj('book')->where('name', 'like', '% %')->get();
@@ -42,6 +91,32 @@ class TestController extends AbstractController
             }
         }
         exit();
+    }
+
+    public function _testTmp()
+    {
+        $file = '/tmp/b.html';
+        $crawler = new Crawler();
+        $content = file_get_contents($file);
+        $crawler->addContent($content);
+        $datas = [];
+        $crawler->filter('span')->each(function ($subCrawler) use (& $datas) {
+            $text = $subCrawler->text();
+            $url = '';
+            $aDom = $subCrawler->filter('a');
+            if ($aDom->count() > 0) {
+                $url = $aDom->attr('href');
+                $url = urldecode($url);
+                $url = strpos($url, '?') !== false ? substr($url, 0, strpos($url, '?')) : $url;
+            }
+            if ($text != '|') {
+                $datas[] = [$text =>  $url];
+                //print_r([$text =>  $url]);
+            }
+        });
+        $a = var_export($datas, true);
+        echo $a;
+        //print_r($datas);
     }
 
     public function _testKing2()

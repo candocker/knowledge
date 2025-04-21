@@ -59,18 +59,20 @@ return [
                 'wgliterature' => ['code' => 'wgliterature', 'name' => '外国文学'],
             ],
         ],
-        'figure' => [
+        /*'figure' => [
             'name' => '名人录',
             'subDatas' => [
                 //'luxun' => ['code' => 'luxun', 'name' => '鲁迅'],
                 //'kongzi' => ['code' => 'kongzi', 'name' => '孔子'],
                 //'' => ['code' => '', 'name' => ''],
             ],
-        ],
+        ],*/
         'zghistory' => [
-            'name' => '中国历史',
+            'name' => '历史',
             'subDatas' => [
-                'zgdynasty' => ['code' => 'zgdynasty', 'name' => '断代史'],
+                'zgdynasty' => ['code' => 'zgdynasty', 'name' => '中国断代史'],
+                'bigcountry' => ['code' => 'bigcountry', 'name' => '大国历史'],
+                'gdempire' => ['code' => 'gdempire', 'name' => '古代帝国'],
                 //'zgemperor' => ['code' => 'zgemperor', 'name' => '历代帝王'],
                 //'zggeneral' => ['code' => 'zggeneral', 'name' => '战争和将领'],
                 //'zgminister' => ['code' => 'zgminister', 'name' => '历代显贵'],
@@ -78,16 +80,16 @@ return [
                 //'' => ['code' => '', 'name' => ''],
             ],
         ],
-        'wghistory' => [
+        /*'wghistory' => [
             'name' => '外国和外国历史',
             'subDatas' => [
-                'bigcountry' => ['code' => 'bigcountry', 'name' => '大国近代史'],
+                'bigcountry' => ['code' => 'bigcountry', 'name' => '大国历史'],
                 //'jdpoliticsreform' => ['code' => 'jdpoliticsreform', 'name' => '近代政治革命'],
                 //'jdgeneral' => ['code' => 'jdgeneral', 'name' => '近代战争和将领'],
                 'gdempire' => ['code' => 'gdempire', 'name' => '古代帝国'],
                 //'gdpolitics' => ['code' => 'gdempire', 'name' => '古代政治和文化'],
                 //'gdgeneral' => ['code' => 'gdgeneral', 'name' => '古代战争和将领'],
             ],
-        ],
+        ],*/
     ],
 ];

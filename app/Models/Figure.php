@@ -123,15 +123,24 @@ class Figure extends AbstractModel
         $baseData = [
             'infos' => [
                 '姓名' => $this->name,
-                '跳转' => $jumpUrl,
             ],
             'brief' => $this->name,
             'desc' => $this->description,
             'headerPicUrl' => $this->photoUrl,
         ];
+        $title = $this->name;
+        if ($jumpUrl) {
+            $title .= $jumpUrl ? " （ {$jumpUrl} ）" : '';
+            $baseData['infos']['跳转'] = $jumpUrl;
+        }
+
+        $books = $this->getModelObj('bookFigure')->where(['figure_code' => $this->code])->get();
+        $bookDatas = [];
+        foreach ($books as $bookData) {
+        }
         $result = [
             'tdkData' => ['title' => $this->name, 'description' => $this->description],
-            'pageData' => ['title' => $this->name . " （ {$jumpUrl} ）", 'brief' => $this->description],
+            'pageData' => ['title' => $title, 'brief' => $this->description],
             'baseData' => $baseData,
             'headerPicUrl' => $this->photoUrl,
         ];
