@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace ModuleKnowledge\Repositories;
 
-class GroupSubjectRepository extends AbstractRepository
+class CountryListingRepository extends AbstractRepository
 {
     protected function _sceneFields()
     {

@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace ModuleKnowledge\Requests;
 
-class GroupSubjectRequest extends AbstractRequest
+class CountryListingRequest extends AbstractRequest
 {
     protected function _updateRule()
     {

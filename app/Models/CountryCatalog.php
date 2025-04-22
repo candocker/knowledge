@@ -15,4 +15,18 @@ class CountryCatalog extends AbstractModel
         return $this->formatTagDatas('string');
     }*/
 
+    public function getFormatNameAttribute()
+    {
+        $tName = $this->name;
+        if (!empty($this->knowledge_path)) {
+            $tName = "<a href='/wiki-country-{$this->code}.html'>{$tName}</a>";
+        }
+        if (!empty($this->baidu_url)) {
+            $tName .= "( <a href='{$this->baidu_url}'>百科</a> )";
+        }
+        /*if (!empty($this->begin_end)) {
+            $tName .= "( {$this->begin_end} )";
+        }*/
+        return $tName;
+    }
 }

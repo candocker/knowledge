@@ -90,7 +90,7 @@ trait SubjectKnowledgeTrait
 
     public function _zgdynastyPointSubjectDatas($currentNav, $isMobile, & $baseDatas)
     {
-        $dynasties = $this->getModelObj('countryCatalog')->where(['sort' => 'top'])->orderBy('orderlist', 'asc')->get();
+        $dynasties = $this->getModelObj('countryCatalog')->where(['category' => 'dynasty'])->orderBy('orderlist', 'asc')->get();
         $titles = [];
         $i = 0;
         $fixKey = 1;
@@ -104,24 +104,27 @@ trait SubjectKnowledgeTrait
                 $fixKey = $i == 8 ? $fixKey + 1 : $fixKey;
             }
             $tCode = $dynasty['code'];
-            $subInfos = $this->getModelObj('dynasty')->where(['parent_code' => $tCode])->orderBy('orderlist', 'asc')->get();
+            $subInfos = $this->getModelObj('countryListing')->where(['catalog_code' => $tCode])->orderBy('orderlist', 'asc')->get();
             $details[$dynasty->name] = $dynasty;
             //echo "        ['{$dynasty['name']}', '', ''],\n";
             foreach ($subInfos as $subInfo) {
+                $countryInfo = $subInfo->countryInfo;
+                //print_r($countryInfo->toArray());
                 //echo "        ['{$subInfo['name']}', '', ''],\n";
-                $details[$subInfo->name] = $subInfo;
+                $details[$countryInfo->name] = $countryInfo;
             }
             $commonFixed[$fixKey]['titles'][$tCode] = $dynasty->formatName;
             $commonFixed[$fixKey]['max'] = max($commonFixed[$fixKey]['max'], $subInfos->count());
             $commonFixed[$fixKey]['tmpInfos'][$tCode] = $subInfos;
             $i++;
         }
+        //print_r($commonFixed);exit();
         foreach ($commonFixed as & $cData) {
             for ($i = 0; $i <= $cData['max']; $i++ ) {
                 $tInfos = [];
                 foreach ($cData['titles'] as $tCode => $cTitle) {
                     if (isset($cData['tmpInfos'][$tCode][$i])) {
-                        $tInfos[] = $cData['tmpInfos'][$tCode][$i]->formatName;
+                        $tInfos[] = $cData['tmpInfos'][$tCode][$i]->countryInfo->formatName;
                     } else {
                         $tInfos[] = '<span style="color:white;">占位符</span>';
                     }
