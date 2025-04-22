@@ -4,6 +4,6 @@ declare(strict_types = 1);
 
 namespace ModuleKnowledge\Controllers;
 
-class KnowledgeDetailController extends AbstractController
+class MuwikiListingController extends AbstractController
 {
 }

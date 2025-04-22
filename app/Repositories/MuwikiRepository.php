@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace ModuleKnowledge\Repositories;
 
-class GroupRepository extends AbstractRepository
+class MuwikiRepository extends AbstractRepository
 {
     protected function _sceneFields()
     {

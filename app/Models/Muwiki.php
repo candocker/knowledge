@@ -4,9 +4,9 @@ declare(strict_types = 1);
 
 namespace ModuleKnowledge\Models;
 
-class Group extends AbstractModel
+class Muwiki extends AbstractModel
 {
-    protected $table = 'group';
+    protected $table = 'muwiki';
     protected $primaryKey = 'code';
     public $incrementing = false;
 

@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace ModuleKnowledge\Controllers;
 
-class KnowledgeController extends AbstractController
+class MuwikiCatalogController extends AbstractController
 {
     public function readerChapterDetail()
     {
@@ -17,7 +17,7 @@ class KnowledgeController extends AbstractController
 
     public function globalSetting()
     {
-        return $this->getContentData('knowledge', 'global', 'setting');
+        return $this->getContentData('muwiki_catalog', 'global', 'setting');
     }
 
     protected function getContentData($app, $module, $action, $returnType = null)

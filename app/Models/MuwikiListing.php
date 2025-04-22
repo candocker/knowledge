@@ -4,9 +4,9 @@ declare(strict_types = 1);
 
 namespace ModuleKnowledge\Models;
 
-class KnowledgeDetail extends AbstractModel
+class MuwikiListing extends AbstractModel
 {
-    protected $table = 'knowledge_detail';
+    protected $table = 'muwiki_listing';
     protected $guarded = ['id'];
     public $timestamps = false;
 

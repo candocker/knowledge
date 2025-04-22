@@ -99,9 +99,9 @@ class BookService extends AbstractService
 
         $file = $this->_getChapterFile($chapterInfo);
         $contents = require($file);
-        $contents = $this->_formatChapterContents($contents);
-        //if ($returnType == 'array') {
-        //}
+        if ($returnType != 'array') {
+            $contents = $this->_formatChapterContents($contents);
+        }
         //print_r($contents);exit();
         if ($returnType == 'string') {
             $contents = implode('<p style="line-height:10px"><br /></p>', $contents);

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace ModuleKnowledge\Repositories;
 
-class KnowledgeRepository extends AbstractRepository
+class MuwikiCatalogRepository extends AbstractRepository
 {
     public function getShowFields()
     {

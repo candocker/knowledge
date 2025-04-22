@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace ModuleKnowledge\Requests;
 
-class SubjectRequest extends AbstractRequest
+class MuwikiRequest extends AbstractRequest
 {
     protected function _addRule()
     {
@@ -12,9 +12,9 @@ class SubjectRequest extends AbstractRequest
             'code' => [
                 'bail',
                 'required',
-                'unique:knowledge.subject',
+                'unique:knowledge.muwiki',
             ],
-            //'name' => ['bail', 'required'],
+            'name' => ['bail', 'required'],
             'status' => ['required', $this->_getKeyValues('status')],
         ];
     }
@@ -25,9 +25,8 @@ class SubjectRequest extends AbstractRequest
             'code' => [
                 'bail',
                 'filled',
-                $this->getRule()->unique('knowledge.subject')->ignore($this->routeParam('code', '')),
+                $this->getRule()->unique('knowledge.muwiki')->ignore($this->routeParam('code', '')),
             ],
-            'status' => ['nullable', $this->_getKeyValues('status')],
         ];
     }
 
@@ -44,11 +43,5 @@ class SubjectRequest extends AbstractRequest
         return [
             //'name.required' => '请填写名称',
         ];
-    }
-
-    public function filterDirtyData($data)
-    {
-        unset($data['group_code']);
-        return $data;
     }
 }

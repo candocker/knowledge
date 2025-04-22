@@ -68,7 +68,7 @@ class KnowledgeController extends AbstractController
 
     public function bookDetail($bookCode, $chapterCode)
     {
-        $datas = $this->getBookServiceObj()->getChapterDetail($bookCode, $chapterCode);
+        $datas = $this->getBookServiceObj()->getChapterDetail($bookCode, $chapterCode, 'source');
         return $this->customView('book.detail', $datas);
     }
 

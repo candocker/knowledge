@@ -4,6 +4,6 @@ declare(strict_types = 1);
 
 namespace ModuleKnowledge\Resources;
 
-class KnowledgeDetail extends AbstractResource
+class MuwikiListingCollection extends AbstractCollection
 {
 }

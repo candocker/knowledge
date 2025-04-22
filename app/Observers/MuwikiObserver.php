@@ -4,17 +4,17 @@ declare(strict_types = 1);
 
 namespace ModuleKnowledge\Observers;
 
-use ModuleKnowledge\Models\Group;
+use ModuleKnowledge\Models\Muwiki;
 
-class GroupObserver
+class MuwikiObserver
 {
-    /*public function created(Group $model)
+    /*public function created(Muwiki $model)
     {
         $model->updateTagInfos(['tags' => [$model->code]]);
         return true;
     }
 
-    public function creating(Group $model)
+    public function creating(Muwiki $model)
     {
         $code = $model->code;
         $checkCode = $model->getCodeTag($code);
@@ -25,7 +25,7 @@ class GroupObserver
         return true;
     }
 
-    public function deleted(Group $model)
+    public function deleted(Muwiki $model)
     {
         $model->deleteTagInfos([]);
         return true;

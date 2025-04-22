@@ -4,11 +4,12 @@ declare(strict_types = 1);
 
 namespace ModuleKnowledge\Requests;
 
-class KnowledgeDetailRequest extends AbstractRequest
+class MuwikiCatalogRequest extends AbstractRequest
 {
     protected function _updateRule()
     {
         return [
+            'id' => ['bail', 'required', 'exists'],
         ];
     }
 

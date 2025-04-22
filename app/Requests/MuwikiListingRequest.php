@@ -4,12 +4,11 @@ declare(strict_types = 1);
 
 namespace ModuleKnowledge\Requests;
 
-class EmperorRequest extends AbstractRequest
+class MuwikiListingRequest extends AbstractRequest
 {
     protected function _updateRule()
     {
         return [
-            'id' => ['bail', 'required', 'exists'],
         ];
     }
 
