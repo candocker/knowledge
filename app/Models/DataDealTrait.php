@@ -4,11 +4,12 @@ declare(strict_types = 1);
 
 namespace ModuleKnowledge\Models;
 
-class Dateinfo extends AbstractModel
-{
-    protected $table = 'dateinfo';
-    protected $guarded = ['id'];
+use Framework\Baseapp\Models\AbstractModel as AbstractModelBase;
 
+trait DataDealTrait
+{
+
+    // Dateinfo
     public function recordDateinfo($type, $value, $infoType, $infoKey)
     {
         $formatedValue = explode('|', $value);
@@ -25,7 +26,6 @@ class Dateinfo extends AbstractModel
             'month' => isset($date[1]) ? intval(trim($date[1])) : 0,
             'day' => isset($date[2]) ? intval(trim($date[2])) : 0,
         ];
-        
         $data = ['type' => $type, 'info_type' => $infoType, 'info_key' => $infoKey];
         $exist = $this->where($data)->first();
         if ($exist) {
@@ -53,4 +53,19 @@ class Dateinfo extends AbstractModel
         $accurateStr = empty($this->accurate) ? '' : " ( {$accurateInfos[$this->accurate]} )";
         return $eraStr . $dateStr . $accurateStr;
     }
+
+    // Dateinfo repository
+    /*protected function _typeKeyDatas()
+    {
+        return [
+            'birthday' => '出生日期',
+            'deathday' => '逝世日期',
+            'start' => '起始日期',
+            'end' => '截止日期',
+            'termstart' => '任期起始日期',
+            'termend' => '任期截止日期',
+            'termstart2' => '第一任期起始日期',
+            'termend2' => '第二任期截止日期',
+        ];
+    }*/
 }

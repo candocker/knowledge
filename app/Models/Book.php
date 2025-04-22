@@ -41,9 +41,9 @@ class Book extends AbstractModel
 
     public function authorData()
     {
-        $data = BookFigure::where(['book_code' => $this->code])->first();
+        $data = $this->getModelObj('figureListing')->where(['book_code' => $this->code])->first();
         if (empty($data)) {
-            return new BookFigure();
+            return new FigureListing();
         }
         return $data->figureInfo;
     }

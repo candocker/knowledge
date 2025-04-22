@@ -90,7 +90,7 @@ trait SubjectKnowledgeTrait
 
     public function _zgdynastyPointSubjectDatas($currentNav, $isMobile, & $baseDatas)
     {
-        $dynasties = $this->getModelObj('dynasty')->where(['sort' => 'top'])->orderBy('orderlist', 'asc')->get();
+        $dynasties = $this->getModelObj('countryCatalog')->where(['sort' => 'top'])->orderBy('orderlist', 'asc')->get();
         $titles = [];
         $i = 0;
         $fixKey = 1;

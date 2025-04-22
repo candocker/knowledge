@@ -6,10 +6,10 @@ namespace ModuleKnowledge\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class BookFigure extends AbstractModel
+class FigureListing extends AbstractModel
 {
     use SoftDeletes;
-    protected $table = 'book_figure';
+    protected $table = 'figure_listing';
     protected $guarded = ['id'];
 
     public function book()

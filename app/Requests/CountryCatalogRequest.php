@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace ModuleKnowledge\Requests;
 
-class DynastyRequest extends AbstractRequest
+class CountryCatalogRequest extends AbstractRequest
 {
     protected function _updateRule()
     {

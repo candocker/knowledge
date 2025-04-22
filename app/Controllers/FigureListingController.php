@@ -4,6 +4,6 @@ declare(strict_types = 1);
 
 namespace ModuleKnowledge\Controllers;
 
-class BookFigureController extends AbstractController
+class FigureListingController extends AbstractController
 {
 }

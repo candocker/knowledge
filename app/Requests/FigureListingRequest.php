@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace ModuleKnowledge\Requests;
 
-class BookFigureRequest extends AbstractRequest
+class FigureListingRequest extends AbstractRequest
 {
     protected function _updateRule()
     {

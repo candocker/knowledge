@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace ModuleKnowledge\Repositories;
 
-class BookFigureRepository extends AbstractRepository
+class FigureListingRepository extends AbstractRepository
 {
     protected function _sceneFields()
     {

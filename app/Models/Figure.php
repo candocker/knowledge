@@ -134,7 +134,7 @@ class Figure extends AbstractModel
             $baseData['infos']['跳转'] = $jumpUrl;
         }
 
-        $books = $this->getModelObj('bookFigure')->where(['figure_code' => $this->code])->get();
+        $books = $this->getModelObj('figureListing')->where(['type' => 'author', 'figure_code' => $this->code])->get();
         $bookDatas = [];
         foreach ($books as $bookData) {
         }
