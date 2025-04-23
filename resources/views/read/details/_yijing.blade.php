@@ -28,6 +28,17 @@ $symbolDatas = explode(',', $cChapter['description']);
   <hr>
 </div>
 
+@foreach ($showElems as $pointKey => $pointElem)
+  <p class="{{$pointElem['class']}}" style="margin-bottom:3px;"><big>{{$pointElem['name']}}</big><span>{{$contents[$pointKey]}}</span></p>
+  @foreach ($authors as $aCode => $author)
+    @if (isset($contents[$aCode]) && isset($contents[$aCode][$pointKey]) && !empty($contents[$aCode][$pointKey]))
+      @foreach ((array) $contents[$aCode][$pointKey] as $i => $elemStr)
+      <div class="yiwen {{$aCode}} "><p>【{{$author['name']}}】{!!$elemStr!!}</p></div>
+      @endforeach
+    @endif
+  @endforeach
+@endforeach
+
 @if (in_array($contents['serial'], [1, 2]))
 @php $topYao = array_pop($contents['yao']); @endphp
 <div style="text-align:center;margin: 0 auto; color:red;padding:0px;">{{$topYao}}</div>
@@ -63,17 +74,6 @@ $symbolDatas = explode(',', $cChapter['description']);
   @endif
   @endforeach
 </p>
-@endforeach
-
-@foreach ($showElems as $pointKey => $pointElem)
-  <p class="{{$pointElem['class']}}" style="margin-bottom:3px;"><big>{{$pointElem['name']}}</big><span>{{$contents[$pointKey]}}</span></p>
-  @foreach ($authors as $aCode => $author)
-    @if (isset($contents[$aCode]) && isset($contents[$aCode][$pointKey]) && !empty($contents[$aCode][$pointKey]))
-      @foreach ((array) $contents[$aCode][$pointKey] as $i => $elemStr)
-      <div class="yiwen {{$aCode}} "><p>【{{$author['name']}}】{!!$elemStr!!}</p></div>
-      @endforeach
-    @endif
-  @endforeach
 @endforeach
 
 

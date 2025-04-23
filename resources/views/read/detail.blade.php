@@ -7,7 +7,7 @@ $currentName .= isset($datas['nameSpell']) ? "<span class='spellclass' style='di
 $nextData = $datas['relateChapters']['next'];
 $preData = $datas['relateChapters']['pre'];
 
-$tabNames = ['spellclass' => '拼音', 'commentinner' => '注释', 'comment' => '注释', 'yiwen' => '译文', 'jiedu' => '解读', 'zhuxi' => '朱熹', 'wangbi' => '王弼', 'sushi' => '苏轼', 'simple' => '原文'];
+$tabNames = ['spellclass' => '拼音', 'commentinner' => '注释', 'comment' => '注释', 'yiwen' => '译文', 'jiedu' => '解读', 'zhuxi' => '朱熹', 'wangbi' => '王弼', 'sushi' => '苏轼', 'simple' => '原文', 'vernacular' => '译文'];
 if (isset($datas['bookData']['tabs'])) {
   $tabs = $datas['bookData']['tabs'];
 } else {
