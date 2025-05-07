@@ -1,20 +1,29 @@
 @php $commonTitles = $commonFixedDatas['titles'] ?? []; @endphp
-@foreach ($commonFixedDatas as $tData)
-@if (isset($tData['infos']))
-@php $tTitles = $tData['titles'] ?? $commonTitles; $tInfos = $tData['infos'] ?? $tData['fixed']; @endphp
 <div class="portlet box green">
+  @if (isset($commonFixedDatas['topName']))
   <div class="portlet-title">
     <div class="caption">
+      <b>{{$commonFixedDatas['topName']}}</b>
+    </div>
+    <div class="tools">
+      @if (isset($commonFixedDatas['showUrl']) && !empty($commonFixedDatas['showUrl']))<a href="{{$commonFixedDatas['showUrl']}}" style="color:red;">详情</a>@endif
+    </div>
+  </div>
+  @endif
+  @foreach ($commonFixedDatas as $tData)
+  @if (isset($tData['infos']))
+  @php $tTitles = $tData['titles'] ?? $commonTitles; $tInfos = $tData['infos'] ?? $tData['fixed']; @endphp
+  <!--<div class="portlet-title">
+    <div class="caption">
       <b>{{$tData['name']}}</b>
-      @if (isset($tData['brief']) && !empty($tData['brief']))
-      <small style="margin-left: 15px; color:red; font-weight:normal; text-decoration:underline; font-style:oblique;">{{$tData['brief']}}</small>
-      @endif
     </div>
     <div class="tools">
       @if (isset($tData['showUrl']) && !empty($tData['showUrl']))<a href="{{$tData['showUrl']}}" style="color:red;">详情</a>@endif
     </div>
-  </div>
+  </div>-->
   <div class="portlet-body flip-scroll">
+    <h4 style="display: flex; justify-content: center; align-items: center;"><em>{{$tData['name']}}</em></h4>
+    @if (isset($tData['brief']))<p class="page-title" style="text-align: center; margin-top:0px;color:red; font-weight:normal; font-style:oblique;"> <small>{!!$tData['brief']!!}</small></p>@endif
     <table class="table-bordered table-striped table-condensed flip-content table-bordered">
       <thead class="flip-content">
         <tr>
@@ -34,6 +43,6 @@
       </tbody>
     </table>
   </div>
+  @endif
+  @endforeach
 </div>
-@endif
-@endforeach

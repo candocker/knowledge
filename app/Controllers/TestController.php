@@ -23,6 +23,29 @@ class TestController extends AbstractController
         exit();
     }
 
+    public function _testEmperor()
+    {
+        $dynasty = request()->input('dynasty');
+        $sql = "SELECT * FROM `work_tmp_knowledge`.`ztmp_wp_emperor` WHERE `dynasty` = '{$dynasty}';";
+        $str = '';
+        $infos = \DB::select($sql);
+        foreach ($infos as $info) {
+            $info = (array) $info;
+            $name = $info['baidu_url'] ? "<a href=\"{$info['baidu_url']}\">{$info['name']}</a>" : $info['name'];
+            $eraname = $info['eraname'] . " ({$info['office_start_end']} 年)";
+            $dynastic = $info['dynastic_title'] . " ({$info['birth_death']} {$info['age']} 岁)";
+            $str .= "        [\n"
+                . "            'name' => '{$name}',\n"
+                . "            'eraname' => '{$eraname}',\n"
+                . "            'dynastic' => '{$dynastic}',\n"
+                . "            'major' => ''\n"
+                . "        ],\n";
+        }
+        echo $str;
+        //print_r($infos);
+        exit();
+    }
+
     public function _testCountry()
     {
         $datas = require('/tmp/d.php');

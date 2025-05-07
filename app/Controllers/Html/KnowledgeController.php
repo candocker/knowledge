@@ -48,7 +48,7 @@ class KnowledgeController extends AbstractController
             $dDatas = $service->formatPointDatas($navCode, $currentNav, $isMobile);
         }
         $datas['detailDatas'] = $dDatas;
-        //print_r($datas);exit();
+        //return $this->success($datas);
         return $this->customView('develop-single', $datas);
         //\Storage::disk('local')->put('views/' . request()->path(), $view->render());
         return $view;
@@ -114,6 +114,8 @@ class KnowledgeController extends AbstractController
         $topNavs = $this->getBookServiceObj()->getBookCatalogs(null);
         $results = $this->getBookServiceObj()->getVolumeBookListings($topNavs['currentNav'], null);
         $datas = array_merge($topNavs, $results);
+        $datas['isMobile'] = $this->isMobile(true);
+        $datas['detailDatas'] = require('/data/database/knowledge/test.php');
         return $this->customView('develop-' . $view, $datas);
     }
 

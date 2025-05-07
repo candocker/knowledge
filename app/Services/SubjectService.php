@@ -101,6 +101,7 @@ class SubjectService extends AbstractService
             $info = $this->getPointKnowledgeInfo($type, $code);
             $knowledgePath = $info->full_knowledge_path;
             $detailDatas = empty($knowledgePath) ? [] : require($knowledgePath . '.php');
+            $detailDatas = $this->formatDetailDatas($detailDatas, $isMobile);
 
             $fData = $info->formatBaseData($detailDatas['baseData'] ?? [], $isMobile);
             $detailDatas['tdkData'] = $fData['tdkData'] ?? [];
@@ -266,5 +267,52 @@ class SubjectService extends AbstractService
         $baseDatas['commonTable']['base']['infos'] = $sourceDatas;
         $baseDatas['modalDatas'] = $modalDatas;
         return [];
+    }
+
+    public function formatDetailDatas($datas, $isMobile)
+    {
+        foreach ($datas as $key => $value) {
+            if (strpos($key, 'commonFixTable') !== false) {
+                $datas[$key] = $this->_formatCommonFixTable($value, $isMobile);
+            }
+        }
+        //print_r($datas);exit();
+        return $datas;
+    }
+
+    protected function _formatCommonFixTable($ftDatas, $isMobile)
+    {
+        $results = [];
+        foreach ($ftDatas as $key => $ftData) {
+            if (!is_array($ftData)) {
+                $results[$key] = $ftData;
+                continue;
+            }
+            $infos = $ftData['baseInfos'];
+            unset($ftData['baseInfos']);
+
+            $newData = $ftData;
+            if (!$isMobile) {
+                $newData['infos'] = $infos;
+                $results[$key] = $newData;
+                continue;
+            }
+            $sTitles = $ftData['titles'];
+            $fTitles = $fInfos = [];
+            $hField = $ftData['fixTitleField'];
+            foreach ($infos as & $info) {
+                foreach ($sTitles as $sTitle => $sName) {
+                    if ($sTitle == $hField) {
+                        $fTitles[] = $info[$hField];
+                    } else {
+                        $fInfos[$sTitle][] = $info[$sTitle] ?: '<span style="color:white;">占位符</span>';
+                    }
+                }
+            }
+            $newData['titles'] = $fTitles;
+            $newData['infos'] = array_values($fInfos);
+            $results[$key] = $newData;
+        }
+        return $results;
     }
 }

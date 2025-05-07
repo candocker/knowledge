@@ -21,7 +21,7 @@
           @php $nameStr = $vData['name'] ?? $vData[0]; @endphp
           <td @if (isset($vData['colspan'])) colspan="{{$vData['colspan']}}" @endif style="text-align: center;">
             @if (!empty($vData['url']) || !empty($vData['modalUrl']))
-            <a href="{{$vData['url']}}" @if (isset($vData['modalUrl'])) modal-url="{{$vData['modalUrl']}}" class="modal_ajax_btn" @endif>{!!$vData['name']!!}</a>
+            <a href="{{$vData['url']}}" @if (isset($vData['modalUrl'])) modal-url="{{$vData['modalUrl']}}" class="modal_ajax_btn" @endif>{!!$nameStr!!}</a>
             @else
             <span >{!!$nameStr!!}</span>
             @endif

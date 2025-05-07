@@ -27,11 +27,12 @@
         @foreach ($tInfos as $pData)
         <tr>
           @foreach ($pData as $vData)
+          @php $nameStr = $vData['name'] ?? $vData[0]; @endphp
           <td @if (isset($vData['colspan'])) colspan="{{$vData['colspan']}}" @endif style="text-align: left;">
             @if (!empty($vData['url']) || !empty($vData['modalUrl']))
-            <a href="{{$vData['url']}}" @if (isset($vData['modalUrl'])) modal-url="{{$vData['modalUrl']}}" class="modal_ajax_btn" @endif>{!!$vData['name']!!}</a>
+            <a href="{{$vData['url']}}" @if (isset($vData['modalUrl'])) modal-url="{{$vData['modalUrl']}}" class="modal_ajax_btn" @endif>{!!$nameStr!!}</a>
             @else
-            <span >{!!$vData['name']!!}</span>
+            <span >{!!$nameStr!!}</span>
             @endif
             @if (isset($vData['nameExt']))
             <span >{!!$vData['nameExt']!!}</span>

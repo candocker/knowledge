@@ -63,7 +63,8 @@ $elems = [
     'modals' => ['bootstrap-modal.js', 'bootstrap-modalmanager.js', 'app.js', 'select2.min.js', 'ui-modals.js'],
     'pointsingle' => [
         'bootstrap-modal.js', 'bootstrap-modalmanager.js', 'jquery.dataTables.js', 'DT_bootstrap.js', 
-        'app.js', 'self-table.js', 'select2.min.js', 'self-ajax.js'
+        'jquery.fancybox.pack.js',
+        'app.js', 'gallery.js', 'self-table.js', 'select2.min.js', 'self-ajax.js',
     ],
     'jqueryui' => ['app.js', 'ui-jqueryui.js'],
     'uigeneral' => ['jquery.gritter.js', 'jquery.pulsate.min.js', 'jquery.bootpag.min.js', 'app.js', 'ui-general.js'],
@@ -102,6 +103,7 @@ jQuery(document).ready(function() {
        UIJQueryUI.init();
   @elseif (in_array($viewCode, ['pointsingle']))
        SelfTable.init();
+       Gallery.init();
        SelfAjax.init();
   @elseif (in_array($viewCode, ['modals']))
        UIModals.init();
