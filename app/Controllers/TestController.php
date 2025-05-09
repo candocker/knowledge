@@ -27,22 +27,110 @@ class TestController extends AbstractController
     {
         $dynasty = request()->input('dynasty');
         $sql = "SELECT * FROM `work_tmp_knowledge`.`ztmp_wp_emperor` WHERE `dynasty` = '{$dynasty}';";
+        $sql = "SELECT * FROM `work_tmp_knowledge`.`ztmp_wp_emperor` WHERE `extfield` = '';";
         $str = '';
         $infos = \DB::select($sql);
+        $newDatas = [];
+        $pDynasties = [
+            'beiweidai' => 'beiwei',
+            'suichao' => 'sui',
+            'tangchao' => 'tang',
+        ];
+        $p = [];
         foreach ($infos as $info) {
             $info = (array) $info;
-            $name = $info['baidu_url'] ? "<a href=\"{$info['baidu_url']}\">{$info['name']}</a>" : $info['name'];
+            $code = $info['figure_code'];
+            $exist = $this->getModelObj('figure')->where(['code' => $code])->first();
+            if (!empty($exist)) {
+                continue;
+                //print_r($exist->toArray());
+                //print_r($info);
+            }
+            $cDynasty = $info['dynasty'];
+            $cDynasty = $pDynasties[$cDynasty] ?? $cDynasty;
+            $dynasty = $this->getModelObj('country')->where(['code' => $cDynasty])->first();
+            if (empty($dynasty)) {
+                print_r($info);
+            }
+            $kPath = $dynasty['knowledge_path'];
+            $kPath = str_replace('base', '', $kPath);
+            $kPath = trim($kPath, '/') . '/';
+
+            $nameFull = $info['name'];
+            $name = $nameFull;
+            if (strpos($nameFull, '·') !== false) {
+                $name = substr($nameFull, strpos($nameFull, '·') + 2);
+            }
+            //var_dump($name . '==' . $nameFull);
+            $kPath .= '人物/' . $name . '.base';
+            $p[] = dirname(dirname($kPath));
+            $newDatas[] = [
+                'code' => $code,
+                'name' => $name,
+                'name_card' => $nameFull,
+                'dynasty' => $info['dynasty'],
+                'baidu_url' => $info['baidu_url'],
+                'knowledge_path' => $kPath,
+            ];
+            //var_dump($kPath);
+            //$str .= "'{$info['figure_code']}',";
+            continue;
+            //$name = $info['baidu_url'] ? "<a href=\"{$info['baidu_url']}\">{$info['name']}</a>" : $info['name'];
+            $name = "<a href=\"/wiki-figure-{$info['figure_code']}.html\">{$info['name']}</a>";
             $eraname = $info['eraname'] . " ({$info['office_start_end']} 年)";
-            $dynastic = $info['dynastic_title'] . " ({$info['birth_death']} {$info['age']} 岁)";
-            $str .= "        [\n"
-                . "            'name' => '{$name}',\n"
-                . "            'eraname' => '{$eraname}',\n"
-                . "            'dynastic' => '{$dynastic}',\n"
-                . "            'major' => ''\n"
-                . "        ],\n";
+            $dynastic = $info['dynastic_title'] . " ({$info['birth_death']} {$info['age']}岁)";
+            $str .= ''//"        [\n"
+                . "            'name' => '{$name}',\n";
+                //. "            'eraname' => '{$eraname}',\n"
+                //. "            'dynastic' => '{$dynastic}',\n"
+                //. "            'major' => ''\n"
+                //. "        ],\n";
+        }
+        /*$p = array_unique($p);
+        $pC = '';
+        foreach ($p as $pPath) {
+            if (!is_dir('/data/database/knowledge/' . $pPath)) {
+                $pC .= "mkdir -p /data/database/knowledge/{$pPath};\n";
+                //var_dump($pPath);
+            }
+        }
+        echo $pC;*/
+        //print_r($newDatas);
+        //$this->getModelObj('figure')->insert($newDatas);
+        exit();
+        //echo $str;exit();
+        //print_r($infos);
+        $fDatas = [];
+        foreach ($infos as $info) {
+            $info = (array) $info;
+            $code = $info['figure_code'];
+            $fDatas[$code][] = $info;
+        }
+        //print_r($fDatas);
+        $i = 0;
+        $str = '';
+        foreach ($fDatas as $fCode => $fData) {
+            if (count($fData) > 1) {
+                $str .= "'{$fCode}',";
+                //var_dump($fCode);
+                $names = [];
+                foreach ($fData as $v) {
+                    $names[] = $v['name'];
+                    //echo $v['name'] . '---' . $v['dynastic_title'] . '===';
+                }
+                $names = array_unique($names);
+                if (count($names) == 1) {
+                    $i++;
+                    //echo $v['name'] . '---' . $v['dynastic_title'] . '===';
+                    //print_r($names);
+                    //print_r($fDatas[$fCode]);
+                }
+                //echo "\n";
+                //print_r($fData);
+            }
         }
         echo $str;
-        //print_r($infos);
+        var_dump($i);
         exit();
     }
 

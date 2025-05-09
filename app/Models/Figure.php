@@ -83,7 +83,8 @@ class Figure extends AbstractModel
 
     public function getPhotoUrlAttribute()
     {
-        $url = $this->getRepositoryObj()->getAttachmentUrl(['app' => 'culture', 'info_table' => 'figure', 'info_field' => 'photo', 'info_id' => $this->code]);
+        //$url = $this->getRepositoryObj()->getAttachmentUrl(['app' => 'culture', 'info_table' => 'figure', 'info_field' => 'photo', 'info_id' => $this->code]);
+        $url = $this->getServiceObj('dealResource')->getResourceUrl('culture', 'figure', 'photo', $this->code);
         $url = $url ? $url : 'http://ossfile.canliang.wang/book/cover_scholarism/0921a8be-f9e6-4a31-87e3-b31f023b96a0.jpg';
         return $url;
     }

@@ -100,7 +100,19 @@ class SubjectService extends AbstractService
         } else {
             $info = $this->getPointKnowledgeInfo($type, $code);
             $knowledgePath = $info->full_knowledge_path;
-            $detailDatas = empty($knowledgePath) ? [] : require($knowledgePath . '.php');
+            //$detailDatas = empty($knowledgePath) ? [] : require($knowledgePath . '.php');
+            $fFile = $knowledgePath . '.php';
+            $autoCreate = request()->input('force_create_file');
+            if ($autoCreate) {
+                $sFile = $this->config->get('knowledge.knowledge_path') . 'sourcefile/' . $autoCreate . '.php';
+                if (file_exists($sFile)) {
+                    file_put_contents($fFile, file_get_contents($sFile));
+                }
+            }
+            $detailDatas = [];
+            if (file_exists($fFile)) {
+                $detailDatas = require($fFile);
+            }
             $detailDatas = $this->formatDetailDatas($detailDatas, $isMobile);
 
             $fData = $info->formatBaseData($detailDatas['baseData'] ?? [], $isMobile);

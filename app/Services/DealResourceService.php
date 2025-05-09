@@ -109,4 +109,25 @@ class DealResourceService extends AbstractService
         }
         return $data;
     }
+
+    public function getResourceUrl($app, $infoTable, $infoField, $infoId)
+    {
+        $info = $this->getResourceData($app, $infoTable, $infoField, $infoId);
+        return 'http://39.106.102.45/resource/' . $info->resourceDetailInfo->filepath;
+    }
+
+    public function getResourceData($app, $infoTable, $infoField, $infoId, $onlyOne = true)
+    {
+        $where = [
+            'app' => $app,
+            'info_table' => $infoTable,
+            'info_field' => $infoField,
+            'info_id' => $infoId
+        ];
+        $query = $this->getModelObj('resourceInfo')->where($where);
+        if ($onlyOne) {
+            return $query->first();
+        }
+        return $query->get();
+    }
 }
