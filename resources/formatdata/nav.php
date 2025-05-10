@@ -91,5 +91,13 @@ return [
                 //'gdgeneral' => ['code' => 'gdgeneral', 'name' => '古代战争和将领'],
             ],
         ],*/
+        'region' => [
+            'name' => '区域',
+            'subDatas' => [
+                'worldregion' => ['code' => 'worldregion', 'name' => '世界政区'],
+                'situation' => ['code' => 'situation', 'name' => '局势'],
+                'trend' => ['code' => 'trend', 'name' => '趋势'],
+            ],
+        ],
     ],
 ];

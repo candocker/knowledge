@@ -1,0 +1,1 @@
+UPDATE `wp_resource_detail` AS `rd`, (SELECT `resource_id`, COUNT(*) AS `count` FROM `wp_resource_info` GROUP BY `resource_id`) AS `ri` SET `rd`.`info_number` = `ri`.`count` WHERE `rd`.`id` = `ri`.`resource_id`;

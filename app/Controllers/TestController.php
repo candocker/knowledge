@@ -136,8 +136,21 @@ class TestController extends AbstractController
 
     public function _testCountry()
     {
-        $datas = require('/tmp/d.php');
-        //print_R($datas);
+        $datas = require('/data/log/tmp/guojia.php');
+        $datas = $datas['base'];
+        $en = require('/tmp/a.php');
+
+        foreach ($datas as $key => $data) {
+            $code = $en[$key] ?? '';
+            echo $key . '-' . $code . "\n";
+            $sDatas = $data['infos'] ?? [];
+            foreach ($sDatas as $sKey => $sData) {
+                $sCode = $en[$sKey] ?? '';
+                echo $sKey . '-' . $sCode . "\n";
+            }
+        }
+        exit();
+        print_R($datas);exit();
         foreach ($datas as $subData) {
             foreach ($subData as $key => $data) {
                 if ($key != 'infos') {
@@ -221,13 +234,23 @@ class TestController extends AbstractController
                 $url = strpos($url, '?') !== false ? substr($url, 0, strpos($url, '?')) : $url;
             }
             if ($text != '|') {
-                $datas[] = [$text =>  $url];
-                //print_r([$text =>  $url]);
+                $datas[] = [$text => $url];
+                //print_r([$text => $url]);
             }
         });
-        $a = var_export($datas, true);
-        echo $a;
+        $str = '';
+        foreach ($datas as $data) {
+            foreach ($data as $key => $value) {
+                $str .= "        '{$key}' => '{$value}',\n";
+                //var_dump($key . '-' . $value);
+            }
+            //print_r($data);exit();
+        }
+        echo $str;
+        //$a = var_export($datas, true);
+        //echo $a;
         //print_r($datas);
+        exit();
     }
 
     public function _testKing2()
@@ -333,7 +356,9 @@ class TestController extends AbstractController
     {
         $basePath = '/data/htmlwww/resource/';
         $service = $this->getServiceObj('dealResource');
-        $r = $service->checkLocalFiles('');
+        $path = 'bak/old/resource';
+        $path = 'bak/resource';
+        $r = $service->dealLocalFiles($path);
         exit();
 
         $infos = $this->getModelObj('resourceInfo')->where('info_table', 'navsort')->limit(1500)->get();

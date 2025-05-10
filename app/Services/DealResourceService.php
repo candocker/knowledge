@@ -16,6 +16,34 @@ class DealResourceService extends AbstractService
         return hash_file('md5', $file);
     }
 
+    public function dealLocalFiles($path)
+    {
+        $driver = \Storage::disk('local');
+        $files = $driver->listContents($path, true);
+
+        $i = 1;
+        $command = '';
+        $fHashs = [];
+        $sql = "INSERT INTO `wp_resource` (`file_hash`, `basepath`, `name`, `filepath`) VALUES \n";
+        foreach ($files as $file) {
+            //echo $file['type'];
+            //var_dump($file->isFile());
+            //echo get_class($file);exit();
+            if (!$file->isFile()) {
+                continue;
+            }
+            $fPath = $file->path();
+            $fullFile = $driver->path($fPath);
+            $fileHash = $this->createFileHash($fullFile);
+            $baseName = basename($fullFile);
+            $sql .= "('{$fileHash}', '{$path}', '{$baseName}', '{$fullFile}'),\n";
+        }
+        echo $sql;
+        echo $command;
+        return true;
+        //print_r($files);exit();
+    }
+
     public function checkLocalFiles($path)
     {
         $driver = \Storage::disk('local');

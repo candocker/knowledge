@@ -167,6 +167,8 @@ class SubjectService extends AbstractService
             'gdempire' => $base. 'history/外国历史/帝国/base.php',
 
             'usasession' => $base . 'history/外国历史/近代大国/美国/总统/session.php',
+
+            'worldregion' => $base. 'region/base.php',
         ];
         return is_null($sCode) ? $datas : $datas[$sCode] ?? $datas['other'];
     }
