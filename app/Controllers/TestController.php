@@ -136,37 +136,123 @@ class TestController extends AbstractController
 
     public function _testCountry()
     {
-        $datas = require('/data/log/tmp/guojia.php');
-        $datas = $datas['base'];
+        $dataSources = require('/data/log/tmp/guojia.php');
+        $datas = $dataSources['base'];
+        //print_r($datas);
         $en = require('/tmp/a.php');
 
+        $newDatas = [];
         foreach ($datas as $key => $data) {
             $code = $en[$key] ?? '';
-            echo $key . '-' . $code . "\n";
+            //echo $key . '-' . $code . "\n";
             $sDatas = $data['infos'] ?? [];
+            $pCode = strtolower(str_replace(' ', '', $code));
+            $newDatas[$key] = [
+                'code' => $pCode,
+                'name' => $key,
+                'name_english' => $code,
+                'bigsort' => 'region',
+                'parent_code' => '',
+                'baidu_url' => $data['url'] ?? '',
+            ];
             foreach ($sDatas as $sKey => $sData) {
                 $sCode = $en[$sKey] ?? '';
-                echo $sKey . '-' . $sCode . "\n";
+                //echo $sKey . '-' . $sCode . "\n";
+
+                $newDatas[$sKey] = [
+                    'code' => strtolower(str_replace(' ', '', $sCode)),
+                    'name' => $sKey,
+                    'name_english' => $sCode,
+                    'bigsort' => 'region',
+                    'parent_code' => $pCode,
+                    'baidu_url' => $sData,
+                ];
             }
         }
-        exit();
-        print_R($datas);exit();
-        foreach ($datas as $subData) {
-            foreach ($subData as $key => $data) {
-                if ($key != 'infos') {
-                    var_dump($key . '-' . $data);
-                    continue;
-                }
-                //print_r($data);
-                foreach ($data as $cData) {
-                    foreach ($cData as $c => $cUrl) {
-                    var_dump($c . '-' . $cUrl);
+        //print_r($newDatas);
+        $details = $dataSources['details'];
+        $bb = require('/tmp/b.php');
+        $i = 0;
+        $sql = "INSERT INTO `wp_country` (`code`, `sort`, `name`, `name_english`, `baidu_url`, `knowledge_path`) VALUES \n";
+        $cListings = [];
+        foreach ($details as $fKey => $subData) {
+            foreach ($subData as $dKey => $dInfos) {
+                if (!isset($newDatas[$dKey])) {
+                    //print_r($dInfos);
+                    $bnewData = $newDatas[$fKey];
+                    //print_r($bnewData);exit();
+                    $newDatas[$bnewData['name'] . '其他'] = [
+                        'code' => $bnewData['code'] . 'other',
+                        'name' => $bnewData['name'] . '其他',
+                        'name_english' => $bnewData['name_english'] . ' Other',
+                        'bigsort' => 'region',
+                        'parent_code' => $bnewData['code'],
+                        'baidu_url' => '',
+                    ];
+                    foreach ($dInfos as $sCountry => $tmps) {
+                        print_r($tmps);
+                        foreach ($tmps as $t => $tt) {
+
+                            $cInfo = $this->getModelObj('country')->where(['sort' => '', 'name' => $t])->first();
+                        $cListings[] = [
+                            'catalog_code' => $newDatas[$bnewData['name'] . '其他']['code'],
+                            'country_code' => $cInfo['code'],
+                            'description' => $newDatas[$bnewData['name'] . '其他']['name'],
+                        ];
+                            if (empty($cInfo)) {
+                                $cInfo = $this->getModelObj('country')->where(['sort' => ''])->where('name', 'like', "%{$t}%")->first();
+                                if (empty($cInfo)) {
+                                    var_dump($t . '= ' . $tt);
+                                    $eName = $bb[$i];
+                                    $code = strtolower(str_replace(' ', '', $eName));
+                                    //echo $t . '-' . $bb[$i] . "\n";
+                                    $sql .= "('{$code}', '', '{$t}', '{$eName}', '{$tt}', ''),\n";
+                                    $i++;
+                                } else {
+                                    print_r($tt);
+                                }
+                            } else {
+                                //$cInfo['baidu_url'] = 'https://baike.baidu.com' . $tt;
+                                //$cInfo->save();
+                                //var_dump($cInfo['name'] . '-' . $cInfo['baidu_url'] . '= ' . $tt);
+                                //print_r($tmps);
+                            }
+                        }
+                    }
+                } else {
+                    if ($newDatas[$dKey]['baidu_url'] != $dInfos['url']) {
+                        var_dump($dKey);
+                        //print_r($dInfos);
+                    }
+                    foreach ($dInfos['infos'] as $ccCode => $dInfo) {
+                        $cInfo = $this->getModelObj('country')->where(['sort' => '', 'name' => $ccCode])->first();
+                        if (empty($cInfo)) {
+                            var_dump($ccCode . '-' . $dInfo);
+                        } else {
+                            //$cInfo['baidu_url'] = 'https://baike.baidu.com' . $dInfo;
+                            //$cInfo->save();
+                            //var_dump($cInfo['name'] . '-' . $cInfo['baidu_url'] . '= ' . $dInfo);
+                        }
+                        /*$cListings[] = [
+                            'catalog_code' => $newDatas[$dKey]['code'],
+                            'country_code' => $cInfo['code'],
+                            'description' => $newDatas[$dKey]['name'],
+                        ];*/
+                        //print_r($dInfo);
                     }
                 }
-                //print_r($key);
-                //print_r($data);
+                //print_R($newDatas[$dKey]);
+                //print_r($dInfos);
             }
+            //print_r($subData);exit();
         }
+        //echo $sql;
+        echo count($cListings);
+        print_r($cListings);
+        //$this->getModelObj('countryListing')->insert($cListings);
+        //echo count($newDatas);
+        //print_r($newDatas);
+        //$this->getModelObj('countryCatalog')->insert($newDatas);
         exit();
         $datas = require('/tmp/sql.php');
         $tmp = require('/tmp/b.php');
