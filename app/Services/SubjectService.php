@@ -137,6 +137,7 @@ class SubjectService extends AbstractService
             'dynasty' => ['mCode' => 'dynasty', 'field' => 'code'],
         ];
         $param = $params[$type];
+        print_R([$param['field'] => $code]);
         $info = $this->getModelObj($param['mCode'])->where([$param['field'] => $code])->first();
         if (empty($info)) {
             $this->resource->throwException(400, '信息不存在-' . $code);
@@ -162,11 +163,11 @@ class SubjectService extends AbstractService
             'wgliterature' => $base. 'culture/外国文学/base.php',
             'other' => $base. 'culture/外国文学/base.php',
 
-            'zgdynasty' => $base. 'history/中国断代/base.php',
-            'bigcountry' => $base. 'history/外国历史/近代大国/base.php',
-            'gdempire' => $base. 'history/外国历史/帝国/base.php',
+            'zgdynasty' => $base. '古代中国/base.php',
+            'bigcountry' => $base. '大国和组织/base.php',
+            'gdempire' => $base. '帝国历史/base.php',
 
-            'usasession' => $base . 'history/外国历史/近代大国/美国/总统/session.php',
+            'usasession' => $base . '大国和组织/美国/总统/session.php',
 
             'worldregion' => $base. 'region/base.php',
         ];

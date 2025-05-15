@@ -23,114 +23,60 @@ class TestController extends AbstractController
         exit();
     }
 
-    public function _testEmperor()
+    public function _testInitcountry()
     {
-        $dynasty = request()->input('dynasty');
-        $sql = "SELECT * FROM `work_tmp_knowledge`.`ztmp_wp_emperor` WHERE `dynasty` = '{$dynasty}';";
-        $sql = "SELECT * FROM `work_tmp_knowledge`.`ztmp_wp_emperor` WHERE `extfield` = '';";
-        $str = '';
-        $infos = \DB::select($sql);
-        $newDatas = [];
-        $pDynasties = [
-            'beiweidai' => 'beiwei',
-            'suichao' => 'sui',
-            'tangchao' => 'tang',
-        ];
-        $p = [];
-        foreach ($infos as $info) {
-            $info = (array) $info;
-            $code = $info['figure_code'];
-            $exist = $this->getModelObj('figure')->where(['code' => $code])->first();
-            if (!empty($exist)) {
+        $fInfos = $this->getModelObj('figure')->where('nationality', '<>', '')->get();
+        $m = [];
+        foreach ($fInfos as $fInfo) {
+            $cCount = $this->getModelObj('country')->where(['sort' => '', 'name' => $fInfo['nationality']])->count();
+            $cInfo = $this->getModelObj('country')->where(['sort' => '', 'name' => $fInfo['nationality']])->first();
+            if ($cCount > 1) {
+                $m[] = $fInfo['nationality'];
                 continue;
-                //print_r($exist->toArray());
-                //print_r($info);
             }
-            $cDynasty = $info['dynasty'];
-            $cDynasty = $pDynasties[$cDynasty] ?? $cDynasty;
-            $dynasty = $this->getModelObj('country')->where(['code' => $cDynasty])->first();
-            if (empty($dynasty)) {
-                print_r($info);
+            if ($cCount == 0) {
+                $cCount = $this->getModelObj('country')->where('sort', '<>', '')->where(['name' => $fInfo['nationality']])->count();
+                $cInfo = $this->getModelObj('country')->where('sort', '<>', '')->where(['name' => $fInfo['nationality']])->first();
             }
-            $kPath = $dynasty['knowledge_path'];
-            $kPath = str_replace('base', '', $kPath);
-            $kPath = trim($kPath, '/') . '/';
-
-            $nameFull = $info['name'];
-            $name = $nameFull;
-            if (strpos($nameFull, '·') !== false) {
-                $name = substr($nameFull, strpos($nameFull, '·') + 2);
+            if ($cCount != 1) {
+                var_dump($cCount);
+                print_r($fInfo->toArray());
+                continue;
             }
-            //var_dump($name . '==' . $nameFull);
-            $kPath .= '人物/' . $name . '.base';
-            $p[] = dirname(dirname($kPath));
-            $newDatas[] = [
-                'code' => $code,
-                'name' => $name,
-                'name_card' => $nameFull,
-                'dynasty' => $info['dynasty'],
-                'baidu_url' => $info['baidu_url'],
-                'knowledge_path' => $kPath,
-            ];
-            //var_dump($kPath);
-            //$str .= "'{$info['figure_code']}',";
-            continue;
-            //$name = $info['baidu_url'] ? "<a href=\"{$info['baidu_url']}\">{$info['name']}</a>" : $info['name'];
-            $name = "<a href=\"/wiki-figure-{$info['figure_code']}.html\">{$info['name']}</a>";
-            $eraname = $info['eraname'] . " ({$info['office_start_end']} 年)";
-            $dynastic = $info['dynastic_title'] . " ({$info['birth_death']} {$info['age']}岁)";
-            $str .= ''//"        [\n"
-                . "            'name' => '{$name}',\n";
-                //. "            'eraname' => '{$eraname}',\n"
-                //. "            'dynastic' => '{$dynastic}',\n"
-                //. "            'major' => ''\n"
-                //. "        ],\n";
+            $fInfo->country_code = $cInfo['code'];
+            $fInfo->save();
+            //var_dump($fInfo['nationality'] . '==' . $cInfo['knowledge_path'] . '-' . $fInfo['name']);
+            if (empty($fInfo->path_old)) {
+                //var_dump($fInfo->knowledgePath . '----' . $fInfo['path_old']);
+                continue;
+            }
+            $base = $this->config->get('knowledge.knowledge_path');
+            $oldFull = $base . $fInfo['path_old'];
+            var_dump($oldFull . '===' . $fInfo->knowledgePath);
         }
-        /*$p = array_unique($p);
-        $pC = '';
-        foreach ($p as $pPath) {
-            if (!is_dir('/data/database/knowledge/' . $pPath)) {
-                $pC .= "mkdir -p /data/database/knowledge/{$pPath};\n";
-                //var_dump($pPath);
-            }
-        }
-        echo $pC;*/
-        //print_r($newDatas);
-        //$this->getModelObj('figure')->insert($newDatas);
+        $m = array_unique($m);
+        $mStr = implode("','", $m);
+        var_dump($mStr);
+        print_r($m);
         exit();
-        //echo $str;exit();
-        //print_r($infos);
-        $fDatas = [];
+        $infos = $this->getModelObj('country')->where('knowledge_path', '')->get();
         foreach ($infos as $info) {
-            $info = (array) $info;
-            $code = $info['figure_code'];
-            $fDatas[$code][] = $info;
-        }
-        //print_r($fDatas);
-        $i = 0;
-        $str = '';
-        foreach ($fDatas as $fCode => $fData) {
-            if (count($fData) > 1) {
-                $str .= "'{$fCode}',";
-                //var_dump($fCode);
-                $names = [];
-                foreach ($fData as $v) {
-                    $names[] = $v['name'];
-                    //echo $v['name'] . '---' . $v['dynastic_title'] . '===';
-                }
-                $names = array_unique($names);
-                if (count($names) == 1) {
-                    $i++;
-                    //echo $v['name'] . '---' . $v['dynastic_title'] . '===';
-                    //print_r($names);
-                    //print_r($fDatas[$fCode]);
-                }
-                //echo "\n";
-                //print_r($fData);
+            $cCode = $info['code'];
+            $clInfo = $this->getModelObj('countryListing')->where(['country_code' => $cCode])->first();
+            if (empty($clInfo)) {
+                var_dump($info['name']);
+                //print_r($info->toArray());
+                continue;
             }
+            $cInfo = $clInfo->catalogInfo;
+            $pInfo = $cInfo->parentInfo;
+            $kPath = "国家地区/{$pInfo['name']}/{$cInfo['name']}/{$info['name']}/base";
+            $info->knowledge_path = $kPath;
+            $info->save();
+            var_dump($kPath);
+            //print_r($cInfo->toArray());
+            //print_r($info->toArray());exit();
         }
-        echo $str;
-        var_dump($i);
         exit();
     }
 
@@ -406,7 +352,7 @@ class TestController extends AbstractController
                 echo '---        ---' . $subject['name'] . '--' . $subject['code'] . '<br />';
                 $sgDatas = $this->getModelObj('groupSubject')->where(['subject_code' => $subject['code']])->orderBy('orderlist', 'desc')->get();
 
-                $kPath = "history/中国断代/{$subject['name']}/base";
+                $kPath = "古代中国/{$subject['name']}/base";
                 $nData = [
                     'county' => 'ancientchina',
                     'nationality' => 'huaxia',
@@ -419,7 +365,7 @@ class TestController extends AbstractController
                 //$this->getModelObj('dynasty')->create($nData);
                 foreach ($sgDatas as $sgData) {
                     echo '---        ---===---        ---' . $sgData->groupInfo['name'] . '--' . $sgData['group_code'] . '<br />';
-                    $kPath = "history/中国断代/{$subject['name']}/{$sgData->groupInfo['name']}/base";
+                    $kPath = "古代中国/{$subject['name']}/{$sgData->groupInfo['name']}/base";
                     $nData = [
                         'county' => 'ancientchina',
                         'nationality' => 'huaxia',
@@ -528,6 +474,16 @@ class TestController extends AbstractController
         echo trim($code, ',');
         return false;
         //$swbooks = require('/data/htmlwww/laravel-system/vendor/candocker/knowledge/resources/formatdata/swbooks.php');
+    }
+
+    public function _testFormatData()
+    {
+        $service = $this->getServiceObj('formatData');
+        $sort = request()->input('sort');
+        $method = 'deal' . ucfirst($sort);
+        $params = request()->all();
+        $service->$method($params);
+        exit();
     }
 
     public function _test()

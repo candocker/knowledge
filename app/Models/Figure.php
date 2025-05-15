@@ -10,6 +10,7 @@ class Figure extends AbstractModel
     protected $primaryKey = 'code';
     protected $keyType = 'string';
     protected $guarded = ['id'];
+    public $timestamps = false;
 
     public function afterSave()
     {
@@ -79,6 +80,31 @@ class Figure extends AbstractModel
         $id = $query->insertGetId($attributes, $keyName = $this->getKeyName());
 
         $this->setAttribute('id', $id);
+    }
+
+    public function countryInfo()
+    {
+        return $this->hasOne(Country::class, 'code', 'country_code');
+    }
+
+    public function getKnowledgePathAttribute()
+    {
+        //return $this->path_old;
+        if (!empty($this->path_point)) {
+            return $this->path_point;
+        }
+        $countryInfo = $this->countryInfo;
+        if (empty($countryInfo)) {
+            return '';
+        }
+        $path = $countryInfo->knowledge_path;
+        $path = trim($path, 'base');
+        $path = rtrim($path, '/') . '/人物/';
+        if (!empty($this->path_label)) {
+            $path .= $this->path_label . '/';
+        }
+        $path .= $this->name . '/';
+        return $path;
     }
 
     public function getPhotoUrlAttribute()

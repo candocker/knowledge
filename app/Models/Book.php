@@ -22,6 +22,26 @@ class Book extends AbstractModel
         ]
     ];
 
+    public function getKnowledgePathAttribute()
+    {
+        //return $this->path_old;
+        if (!empty($this->path_point)) {
+            return this->path_point;
+        }
+        $authorData = $this->authorData();
+        if (empty($authorData)) {
+            return '';
+        }
+        $path = $authorData->knowledge_path;
+        $path = trim($path, 'figure');
+        $path = rtrim($path, '/') . '/书籍/';
+        if (!empty($this->path_label)) {
+            $path .= $this->path_label . '/';
+        }
+        $path .= $this->name;
+        return $path;
+    }
+
     public function getFullPathAttribute()
     {
         $base = $this->config->get('knowledge.book_basepath');

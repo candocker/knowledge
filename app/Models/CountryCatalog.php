@@ -10,6 +10,11 @@ class CountryCatalog extends AbstractModel
     protected $primaryKey = 'code';
     public $incrementing = false;
 
+    public function parentInfo()
+    {
+        return $this->hasOne(CountryCatalog::class, 'code', 'parent_code');
+    }
+
     /*public function getNameAttribute()
     {
         return $this->formatTagDatas('string');
