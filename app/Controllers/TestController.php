@@ -25,6 +25,21 @@ class TestController extends AbstractController
 
     public function _testInitcountry()
     {
+        $basePath = $this->config->get('knowledge.knowledge_path');
+        $cInfos = $this->getModelObj('country')->get();
+        foreach ($cInfos as $cInfo) {
+            $kPath = $cInfo->knowledge_path;
+            $kFullPath = $basePath . 'bak/' . $kPath;
+            if (is_dir($kFullPath)) {
+                //var_dump($cInfo['name'] . '---' . $kFullPath);
+            }
+            $cFullFile = $kFullPath . '.php';
+            if (!file_exists($cFullFile)) {
+                var_dump($cInfo['name'] . '---' . $cFullFile);
+            }
+        }
+        exit();
+
         $fInfos = $this->getModelObj('figure')->where('nationality', '<>', '')->get();
         $m = [];
         foreach ($fInfos as $fInfo) {
@@ -50,38 +65,42 @@ class TestController extends AbstractController
                 //var_dump($fInfo->knowledgePath . '----' . $fInfo['path_old']);
                 continue;
             }
-            $base = $this->config->get('knowledge.knowledge_path');
-            $oldFull = $base . $fInfo['path_old'];
-            var_dump($oldFull . '===' . $fInfo->knowledgePath);
+            $oldFull = $base . 'bak/' . $fInfo['path_old'];
+            if (is_file($oldFull . '.php')) {
+                var_dump($oldFull . '===' . $fInfo->knowledgePath);
+            } else {
+                $oldFull = $base . '/' . $fInfo['path_old'];
+            }
+            //var_dump($oldFull);
+            $nPath = $base . $fInfo->knowledgePath;
+            $bName = basename($oldFull);
+            if (is_dir($oldFull)) {
+                var_dump($nPath);
+            }
+            if ($bName != 'figure') {
+                //var_dump($oldFull . '---' . $nPath);
+            }
+
+            //var_dump($oldFull . '===' . $fInfo->knowledgePath);
         }
         $m = array_unique($m);
         $mStr = implode("','", $m);
         var_dump($mStr);
         print_r($m);
         exit();
-        $infos = $this->getModelObj('country')->where('knowledge_path', '')->get();
-        foreach ($infos as $info) {
-            $cCode = $info['code'];
-            $clInfo = $this->getModelObj('countryListing')->where(['country_code' => $cCode])->first();
-            if (empty($clInfo)) {
-                var_dump($info['name']);
-                //print_r($info->toArray());
-                continue;
-            }
-            $cInfo = $clInfo->catalogInfo;
-            $pInfo = $cInfo->parentInfo;
-            $kPath = "国家地区/{$pInfo['name']}/{$cInfo['name']}/{$info['name']}/base";
-            $info->knowledge_path = $kPath;
-            $info->save();
-            var_dump($kPath);
-            //print_r($cInfo->toArray());
-            //print_r($info->toArray());exit();
-        }
-        exit();
     }
 
     public function _testCountry()
     {
+        $infos = $this->getModelObj('country')->where(['sort' => 'dynasty'])->get();
+        foreach ($infos as $info) {
+            $dCode = $info['code'];
+            $count = $this->getModelObj('figure')->where(['dynasty' => $dCode])->count();
+            if ($count > 0) {
+                var_dump($info['name']);
+            }
+        }
+        exit();
         $dataSources = require('/data/log/tmp/guojia.php');
         $datas = $dataSources['base'];
         //print_r($datas);

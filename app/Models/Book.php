@@ -24,7 +24,7 @@ class Book extends AbstractModel
 
     public function getKnowledgePathAttribute()
     {
-        //return $this->path_old;
+        //return 'bak/' . $this->path_old;
         if (!empty($this->path_point)) {
             return this->path_point;
         }

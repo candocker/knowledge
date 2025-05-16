@@ -56,4 +56,22 @@ class Country extends AbstractModel
     {
         return [$this->formatName, $this->first_emperor, $this->begin_end, $this->duration];
     }
+
+    public function formatKnowledgePath()
+    {
+        if ($this->sort != '') {
+            return '';
+        }
+        $clInfo = $this->getModelObj('countryListing')->where(['country_code' => $this->code])->first();
+        if (empty($clInfo)) {
+            return 'no listing';
+        }
+        $cInfo = $clInfo->catalogInfo;
+        $pInfo = $cInfo->parentInfo;
+        $kPath = "国家地区/{$pInfo['name']}/{$cInfo['name']}/{$info['name']}/base";
+        //var_dump($kPath);
+        return $kPath;
+        //$info->knowledge_path = $kPath;
+        //$info->save();
+    }
 }
