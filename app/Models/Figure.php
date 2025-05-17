@@ -12,6 +12,12 @@ class Figure extends AbstractModel
     protected $guarded = ['id'];
     public $timestamps = false;
 
+    public function getFullKnowledgePathAttribute()
+    {
+        $base = $this->config->get('knowledge.knowledge_path');
+        return $this->knowledge_path ? $base . $this->knowledge_path . '/figure' : '';
+    }
+
     public function afterSave()
     {
         $request = request();
@@ -98,7 +104,9 @@ class Figure extends AbstractModel
             return '';
         }
         $path = $countryInfo->knowledge_path;
-        $path = trim($path, 'base');
+        if (empty($path)) {
+            $path = $countryInfo->formatKnowledgePath();
+        }
         $path = rtrim($path, '/') . '/人物/';
         if (!empty($this->path_label)) {
             $path .= $this->path_label . '/';

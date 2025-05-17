@@ -10,6 +10,12 @@ class Country extends AbstractModel
     protected $guarded = ['id'];
     public $timestamps = false;
 
+    public function getFullKnowledgePathAttribute()
+    {
+        $base = $this->config->get('knowledge.knowledge_path');
+        return $this->knowledge_path ? $base . $this->knowledge_path . '/base' : '';
+    }
+
     public function _formatBaseData($isMobile)
     {
         $jumpUrl = !empty($this->baidu_url) ? "<a href='{$this->baidu_url}'>百科</a>" : '';
@@ -59,19 +65,25 @@ class Country extends AbstractModel
 
     public function formatKnowledgePath()
     {
-        if ($this->sort != '') {
-            return '';
-        }
-        $clInfo = $this->getModelObj('countryListing')->where(['country_code' => $this->code])->first();
+        $sortDatas = [
+            '' => ['bigsort' => 'region', 'path' => '国家地区'],
+            'dynasty' => ['bigsort' => 'dynasty', 'path' => '古代中国'],
+            'gdempire' => ['bigsort' => 'gdempire', 'path' => '帝国历史'],
+        ];
+        $where = ['country_code' => $this->code, 'bigsort' => $sortDatas[$this->sort]['bigsort']];
+        $clInfo = $this->getModelObj('countryListing')->where($where)->first();
         if (empty($clInfo)) {
             return 'no listing';
         }
+
         $cInfo = $clInfo->catalogInfo;
         $pInfo = $cInfo->parentInfo;
-        $kPath = "国家地区/{$pInfo['name']}/{$cInfo['name']}/{$info['name']}/base";
+        $kPath = $sortDatas[$this->sort]['path'];
+        if (!empty($pInfo)) {
+            $kPath .= "/{$pInfo['name']}";
+        }
+        $kPath .= "/{$cInfo['name']}/{$this->name}";
         //var_dump($kPath);
         return $kPath;
-        //$info->knowledge_path = $kPath;
-        //$info->save();
     }
 }

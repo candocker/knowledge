@@ -26,67 +26,106 @@ class TestController extends AbstractController
     public function _testInitcountry()
     {
         $basePath = $this->config->get('knowledge.knowledge_path');
-        $cInfos = $this->getModelObj('country')->get();
+        $command = '';
+
+        /*$cInfos = $this->getModelObj('country')->where('sort', 'dynasty')->get();
         foreach ($cInfos as $cInfo) {
-            $kPath = $cInfo->knowledge_path;
+            $kPath = $cInfo->path_old;
             $kFullPath = $basePath . 'bak/' . $kPath;
             if (is_dir($kFullPath)) {
                 //var_dump($cInfo['name'] . '---' . $kFullPath);
             }
             $cFullFile = $kFullPath . '.php';
             if (!file_exists($cFullFile)) {
-                var_dump($cInfo['name'] . '---' . $cFullFile);
+                $ppPath = $cInfo->formatKnowledgePath();
+                if ($ppPath . '/base' != $cInfo->path_old) {
+                    //var_dump($ppPath . '-' . $cInfo->path_old);
+                }
+                //$cInfo->path_old = '';
+                //$cInfo->save();
+                //var_dump($cInfo['name'] . '---' . $cFullFile);
+            } else {
+                $fContent = file_get_contents($cFullFile);
+                $sContent = file_get_contents($basePath . 'sourcefile/obase.php');
+                if ($fContent == $sContent) {
+                    //$command .= "more {$cFullFile};\n";
+                    $command .= "rm -f {$cFullFile};\n";
+                } else {
+                    //var_dump($cInfo['name'] . '---' . $cFullFile);
+                    $nPath = dirname($cInfo->path_old);
+                    //var_dump($nPath);
+                    $cInfo->knowledge_path = $nPath;
+                    //$cInfo->save();
+                    $nPath = $basePath . $nPath;
+                    //$command .= "mkdir -p {$nPath};\n";
+                    //$command .= "mv {$cFullFile} {$nPath};\n";
+                    //var_dump($nPath);
+                    //var_dump($cInfo['name'] . '---' . $cFullFile);
+                }
             }
         }
+        echo $command;
+        exit();*/
+
+        $bInfos = $this->getModelObj('book')->get();
+        //$bInfos = $this->getModelObj('book')->where('name', '呐喊')->get();
+        foreach ($bInfos as $bInfo) {
+            $aInfo = $bInfo->authorData();
+            if (empty($aInfo) || empty($aInfo['name'])) {
+                //var_dump($bInfo['name'] . '-' . $bInfo['code']);
+                continue;
+            }
+            //var_dump($bInfo['name'] . '-----====----' . $aInfo['name']);
+            //continue;
+            if (empty($bInfo->path_old)) {
+                //var_dump($bInfo->knowledgePath . '----' . $bInfo['path_old']);
+                //var_dump($bInfo['name'] . '-' . $aInfo['name']);
+                continue;
+            }
+            $oldFull = $basePath . 'bak/' . $bInfo['path_old'];
+            if (is_file($oldFull . '.php')) {
+                //var_dump($oldFull . '===' . $fInfo->knowledgePath);
+                $newPath = $basePath . $bInfo->knowledgePath;
+                $newPath = dirname($newPath);
+                //var_dump($newPath);
+                $command .= "mkdir -p {$newPath};\n";
+                $command .= "mv {$oldFull}.php {$newPath}\n";
+            } else {
+                var_dump($bInfo['name'] . '-' . $aInfo['name']);
+                //$oldFull = $base . '/' . $fInfo['path_old'];
+            }
+            continue;
+        }
+        echo $command;
         exit();
 
-        $fInfos = $this->getModelObj('figure')->where('nationality', '<>', '')->get();
-        $m = [];
+        $fInfos = $this->getModelObj('figure')->get();
+        //$fInfos = $this->getModelObj('figure')->where('name', '王肃')->get();
         foreach ($fInfos as $fInfo) {
-            $cCount = $this->getModelObj('country')->where(['sort' => '', 'name' => $fInfo['nationality']])->count();
-            $cInfo = $this->getModelObj('country')->where(['sort' => '', 'name' => $fInfo['nationality']])->first();
-            if ($cCount > 1) {
-                $m[] = $fInfo['nationality'];
+            $cInfo = $fInfo->countryInfo;
+            if (empty($cInfo)) {
+                //var_dump($fInfo['name'] . '-' . $fInfo['country_code']);
                 continue;
             }
-            if ($cCount == 0) {
-                $cCount = $this->getModelObj('country')->where('sort', '<>', '')->where(['name' => $fInfo['nationality']])->count();
-                $cInfo = $this->getModelObj('country')->where('sort', '<>', '')->where(['name' => $fInfo['nationality']])->first();
-            }
-            if ($cCount != 1) {
-                var_dump($cCount);
-                print_r($fInfo->toArray());
-                continue;
-            }
-            $fInfo->country_code = $cInfo['code'];
-            $fInfo->save();
-            //var_dump($fInfo['nationality'] . '==' . $cInfo['knowledge_path'] . '-' . $fInfo['name']);
             if (empty($fInfo->path_old)) {
                 //var_dump($fInfo->knowledgePath . '----' . $fInfo['path_old']);
+                //var_dump($fInfo['name'] . '-' . $fInfo['country_code']);
                 continue;
             }
-            $oldFull = $base . 'bak/' . $fInfo['path_old'];
+            $oldFull = $basePath . 'bak/' . $fInfo['path_old'];
             if (is_file($oldFull . '.php')) {
-                var_dump($oldFull . '===' . $fInfo->knowledgePath);
+                //var_dump($oldFull . '===' . $fInfo->knowledgePath);
+                $newPath = $basePath . $fInfo->knowledgePath;
+                //var_dump($newPath);
+                $command .= "mkdir -p {$newPath};\n";
+                $command .= "mv {$oldFull}.php {$newPath}/figure.php;\n";
             } else {
-                $oldFull = $base . '/' . $fInfo['path_old'];
+                //var_dump($fInfo['name'] . '-' . $fInfo['country_code']);
+                //$oldFull = $base . '/' . $fInfo['path_old'];
             }
-            //var_dump($oldFull);
-            $nPath = $base . $fInfo->knowledgePath;
-            $bName = basename($oldFull);
-            if (is_dir($oldFull)) {
-                var_dump($nPath);
-            }
-            if ($bName != 'figure') {
-                //var_dump($oldFull . '---' . $nPath);
-            }
-
-            //var_dump($oldFull . '===' . $fInfo->knowledgePath);
+            continue;
         }
-        $m = array_unique($m);
-        $mStr = implode("','", $m);
-        var_dump($mStr);
-        print_r($m);
+        echo $command;
         exit();
     }
 

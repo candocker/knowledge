@@ -102,6 +102,7 @@ class SubjectService extends AbstractService
             $knowledgePath = $info->full_knowledge_path;
             //$detailDatas = empty($knowledgePath) ? [] : require($knowledgePath . '.php');
             $fFile = $knowledgePath . '.php';
+            //var_dump($fFile);exit();
             $autoCreate = request()->input('force_create_file');
             if ($autoCreate) {
                 $sFile = $this->config->get('knowledge.knowledge_path') . 'sourcefile/' . $autoCreate . '.php';
@@ -137,7 +138,7 @@ class SubjectService extends AbstractService
             'dynasty' => ['mCode' => 'dynasty', 'field' => 'code'],
         ];
         $param = $params[$type];
-        print_R([$param['field'] => $code]);
+        //print_R([$param['field'] => $code]);
         $info = $this->getModelObj($param['mCode'])->where([$param['field'] => $code])->first();
         if (empty($info)) {
             $this->resource->throwException(400, '信息不存在-' . $code);
@@ -186,7 +187,7 @@ class SubjectService extends AbstractService
             $i = 1;
             $key = 1;
             $newInfos = [];
-            $infos = $this->getModelObj('country')->where('sort', '<>', 'bigcountry')->orderBy('orderlist', 'asc')->get();
+            $infos = $this->getModelObj('country')->where('sort', 'gdempire')->orderBy('orderlist', 'asc')->get();
             foreach ($infos as $info) {
                 $name = $info['name'];
                 if (!empty($info['begin_end'])) {
@@ -195,7 +196,7 @@ class SubjectService extends AbstractService
                 $name = "<a href='/wiki-country-{$info['code']}.html'>{$name}</a>";
                 $details[$info['name']] = $name;
                 if (!empty($info['sort'])) {
-                    continue;
+                    //continue;
                 }
 
                 //$info['name'] .= strlen($info['name']);
