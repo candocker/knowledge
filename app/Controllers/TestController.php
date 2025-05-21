@@ -26,6 +26,7 @@ class TestController extends AbstractController
     public function _testInitcountry()
     {
         $basePath = $this->config->get('knowledge.knowledge_path');
+        $rPath = '/data/htmlwww/resource/';
         $command = '';
 
         /*$cInfos = $this->getModelObj('country')->where('sort', 'dynasty')->get();
@@ -67,9 +68,49 @@ class TestController extends AbstractController
         echo $command;
         exit();*/
 
-        $bInfos = $this->getModelObj('book')->get();
+        /*$bInfos = $this->getModelObj('book')->get();
         //$bInfos = $this->getModelObj('book')->where('name', '呐喊')->get();
         foreach ($bInfos as $bInfo) {
+            $rInfos = $this->getModelObj('resourceInfo')->where(['info_table' => 'book', 'info_field' => 'cover', 'info_id' => $bInfo['code']])->get();
+            foreach ($rInfos as $rInfo) {
+            if (empty($rInfo)) {
+                //var_dump($bInfo['name']);
+                continue;
+            }
+            $rInfo->extfield1 = 'yes';
+            $rInfo->save();
+            //continue;
+            $rDetail = $rInfo->resourceDetailInfo;
+            $rFile = $rPath . $rDetail['filepath'];
+            if (!file_exists($rFile)) {
+                var_dump($bInfo['name'] . '--' . $rDetail['filepath']);
+            $baseFile = basename($rFile);
+            $nFilepath = dirname($bInfo->knowledge_path) . '/' . $baseFile;
+            $rDetail->filepath = $nFilepath;
+            var_dump($nFilepath);
+            $rDetail->extfield1 = 'yes';
+            $rDetail->save();
+                continue;
+            }
+            //continue;
+            if (strpos($rFile, 'jpg') === false) {
+                //var_dump($bInfo['name'] . '--' . $rDetail['filepath']);
+            }
+            $rnewPath = $rPath . $bInfo->knowledge_path;
+            $rnewPath = dirname($rnewPath);
+            if (!is_dir($rnewPath)) {
+                //var_dump($rnewPath);
+                $command .= "mkdir -p {$rnewPath};\n";
+            }
+            $baseFile = basename($rFile);
+            $nFilepath = dirname($bInfo->knowledge_path) . '/' . $baseFile;
+            //$rDetail->filepath = $nFilepath;
+            $rDetail->extfield1 = 'yes';
+            $rDetail->save();
+            //var_dump($nFilepath);
+            $command .= "mv {$rFile} {$rnewPath};\n";
+            continue;
+
             $aInfo = $bInfo->authorData();
             if (empty($aInfo) || empty($aInfo['name'])) {
                 //var_dump($bInfo['name'] . '-' . $bInfo['code']);
@@ -95,13 +136,46 @@ class TestController extends AbstractController
                 //$oldFull = $base . '/' . $fInfo['path_old'];
             }
             continue;
+            }
         }
         echo $command;
-        exit();
+        exit();*/
 
-        $fInfos = $this->getModelObj('figure')->get();
+        /*$fInfos = $this->getModelObj('figure')->get();
         //$fInfos = $this->getModelObj('figure')->where('name', '王肃')->get();
         foreach ($fInfos as $fInfo) {
+            $rInfos = $this->getModelObj('resourceInfo')->where(['info_table' => 'figure', 'info_field' => 'photo', 'info_id' => $fInfo['code']])->get();
+            foreach ($rInfos as $rInfo) {
+            //$rInfo = $this->getModelObj('resourceInfo')->where(['info_table' => 'figure', 'info_field' => 'photo', 'info_id' => $fInfo['code']])->first();
+            if (empty($rInfo) || $rInfo['extfield1'] != '') {
+                //var_dump($fInfo['name'] . '-' . $rInfo['id']);
+                continue;
+            }
+            var_dump($rInfo['id']);
+            $rInfo->extfield1 = 'yes';
+            $rInfo->save();
+            //continue;
+            $rDetail = $rInfo->resourceDetailInfo;
+            $rFile = $rPath . $rDetail['filepath'];
+            if (!file_exists($rFile)) {
+                //var_dump($fInfo['name'] . '--' . $rDetail['filepath']);
+            }
+            if (strpos($rFile, 'jpg') === false) {
+                //var_dump($fInfo['name'] . '--' . $rDetail['filepath']);
+            }
+            $rnewPath = $rPath . $fInfo->knowledge_path;
+            if (!is_dir($rnewPath)) {
+                //var_dump($rnewPath);
+                $command .= "mkdir -p {$rnewPath};\n";
+            }
+            $command .= "mv {$rFile} {$rnewPath}/photo.jpg;\n";
+
+            $nFilepath = $fInfo->knowledge_path . 'photo.jpg';
+            $rDetail->filepath = $nFilepath;
+            $rDetail->extfield1 = 'yes';
+            $rDetail->save();
+            var_dump($nFilepath);
+            continue;
             $cInfo = $fInfo->countryInfo;
             if (empty($cInfo)) {
                 //var_dump($fInfo['name'] . '-' . $fInfo['country_code']);
@@ -124,9 +198,10 @@ class TestController extends AbstractController
                 //$oldFull = $base . '/' . $fInfo['path_old'];
             }
             continue;
+            }
         }
         echo $command;
-        exit();
+        exit();*/
     }
 
     public function _testCountry()
@@ -447,8 +522,19 @@ class TestController extends AbstractController
         $basePath = '/data/htmlwww/resource/';
         $service = $this->getServiceObj('dealResource');
         $path = 'bak/old/resource';
-        $path = 'bak/resource';
-        $r = $service->dealLocalFiles($path);
+        //$path = 'bak/resource';
+        //$path = '';
+        //$r = $service->dealLocalFiles($path);
+
+        $infos = \DB::connection('knowledge')->select("SELECT * FROM `wp_resource` WHERE `status` = 99;");
+        $command = '';
+        foreach ($infos as $info) {
+            $first = \DB::connection('knowledge')->select("SELECT * FROM `wp_resourcebase` WHERE `file_hash` = '{$info->file_hash}';");
+            //print_r($first);
+            //$command .= "{$first[0]->filepath}\n";
+            $command .= "rm -f {$info->filepath};\n";
+        }
+        echo $command;
         exit();
 
         $infos = $this->getModelObj('resourceInfo')->where('info_table', 'navsort')->limit(1500)->get();

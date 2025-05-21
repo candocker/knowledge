@@ -170,7 +170,7 @@ class SubjectService extends AbstractService
 
             'usasession' => $base . '大国和组织/美国/总统/session.php',
 
-            'worldregion' => $base. 'region/base.php',
+            'worldregion' => $base. '国家地区/base.php',
         ];
         return is_null($sCode) ? $datas : $datas[$sCode] ?? $datas['other'];
     }

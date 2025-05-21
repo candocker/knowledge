@@ -8,6 +8,7 @@ class ResourceInfo extends AbstractModel
 {
     protected $table = 'resource_info';
     protected $guarded = ['id'];
+    public $timestamps = false;
 
     public function resourceDetailInfo()
     {

@@ -26,10 +26,10 @@ class Book extends AbstractModel
     {
         //return 'bak/' . $this->path_old;
         if (!empty($this->path_point)) {
-            return this->path_point;
+            return $this->path_point;
         }
         $authorData = $this->authorData();
-        if (empty($authorData)) {
+        if (empty($authorData['code'])) {
             return '';
         }
         $path = $authorData->knowledge_path;

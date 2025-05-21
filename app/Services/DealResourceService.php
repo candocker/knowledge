@@ -24,7 +24,7 @@ class DealResourceService extends AbstractService
         $i = 1;
         $command = '';
         $fHashs = [];
-        $sql = "INSERT INTO `wp_resource` (`file_hash`, `basepath`, `name`, `filepath`) VALUES \n";
+        $sql = "INSERT INTO `wp_resourceold` (`file_hash`, `basepath`, `name`, `filepath`) VALUES \n";
         foreach ($files as $file) {
             //echo $file['type'];
             //var_dump($file->isFile());
