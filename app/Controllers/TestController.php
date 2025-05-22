@@ -521,20 +521,10 @@ class TestController extends AbstractController
     {
         $basePath = '/data/htmlwww/resource/';
         $service = $this->getServiceObj('dealResource');
-        $path = 'bak/old/resource';
-        //$path = 'bak/resource';
-        //$path = '';
+        $path = '';
         //$r = $service->dealLocalFiles($path);
+        $r = $service->checkLocalFiles($path);
 
-        $infos = \DB::connection('knowledge')->select("SELECT * FROM `wp_resource` WHERE `status` = 99;");
-        $command = '';
-        foreach ($infos as $info) {
-            $first = \DB::connection('knowledge')->select("SELECT * FROM `wp_resourcebase` WHERE `file_hash` = '{$info->file_hash}';");
-            //print_r($first);
-            //$command .= "{$first[0]->filepath}\n";
-            $command .= "rm -f {$info->filepath};\n";
-        }
-        echo $command;
         exit();
 
         $infos = $this->getModelObj('resourceInfo')->where('info_table', 'navsort')->limit(1500)->get();

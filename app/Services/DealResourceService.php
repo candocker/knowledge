@@ -67,20 +67,25 @@ class DealResourceService extends AbstractService
             $fileHash = $this->createFileHash($fullFile);
             $exist = $this->getModelObj('resourceDetail')->where(['file_hash' => $fileHash])->first();
 
-            if (in_array($fileHash, array_keys($fHashs)) && $fPath != $fHashs[$fileHash]) {
-                //var_dump($fileHash . '--' . $fPath . '--' . $fHashs[$fileHash]);
+            /*if (in_array($fileHash, array_keys($fHashs)) && $fPath != $fHashs[$fileHash]) {
+                var_dump($fileHash . '--' . $fPath . '--' . $fHashs[$fileHash]);
                 //echo "<br /><img src='http://39.106.102.45/resource/{$fPath}' width='200px' height='200px' /><img src='http://39.106.102.45/resource/{$fHashs[$fileHash]}' width='200px' height='200px' /><br />";
-                $command .= "rm -f {$fullFile};\n";
+                //$command .= "rm -f {$fullFile};\n";
             }
             $fHashs[$fileHash] = $fPath;
-            continue;
+            continue;*/
 
             if ($exist) {
+                continue;
                 if ($exist->filepath != $fPath) {
-                    //var_dump($fileHash . '--' . $fPath . '--' . $exist['filepath']);
-                    //echo "<br /><img src='http://39.106.102.45/resource/{$fPath}' width='200px' height='200px' /><img src='http://39.106.102.45/resource/{$exist['filepath']}' width='200px' height='200px' /><br />";
-                    $command .= "rm -f {$fullFile};\n";
+                    var_dump($fileHash . '--' . $fPath . '--' . $exist['filepath']);
+                    $exist->filepath = $fPath;
+                    //echo "<br /><img src='http://39.106.102.45/resource/{$fPath}' width='200px' height='200px' />"
+                    //echo "<img src='http://39.106.102.45/resource/{$exist['filepath']}' width='200px' height='200px' /><br />";
+                    //$command .= "rm -f {$fullFile};\n";
                 }
+                $exist->extfield1 = 'yes';
+                $exist->save();
                 continue;
             }
 
@@ -94,7 +99,7 @@ class DealResourceService extends AbstractService
             $baseName = basename($fullFile);
             //var_dump($fullFile);
             $fileObj = new SymfonyUploadedFile($fullFile, $baseName);
-            //$this->saveFile($baseData, $fullFile, $fileObj);
+            $this->saveFile($baseData, $fullFile, $fileObj);
             //print_r($fileObj);exit();
 
             $i++;
@@ -113,9 +118,11 @@ class DealResourceService extends AbstractService
             'filename' => $file->getClientOriginalName(),
             'mime_type' => $file->getClientMimeType(),
             'extension' => $extension,
+            'extfield1' => 'new',
         ]);
         $data = $this->fillImageAttrs($fullFile, $data);
         //print_r($data);exit();
+        //return false;
         $this->getModelObj('resourceDetail')->create($data);
         return $data;
     }
