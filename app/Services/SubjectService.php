@@ -291,9 +291,31 @@ class SubjectService extends AbstractService
             if (strpos($key, 'commonFixTable') !== false) {
                 $datas[$key] = $this->_formatCommonFixTable($value, $isMobile);
             }
+            if (strpos($key, 'image') !== false) {
+                $datas[$key] = $this->_formatImageDatas($value, $isMobile);
+            }
         }
         //print_r($datas);exit();
         return $datas;
+    }
+
+    public function _formatImageDatas($imageDatas, $isMobile)
+    {
+        foreach ($imageDatas as & $imageData) {
+            if (!is_array($imageData)) {
+                continue;
+            }
+            foreach ($imageData['infos'] as & $iInfo) {
+                $rDetail = $this->getModelObj('resourceDetail')->where(['id' => $iInfo['img_rid']])->first();
+                $iInfo = array_merge($iInfo, [
+                    'title' => $rDetail ? ($rDetail['brief'] ?: $rDetail['name']) : '',
+                    'description' => $rDetail ? $rDetail['description'] : '',
+                    'url' => $rDetail ? 'http://39.106.102.45/resource/' . $rDetail['filepath'] : '',
+                ]);
+            }
+        }
+        //print_r($imageDatas);exit();
+        return $imageDatas;
     }
 
     protected function _formatCommonFixTable($ftDatas, $isMobile)

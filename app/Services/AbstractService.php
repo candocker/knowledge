@@ -125,8 +125,21 @@ abstract class AbstractService extends AbstractServiceBase
             $tmpStr = implode('<br />', $values);
             return "<div style='color:red; '>{$tmpStr}</div>";
         }
+        if ($elem == 'img_rid') {
+            $rInfo = $this->getModelObj('resourceDetail')->where(['id' => $values])->first();
+            $imgUrl = $rInfo ? $rInfo['filepath'] : '';
+            if (strpos($imgUrl, 'http') === false) {
+                $imgUrl = 'http://39.106.102.45/resource/' . $imgUrl;
+            }
+            return "<div style='text-align: center'><img width='50%' height='50%' src='{$imgUrl}'/></div>";
+        }
         if ($elem == 'img') {
             $imgUrl = $values;
+            //$baseName = urldecode(basename($imgUrl));
+            //$info = $this->getModelObj('resourceDetail')->where('filepath', 'like', "%{$baseName}%")->first();
+            //echo '    \'img_rid\' => ' . $info['id'] . ',' . "\n";
+            //$infos = $this->getModelObj('resourceDetail')->where('filepath', 'like', "%{$baseName}%")->count();
+            //var_dump($infos);
             if (strpos($imgUrl, 'http') === false) {
                 $imgUrl = 'http://39.106.102.45/' . $values;
             }
