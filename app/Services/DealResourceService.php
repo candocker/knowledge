@@ -148,6 +148,9 @@ class DealResourceService extends AbstractService
     public function getResourceUrl($app, $infoTable, $infoField, $infoId)
     {
         $info = $this->getResourceData($app, $infoTable, $infoField, $infoId);
+        if (empty($info)) {
+            return '';
+        }
         return 'http://39.106.102.45/resource/' . $info->resourceDetailInfo->filepath;
     }
 

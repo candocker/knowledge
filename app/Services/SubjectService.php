@@ -132,7 +132,7 @@ class SubjectService extends AbstractService
         $params = [
             'figure' => ['mCode' => 'figure', 'field' => 'code'],
             'book' => ['mCode' => 'book', 'field' => 'code'],
-            'group' => ['mCode' => 'group', 'field' => 'code'],
+            'muwiki' => ['mCode' => 'muwiki', 'field' => 'code'],
             'volume' => ['mCode' => 'bookVolume', 'field' => 'id'],
             'country' => ['mCode' => 'country', 'field' => 'code'],
             'dynasty' => ['mCode' => 'dynasty', 'field' => 'code'],
@@ -235,7 +235,7 @@ class SubjectService extends AbstractService
     public function _americanpotusPointSubjectDatas($currentNav, $isMobile, & $baseDatas)
     {
         $modalDatas = [];
-        $infos = $this->getModelObj('figureTitle')->where(['type' => 'usapresident'])->get();
+        $infos = $this->getModelObj('figureListing')->where(['type' => 'usapresident'])->get();
         $sessions = require($this->_specialKnowledgePath('usasession'));
         $cases = [
             'illness' => 'blue',
