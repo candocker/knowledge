@@ -34,4 +34,24 @@ class CountryCatalog extends AbstractModel
         }*/
         return $tName;
     }
+
+    public function getKnowledgePathAttribute()
+    {
+        //return $this->path_old;
+        if (!empty($this->path_point)) {
+            return $this->path_point;
+        }
+        if ($this->sort == 'gdempire') {
+            $path = '帝国历史/' . $this->name . '/base';
+            return $path;
+        }
+        //print_R($this->toArray());
+        if ($this->bigsort == 'region') {
+            $path = '国家和地区/';
+            $path .= $this->parentInfo ? $this->parentInfo['name'] . '/' : '';
+            $path .= $this->name . '/base';
+            return $path;
+        }
+        return '';
+    }
 }

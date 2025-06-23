@@ -6,8 +6,9 @@ $datas['layoutDatas'] = [
 ];
 
 $isMobile = $datas['isMobile'] ?? false;
-$knowledge = $datas['knowledge'];
-$detailDatas = $datas['detailDatas'];
+$detailDatas = $datas['detailDatas']['datas'];
+unset($datas['detailDatas']['datas']);
+$baseInfo = $datas['detailDatas'];
 
 $pageData = $datas['detailDatas']['pageData'] ?? [];
 $pageTitle = $pageData['title'] ?? '';
@@ -21,8 +22,8 @@ if (isset($pageData['url'])) {
 <div class="page-content no-min-height">
   <div class="container">
     <div class="span12">
-      <h3 class="page-title" style="text-align: center; margin-bottom:0px">{{$knowledge['name']}} </h3>
-      @if (!empty($knowledge['brief']))<h3 class="page-title" style="text-align: center; margin-top:0px"> <small>{{$knowledge['brief']}}</small></h3>@endif
+      <h3 class="page-title" style="text-align: center; margin-bottom:0px">{{$baseInfo['title']}} </h3>
+      @if (isset($baseInfo['brief']) && !empty($baseInfo['brief']))<h3 class="page-title" style="text-align: center; margin-top:0px"> <small>{{$baseInfo['brief']}}</small></h3>@endif
     </div>
   </div>
 

@@ -100,14 +100,16 @@ class SubjectService extends AbstractService
         } else {
             $info = $this->getPointKnowledgeInfo($type, $code);
             $knowledgePath = $info->full_knowledge_path;
-            //$detailDatas = empty($knowledgePath) ? [] : require($knowledgePath . '.php');
-            $fFile = $knowledgePath . '.php';
-            //var_dump($fFile);exit();
-            $autoCreate = request()->input('force_create_file');
-            if ($autoCreate) {
-                $sFile = $this->config->get('knowledge.knowledge_path') . 'sourcefile/' . $autoCreate . '.php';
-                if (file_exists($sFile)) {
-                    file_put_contents($fFile, file_get_contents($sFile));
+            var_dump($knowledgePath);exit();
+            $fFile = '';
+            if (!empty($knowledgePath)) {
+                $fFile = $knowledgePath . '.php';
+                $autoCreate = request()->input('force_create_file');
+                if ($autoCreate) {
+                    $sFile = $this->config->get('knowledge.knowledge_path') . 'sourcefile/' . $autoCreate . '.php';
+                    if (file_exists($sFile)) {
+                        file_put_contents($fFile, file_get_contents($sFile));
+                    }
                 }
             }
             $detailDatas = [];
@@ -135,6 +137,7 @@ class SubjectService extends AbstractService
             'muwiki' => ['mCode' => 'muwiki', 'field' => 'code'],
             'volume' => ['mCode' => 'bookVolume', 'field' => 'id'],
             'country' => ['mCode' => 'country', 'field' => 'code'],
+            'countrycatalog' => ['mCode' => 'countryCatalog', 'field' => 'code'],
             'dynasty' => ['mCode' => 'dynasty', 'field' => 'code'],
         ];
         $param = $params[$type];
@@ -150,19 +153,8 @@ class SubjectService extends AbstractService
     {
         $base = $this->config->get('knowledge.knowledge_path');
         $datas = [
-            'luxunworks' => $base . 'books/鲁迅著作/works.php',
-            'scholarism' => $base . 'books/学术名著/scholarism.php',
-            'zgculture' => $base. 'culture/中国思想史/base.php',
-            'xfculture' => $base. 'culture/西方哲学史/base.php',
-            //'qtculture' => $base. 'culture/其他/base.php',
-            'judaism' => $base. 'culture/其他文化/犹太教/base.php',
-            'christianity' => $base. 'culture/其他文化/基督教/base.php',
-            'islam' => $base. 'culture/其他文化/伊斯兰教/base.php',
-            'buddhism' => $base. 'culture/其他文化/佛教/base.php',
-            'gydculture' => $base. 'culture/其他文化/古印度文化/base.php',
-            'zgliterature' => $base. 'culture/中国文学/base.php',
-            'wgliterature' => $base. 'culture/外国文学/base.php',
-            'other' => $base. 'culture/外国文学/base.php',
+            'zgculture' => $base. '古代中国/culture/思想发展史.php',
+            'zgliterature' => $base. '古代中国/culture/中国文学史.php',
 
             'zgdynasty' => $base. '古代中国/base.php',
             'bigcountry' => $base. '大国和组织/base.php',
@@ -171,12 +163,25 @@ class SubjectService extends AbstractService
             'usasession' => $base . '大国和组织/美国/总统/session.php',
 
             'worldregion' => $base. '国家地区/base.php',
+
+            'luxunworks' => $base . 'books/鲁迅著作/works.php',
+            'scholarism' => $base . 'books/学术名著/scholarism.php',
+            'xfculture' => $base. '大国和组织/culture/西方哲学史/base.php',
+            //'qtculture' => $base. 'culture/其他/base.php',
+            'judaism' => $base. '大国和组织/culture/其他文化/犹太教/base.php',
+            'christianity' => $base. '大国和组织/culture/其他文化/基督教/base.php',
+            'islam' => $base. '大国和组织/culture/其他文化/伊斯兰教/base.php',
+            'buddhism' => $base. '大国和组织/culture/其他文化/佛教/base.php',
+            'gydculture' => $base. '大国和组织/culture/其他文化/古印度文化/base.php',
+            'wgliterature' => $base. '大国和组织/culture/外国文学/base.php',
+            'other' => $base. '大国和组织/culture/外国文学/base.php',
         ];
         return is_null($sCode) ? $datas : $datas[$sCode] ?? $datas['other'];
     }
 
     public function _gdempirePointSubjectDatas($currentNav, $isMobile, & $baseDatas)
     {
+        return [];
         $sorts = [];
         $results = [
             'empire' => ['name' => '帝国', 'infos' => []],
@@ -279,9 +284,9 @@ class SubjectService extends AbstractService
                 }
             }
         }
-        //print_r($sourceDatas);exit();
         $baseDatas['commonTable']['base']['infos'] = $sourceDatas;
         $baseDatas['modalDatas'] = $modalDatas;
+        print_r($modalDatas);exit();
         return [];
     }
 

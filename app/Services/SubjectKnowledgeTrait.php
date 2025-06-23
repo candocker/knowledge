@@ -39,6 +39,7 @@ trait SubjectKnowledgeTrait
         $detailDatas = require($this->_specialKnowledgePath($currentNav['code']));
         $pointDatas = $this->getPointSubjectDatas($currentNav, $isMobile, $detailDatas);
         $detailDatas = array_merge($detailDatas, $pointDatas);
+        $detailDatas = $this->formatDetailDatas($detailDatas, $isMobile);
         //print_r($detailDatas);exit();
         return $detailDatas;
     }
@@ -85,10 +86,12 @@ trait SubjectKnowledgeTrait
             'name' => $currentNav['name'],
             'infos' => array_chunk($this->_getKnowledgeDatas(['confucianism']), 3),
         ];
+        //print_r($data);exit();
+        return [];
         return $data;
     }
 
-    public function _zgdynastyPointSubjectDatas($currentNav, $isMobile, & $baseDatas)
+    public function _tmp_zgdynastyPointSubjectDatas($currentNav, $isMobile, & $baseDatas)
     {
         $dynasties = $this->getModelObj('countryCatalog')->where(['bigsort' => 'dynasty'])->orderBy('orderlist', 'asc')->get();
         $titles = [];
@@ -185,6 +188,7 @@ trait SubjectKnowledgeTrait
 
     public function _worldregionPointSubjectDatas($currentNav, $isMobile, & $baseDatas)
     {
+        return [];
         $dynasties = $this->getModelObj('countryCatalog')->where(['bigsort' => 'dynasty'])->orderBy('orderlist', 'asc')->get();
         $titles = [];
         $i = 0;

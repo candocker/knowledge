@@ -29,420 +29,131 @@ class TestController extends AbstractController
         $rPath = '/data/htmlwww/resource/';
         $command = '';
 
-        /*$cInfos = $this->getModelObj('country')->where('sort', 'dynasty')->get();
-        foreach ($cInfos as $cInfo) {
-            $kPath = $cInfo->path_old;
-            $kFullPath = $basePath . 'bak/' . $kPath;
-            if (is_dir($kFullPath)) {
-                //var_dump($cInfo['name'] . '---' . $kFullPath);
-            }
-            $cFullFile = $kFullPath . '.php';
-            if (!file_exists($cFullFile)) {
-                $ppPath = $cInfo->formatKnowledgePath();
-                if ($ppPath . '/base' != $cInfo->path_old) {
-                    //var_dump($ppPath . '-' . $cInfo->path_old);
-                }
-                //$cInfo->path_old = '';
-                //$cInfo->save();
-                //var_dump($cInfo['name'] . '---' . $cFullFile);
-            } else {
-                $fContent = file_get_contents($cFullFile);
-                $sContent = file_get_contents($basePath . 'sourcefile/obase.php');
-                if ($fContent == $sContent) {
-                    //$command .= "more {$cFullFile};\n";
-                    $command .= "rm -f {$cFullFile};\n";
-                } else {
-                    //var_dump($cInfo['name'] . '---' . $cFullFile);
-                    $nPath = dirname($cInfo->path_old);
-                    //var_dump($nPath);
-                    $cInfo->knowledge_path = $nPath;
-                    //$cInfo->save();
-                    $nPath = $basePath . $nPath;
-                    //$command .= "mkdir -p {$nPath};\n";
-                    //$command .= "mv {$cFullFile} {$nPath};\n";
-                    //var_dump($nPath);
-                    //var_dump($cInfo['name'] . '---' . $cFullFile);
-                }
-            }
-        }
-        echo $command;
-        exit();*/
-
-        /*$bInfos = $this->getModelObj('book')->get();
-        //$bInfos = $this->getModelObj('book')->where('name', '呐喊')->get();
-        foreach ($bInfos as $bInfo) {
-            $rInfos = $this->getModelObj('resourceInfo')->where(['info_table' => 'book', 'info_field' => 'cover', 'info_id' => $bInfo['code']])->get();
-            foreach ($rInfos as $rInfo) {
-            if (empty($rInfo)) {
-                //var_dump($bInfo['name']);
-                continue;
-            }
-            $rInfo->extfield1 = 'yes';
-            $rInfo->save();
-            //continue;
-            $rDetail = $rInfo->resourceDetailInfo;
-            $rFile = $rPath . $rDetail['filepath'];
-            if (!file_exists($rFile)) {
-                var_dump($bInfo['name'] . '--' . $rDetail['filepath']);
-            $baseFile = basename($rFile);
-            $nFilepath = dirname($bInfo->knowledge_path) . '/' . $baseFile;
-            $rDetail->filepath = $nFilepath;
-            var_dump($nFilepath);
-            $rDetail->extfield1 = 'yes';
-            $rDetail->save();
-                continue;
-            }
-            //continue;
-            if (strpos($rFile, 'jpg') === false) {
-                //var_dump($bInfo['name'] . '--' . $rDetail['filepath']);
-            }
-            $rnewPath = $rPath . $bInfo->knowledge_path;
-            $rnewPath = dirname($rnewPath);
-            if (!is_dir($rnewPath)) {
-                //var_dump($rnewPath);
-                $command .= "mkdir -p {$rnewPath};\n";
-            }
-            $baseFile = basename($rFile);
-            $nFilepath = dirname($bInfo->knowledge_path) . '/' . $baseFile;
-            //$rDetail->filepath = $nFilepath;
-            $rDetail->extfield1 = 'yes';
-            $rDetail->save();
-            //var_dump($nFilepath);
-            $command .= "mv {$rFile} {$rnewPath};\n";
-            continue;
-
-            $aInfo = $bInfo->authorData();
-            if (empty($aInfo) || empty($aInfo['name'])) {
-                //var_dump($bInfo['name'] . '-' . $bInfo['code']);
-                continue;
-            }
-            //var_dump($bInfo['name'] . '-----====----' . $aInfo['name']);
-            //continue;
-            if (empty($bInfo->path_old)) {
-                //var_dump($bInfo->knowledgePath . '----' . $bInfo['path_old']);
-                //var_dump($bInfo['name'] . '-' . $aInfo['name']);
-                continue;
-            }
-            $oldFull = $basePath . 'bak/' . $bInfo['path_old'];
-            if (is_file($oldFull . '.php')) {
-                //var_dump($oldFull . '===' . $fInfo->knowledgePath);
-                $newPath = $basePath . $bInfo->knowledgePath;
-                $newPath = dirname($newPath);
-                //var_dump($newPath);
-                $command .= "mkdir -p {$newPath};\n";
-                $command .= "mv {$oldFull}.php {$newPath}\n";
-            } else {
-                var_dump($bInfo['name'] . '-' . $aInfo['name']);
-                //$oldFull = $base . '/' . $fInfo['path_old'];
-            }
-            continue;
-            }
-        }
-        echo $command;
-        exit();*/
-
-        /*$fInfos = $this->getModelObj('figure')->get();
-        //$fInfos = $this->getModelObj('figure')->where('name', '王肃')->get();
-        foreach ($fInfos as $fInfo) {
-            $rInfos = $this->getModelObj('resourceInfo')->where(['info_table' => 'figure', 'info_field' => 'photo', 'info_id' => $fInfo['code']])->get();
-            foreach ($rInfos as $rInfo) {
-            //$rInfo = $this->getModelObj('resourceInfo')->where(['info_table' => 'figure', 'info_field' => 'photo', 'info_id' => $fInfo['code']])->first();
-            if (empty($rInfo) || $rInfo['extfield1'] != '') {
-                //var_dump($fInfo['name'] . '-' . $rInfo['id']);
-                continue;
-            }
-            var_dump($rInfo['id']);
-            $rInfo->extfield1 = 'yes';
-            $rInfo->save();
-            //continue;
-            $rDetail = $rInfo->resourceDetailInfo;
-            $rFile = $rPath . $rDetail['filepath'];
-            if (!file_exists($rFile)) {
-                //var_dump($fInfo['name'] . '--' . $rDetail['filepath']);
-            }
-            if (strpos($rFile, 'jpg') === false) {
-                //var_dump($fInfo['name'] . '--' . $rDetail['filepath']);
-            }
-            $rnewPath = $rPath . $fInfo->knowledge_path;
-            if (!is_dir($rnewPath)) {
-                //var_dump($rnewPath);
-                $command .= "mkdir -p {$rnewPath};\n";
-            }
-            $command .= "mv {$rFile} {$rnewPath}/photo.jpg;\n";
-
-            $nFilepath = $fInfo->knowledge_path . 'photo.jpg';
-            $rDetail->filepath = $nFilepath;
-            $rDetail->extfield1 = 'yes';
-            $rDetail->save();
-            var_dump($nFilepath);
-            continue;
-            $cInfo = $fInfo->countryInfo;
-            if (empty($cInfo)) {
-                //var_dump($fInfo['name'] . '-' . $fInfo['country_code']);
-                continue;
-            }
-            if (empty($fInfo->path_old)) {
-                //var_dump($fInfo->knowledgePath . '----' . $fInfo['path_old']);
-                //var_dump($fInfo['name'] . '-' . $fInfo['country_code']);
-                continue;
-            }
-            $oldFull = $basePath . 'bak/' . $fInfo['path_old'];
-            if (is_file($oldFull . '.php')) {
-                //var_dump($oldFull . '===' . $fInfo->knowledgePath);
-                $newPath = $basePath . $fInfo->knowledgePath;
-                //var_dump($newPath);
-                $command .= "mkdir -p {$newPath};\n";
-                $command .= "mv {$oldFull}.php {$newPath}/figure.php;\n";
-            } else {
-                //var_dump($fInfo['name'] . '-' . $fInfo['country_code']);
-                //$oldFull = $base . '/' . $fInfo['path_old'];
-            }
-            continue;
-            }
-        }
-        echo $command;
-        exit();*/
-    }
-
-    public function _testCountry()
-    {
-        $infos = $this->getModelObj('country')->where(['sort' => 'dynasty'])->get();
-        foreach ($infos as $info) {
-            $dCode = $info['code'];
-            $count = $this->getModelObj('figure')->where(['dynasty' => $dCode])->count();
-            if ($count > 0) {
-                var_dump($info['name']);
-            }
-        }
-        exit();
-        $dataSources = require('/data/log/tmp/guojia.php');
-        $datas = $dataSources['base'];
-        //print_r($datas);
-        $en = require('/tmp/a.php');
-
-        $newDatas = [];
-        foreach ($datas as $key => $data) {
-            $code = $en[$key] ?? '';
-            //echo $key . '-' . $code . "\n";
-            $sDatas = $data['infos'] ?? [];
-            $pCode = strtolower(str_replace(' ', '', $code));
-            $newDatas[$key] = [
-                'code' => $pCode,
-                'name' => $key,
-                'name_english' => $code,
-                'bigsort' => 'region',
-                'parent_code' => '',
-                'baidu_url' => $data['url'] ?? '',
-            ];
-            foreach ($sDatas as $sKey => $sData) {
-                $sCode = $en[$sKey] ?? '';
-                //echo $sKey . '-' . $sCode . "\n";
-
-                $newDatas[$sKey] = [
-                    'code' => strtolower(str_replace(' ', '', $sCode)),
-                    'name' => $sKey,
-                    'name_english' => $sCode,
-                    'bigsort' => 'region',
-                    'parent_code' => $pCode,
-                    'baidu_url' => $sData,
-                ];
-            }
-        }
-        //print_r($newDatas);
-        $details = $dataSources['details'];
-        $bb = require('/tmp/b.php');
-        $i = 0;
-        $sql = "INSERT INTO `wp_country` (`code`, `sort`, `name`, `name_english`, `baidu_url`, `knowledge_path`) VALUES \n";
-        $cListings = [];
-        foreach ($details as $fKey => $subData) {
-            foreach ($subData as $dKey => $dInfos) {
-                if (!isset($newDatas[$dKey])) {
-                    //print_r($dInfos);
-                    $bnewData = $newDatas[$fKey];
-                    //print_r($bnewData);exit();
-                    $newDatas[$bnewData['name'] . '其他'] = [
-                        'code' => $bnewData['code'] . 'other',
-                        'name' => $bnewData['name'] . '其他',
-                        'name_english' => $bnewData['name_english'] . ' Other',
-                        'bigsort' => 'region',
-                        'parent_code' => $bnewData['code'],
-                        'baidu_url' => '',
-                    ];
-                    foreach ($dInfos as $sCountry => $tmps) {
-                        print_r($tmps);
-                        foreach ($tmps as $t => $tt) {
-
-                            $cInfo = $this->getModelObj('country')->where(['sort' => '', 'name' => $t])->first();
-                        $cListings[] = [
-                            'catalog_code' => $newDatas[$bnewData['name'] . '其他']['code'],
-                            'country_code' => $cInfo['code'],
-                            'description' => $newDatas[$bnewData['name'] . '其他']['name'],
-                        ];
-                            if (empty($cInfo)) {
-                                $cInfo = $this->getModelObj('country')->where(['sort' => ''])->where('name', 'like', "%{$t}%")->first();
-                                if (empty($cInfo)) {
-                                    var_dump($t . '= ' . $tt);
-                                    $eName = $bb[$i];
-                                    $code = strtolower(str_replace(' ', '', $eName));
-                                    //echo $t . '-' . $bb[$i] . "\n";
-                                    $sql .= "('{$code}', '', '{$t}', '{$eName}', '{$tt}', ''),\n";
-                                    $i++;
-                                } else {
-                                    print_r($tt);
-                                }
-                            } else {
-                                //$cInfo['baidu_url'] = 'https://baike.baidu.com' . $tt;
-                                //$cInfo->save();
-                                //var_dump($cInfo['name'] . '-' . $cInfo['baidu_url'] . '= ' . $tt);
-                                //print_r($tmps);
-                            }
-                        }
-                    }
-                } else {
-                    if ($newDatas[$dKey]['baidu_url'] != $dInfos['url']) {
-                        var_dump($dKey);
-                        //print_r($dInfos);
-                    }
-                    foreach ($dInfos['infos'] as $ccCode => $dInfo) {
-                        $cInfo = $this->getModelObj('country')->where(['sort' => '', 'name' => $ccCode])->first();
-                        if (empty($cInfo)) {
-                            var_dump($ccCode . '-' . $dInfo);
-                        } else {
-                            //$cInfo['baidu_url'] = 'https://baike.baidu.com' . $dInfo;
-                            //$cInfo->save();
-                            //var_dump($cInfo['name'] . '-' . $cInfo['baidu_url'] . '= ' . $dInfo);
-                        }
-                        /*$cListings[] = [
-                            'catalog_code' => $newDatas[$dKey]['code'],
-                            'country_code' => $cInfo['code'],
-                            'description' => $newDatas[$dKey]['name'],
-                        ];*/
-                        //print_r($dInfo);
-                    }
-                }
-                //print_R($newDatas[$dKey]);
-                //print_r($dInfos);
-            }
-            //print_r($subData);exit();
-        }
-        //echo $sql;
-        echo count($cListings);
-        print_r($cListings);
-        //$this->getModelObj('countryListing')->insert($cListings);
-        //echo count($newDatas);
-        //print_r($newDatas);
-        //$this->getModelObj('countryCatalog')->insert($newDatas);
-        exit();
-        $datas = require('/tmp/sql.php');
-        $tmp = require('/tmp/b.php');
-        $tmp1 = require('/tmp/c.php');
-        $i = 0;
-        $str = '';
-        //print_r($datas);
-        foreach ($datas as $data) {
-            $name = $tmp[$data[2]] ?? ($tmp1[$data[2]] ?? '');
-            $nData = [
-                'code' => strtolower(trim($data[3])),
-                'name' => trim($name),
-                'name_english' => trim($data[2]),
-                'area' => str_replace(',', '', trim($data[4])),
-                'population' => str_replace(',', '', trim($data[6])),
-            ];
-            print_r($nData);
-            if (empty($name)) {
-                $str .= "{$data[2]}\n";
-                $i++;
-            print_r($nData);
-            }
-            //$this->getModelObj('country')->create($nData);
-        }
-        echo $str;
-        var_dump($i);
-        exit();
-    }
-
-    public function _testBook()
-    {
-        $infos = $this->getModelObj('book')->where('name', 'like', '% %')->get();
-        foreach ($infos as $info) {
-            //print_r($info->toArray());
-            $oName = $info->name;
-            $bName = str_replace(' ', '', $info->name);
-            $uData = ['name' => $bName];
-            $this->getModelObj('bookListing')->where(['name' => $oName])->update($uData);
-            //$this->getModelObj('bookFigure')->where(['name' => $oName])->update($uData);
-            var_dump($bName);var_dump($info->name);
-            $exist = $this->getModelObj('book')->where(['name' => $bName])->where('id', '<>', $info->id)->first();
-            $info->name = $bName;
-            $info->save();
-            if ($exist) {
-                print_r($exist->toArray());
-            }
-        }
-        exit();
     }
 
     public function _testTmp()
     {
-        $file = '/tmp/b.html';
-        $crawler = new Crawler();
-        $content = file_get_contents($file);
-        $crawler->addContent($content);
-        $datas = [];
-        $crawler->filter('span')->each(function ($subCrawler) use (& $datas) {
-            $text = $subCrawler->text();
-            $url = '';
-            $aDom = $subCrawler->filter('a');
-            if ($aDom->count() > 0) {
-                $url = $aDom->attr('href');
-                $url = urldecode($url);
-                $url = strpos($url, '?') !== false ? substr($url, 0, strpos($url, '?')) : $url;
+        $file = '/data/log/tmp/kd.php';
+        $infos = \DB::select("SELECT * FROM `work_tmp_knowledge`.`wp_knowledge` WHERE `code` = 'ruxueqianhan';");
+        foreach ($infos as $info) {
+            //print_r($info);
+            $sInfos = \DB::select("SELECT * FROM `work_tmp_knowledge`.`wp_knowledge_listing` WHERE `knowledge_code` = '{$info->code}';");
+            $bStr = '';
+            $str = "<?php\nreturn [\n";
+            foreach ($sInfos as $sInfo) {
+                //print_r($sInfo);
+                $filePath = '/data/database/knowledge/古代中国/culture/中国思想史/' . $info->name . '/' . $sInfo->code . '.php';
+                if (!file_exists($filePath)) {
+                    var_dump($filePath);
+                    continue;
+                }
+                $datas = require($filePath);
+                $newPath = '/data/database/knowledge/小知识/易经/' . $info->name . '/';
+                $str .= "[\n";
+                $str .= "    'ask' => '{$sInfo->name}',\n";
+                foreach ($datas as $data) {
+                    foreach ($data as $subData) {
+                    foreach ($subData as $key => $value) {
+                        $str .= $key == 'content' ? "    'answer' => [\n" : "    '{$key}' => [\n";
+                        foreach ((array)$value as $subValue) {
+                            $str .= "        '{$subValue}',\n";
+                        }
+                        $str .= "    ],\n";
+                    }
+                        $str .= "],\n";
+                    }
+                    //file_put_contents($newFile, $str);
+                }
             }
-            if ($text != '|') {
-                $datas[] = [$text => $url];
-                //print_r([$text => $url]);
-            }
-        });
-        $str = '';
-        foreach ($datas as $data) {
-            foreach ($data as $key => $value) {
-                $str .= "        '{$key}' => '{$value}',\n";
-                //var_dump($key . '-' . $value);
-            }
-            //print_r($data);exit();
+            $str .= "];";
+            echo $str;exit();
+            //echo $bStr;
         }
-        echo $str;
-        //$a = var_export($datas, true);
-        //echo $a;
-        //print_r($datas);
+        exit();
+
+
+        $infos = \DB::select("SELECT * FROM `work_tmp_knowledge`.`wp_knowledge` WHERE `code` = 'yijingcihui';");
+        foreach ($infos as $info) {
+            print_r($info);
+            $sInfos = \DB::select("SELECT * FROM `work_tmp_knowledge`.`wp_knowledge_listing` WHERE `knowledge_code` = '{$info->code}';");
+            $bStr = '';
+            foreach ($sInfos as $sInfo) {
+                print_r($sInfo);
+                $filePath = '/data/database/knowledge/古代中国/culture/中国思想史/' . $info->name . '/' . $sInfo->code . '.php';
+                if (!file_exists($filePath)) {
+                    var_dump($filePath);
+                    continue;
+                }
+                $datas = require($filePath);
+                $str = "<?php\nreturn [\n";
+                $newPath = '/data/database/knowledge/小知识/易经/' . $info->name . '/';
+                if (!is_dir($newPath)) {
+                    var_dump($newPath);
+                    mkdir($newPath, 0777, true);
+                }
+                $newFile = $newPath . $sInfo->name . '.php';
+                $bStr .= "        [\n";
+                $bStr .= "            'name' => '{$sInfo->name}',\n";
+                $bStr .= "            'subInfos' => require(__DIR__ . '/{$info->name}/{$sInfo->name}.php'),\n";
+                $bStr .= "        ],\n";
+                foreach ($datas as $data) {
+                    //print_r($data);
+                    foreach ($data as $subData) {
+                        $str .= "[\n";
+                    foreach ($subData as $key => $value) {
+                        var_dump($key);
+                        print_r($value);
+                        if ($key == 'name') {
+                            $str .= "    'ask' => '{$value}',\n";
+                        } else {
+                            $str .= "    'answer' => [\n";
+                            foreach ((array)$value as $subValue) {
+                                $str .= "        '{$subValue}',\n";
+                            }
+                            $str .= "    ],\n";
+                        }
+                    }
+                        $str .= "],\n";
+                    }
+                    $str .= "];";
+                    file_put_contents($newFile, $str);
+                //echo $str;exit();
+                }
+                //print_r($datas);
+                //exit();
+                //var_dump($filePath);
+            }
+            echo $bStr;
+        }
         exit();
     }
 
     public function _testKing2()
     {
-        $file = '/tmp/b.php';
+        $file = '/tmp/kd2.html';
         $crawler = new Crawler();
         $content = file_get_contents($file);
         $crawler->addContent($content);
         $datas = [];
         //$titles = ['posthumous_title', 'serial', 'mausoleum', 'eraname', 'birth_death', 'office_start_end', 'name', 'office_start_end', 'office_duration', 'brief', 'brief2'];
         $titles = ['dynastic_title', 'posthumous_title', 'name', 'office_start_end', 'eraname', 'mausoleum', 'brief', 'birth_death', 'brief2'];
-        $titles = ['serial', 'name', 'author', 'brief', 'publish_at', 'begin_end', 'brief3', 'capital', 'brief4'];
-        $crawler->filter('tr')->each(function ($subCrawler) use (& $datas, $titles) {
+        $titles = ['serial', 'name', 'name_card', 'brief', 'country_code', 'brief2', 'brief3', 'capital', 'brief4'];
+        $titles = ['name', 'name_card', 'brief', 'country_code', 'brief2', 'brief3', 'capital', 'brief4'];
+        $crawler->filter('tr')->each(function ($crawler) use (& $datas, $titles) {
             $data = [];
             $i = 0;
-            $subCrawler->filter('td')->each(function ($node) use (& $data, & $i, $titles) {
+            $crawler->filter('td')->each(function ($subCrawler) use (& $data, & $i, $titles) {
                 //echo $node->html();
-                $j = 0;
+                $aDom = $subCrawler->filter('a');
                 $url = '';
-                if ($aDom->count() > 0) {
+                if (!isset($data['baidu_url']) && $aDom->count() > 0) {
                     $url = urldecode($aDom->attr('href'));
                     if (strpos($url, '?') !== false) {
                         $url = substr($url, 0, strpos($url, '?'));
                     }
-                    $data['baidu_url' . rand(10, 100)] = 'https://baike.baidu.com/' . trim($url, '/');
+                    $data['baidu_url'] = 'https://baike.baidu.com/' . trim($url, '/');
                 }
-                $text = $node->text();
+                $text = $subCrawler->text();
                 $text = str_replace(['不详'], [''], $text);
                 $title = $titles[$i] ?? '';
                 $data[$title] = $text;
@@ -456,6 +167,8 @@ class TestController extends AbstractController
                 $datas[] = $data;
             }
         });
+        var_export($datas);exit();
+        print_r($datas);
         $sql = "INSERT INT `wp_dynasty` (`" . implode('`,`', $titles) . "`) VALUES \n";
 
         foreach ($datas as & $data) {

@@ -13,7 +13,7 @@ class Country extends AbstractModel
     public function getFullKnowledgePathAttribute()
     {
         $base = $this->config->get('knowledge.knowledge_path');
-        return $this->knowledge_path ? $base . $this->knowledge_path . '/base' : '';
+        return $this->knowledge_path ? $base . $this->knowledge_path . '/base' : $base . $this->formatKnowledgePath() . '/base';
     }
 
     public function _formatBaseData($isMobile)
@@ -83,7 +83,7 @@ class Country extends AbstractModel
             $kPath .= "/{$pInfo['name']}";
         }
         $kPath .= "/{$cInfo['name']}/{$this->name}";
-        //var_dump($kPath);
+        //var_dump($kPath);exit();
         return $kPath;
     }
 }

@@ -82,14 +82,16 @@ class KnowledgeController extends AbstractController
     public function askKnowledge($code = null)
     {
         $service = $this->getSubjectServiceObj();
-        $knowledge = $service->_knowledgeData($code);
 
         $navs = require(self_app_path($this->getAppCode(), '/resources/formatdata/nav.php'));
         $datas = $navs;
-        $datas['knowledge'] = $knowledge;
-        $datas['detailDatas'] = $service->getKnowledgeDetailDatas($knowledge);
+        //$knowledge = $service->_knowledgeData($code);
+        //$datas['knowledge'] = $knowledge;
+        //$datas['detailDatas'] = $service->getKnowledgeDetailDatas($knowledge);
         //print_R($datas);exit();
-        $datas['tdkData'] = ['title' => $knowledge['name'] . '-' . '知识库'];
+        $detail = require($this->_knowledgeDatas($code));
+        $datas['detailDatas'] = $detail;
+        $datas['tdkData'] = ['title' => $detail['title'] . '-' . '知识库'];
         return $this->customView('askwiki', $datas);
     }
 
@@ -236,5 +238,18 @@ class KnowledgeController extends AbstractController
     protected function viewPath()
     {
         return 'knowledge';
+    }
+
+    public function _knowledgeDatas($code = null)
+    {
+        $base = $this->config->get('knowledge.knowledge_path');
+        $datas = [
+            'kongzi' => $base. '小知识/孔子/base.php',
+            'ruxue' => $base. '小知识/儒学/base.php',
+            'ruxuelishi' => $base. '小知识/儒学历史/base.php',
+            'zxcidian' => $base. '小知识/哲学辞典/base.php',
+            'yjxiaozhishi' => $base. '小知识/易经/base.php',
+        ];
+        return is_null($code) ? $datas : $datas[$code];
     }
 }

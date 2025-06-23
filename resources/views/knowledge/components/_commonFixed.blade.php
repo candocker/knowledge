@@ -22,7 +22,7 @@
     </div>
   </div>-->
   <div class="portlet-body flip-scroll">
-    <h4 style="display: flex; justify-content: center; align-items: center;"><em>{{$tData['name']}}</em></h4>
+    <h4 style="display: flex; justify-content: center; align-items: center;"><em>{!!$tData['name']!!}</em></h4>
     @if (isset($tData['brief']))<p class="page-title" style="text-align: center; margin-top:0px;color:red; font-weight:normal; font-style:oblique;"> <small>{!!$tData['brief']!!}</small></p>@endif
     <table class="table-bordered table-striped table-condensed flip-content table-bordered">
       <thead class="flip-content">
