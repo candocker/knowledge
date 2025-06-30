@@ -76,14 +76,18 @@ class Country extends AbstractModel
             return 'no listing';
         }
 
-        $cInfo = $clInfo->catalogInfo;
-        $pInfo = $cInfo->parentInfo;
         $kPath = $sortDatas[$this->sort]['path'];
-        if (!empty($pInfo)) {
-            $kPath .= "/{$pInfo['name']}";
+        $cInfo = $clInfo->catalogInfo;
+        if ($cInfo['path_point']) {
+            $kPath .= "/{$cInfo['path_point']}";
+        } else {
+            $pInfo = $cInfo->parentInfo;
+            if (!empty($pInfo)) {
+                $kPath .= "/{$pInfo['name']}";
+            }
+            $kPath .= "/{$cInfo['name']}";
         }
-        $kPath .= "/{$cInfo['name']}/{$this->name}";
-        //var_dump($kPath);exit();
+        $kPath .= "/{$this->name}";
         return $kPath;
     }
 }

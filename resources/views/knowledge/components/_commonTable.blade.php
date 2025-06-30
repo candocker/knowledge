@@ -32,10 +32,16 @@ $colors = ['#c8dade', '#6dc1d3'];
         @foreach ($tData['infos'] as $pData)
         @php $fExts = []; if (isset($pData['fExts'])) { $fExts = $pData['fExts']; unset($pData['fExts']); } @endphp
         <tr>
+          @if (isset($tData['ignoreTitle']))
+          @foreach ($pData as $pIndex => $vName)
+          <td @if (isset($fExts[$pIndex . '_col'])) colspan="{{$fExts[$pIndex . '_col']}}" @endif  @if (isset($fExts[$pIndex . '_row'])) rowspan="{{$fExts[$pIndex . '_row']}}" @endif style="text-align: center; border-left-width:1px;vertical-align:middle;">{!!$vName!!}</td>
+          @endforeach
+          @else
           @foreach ($tTitles as $pIndex => $tTitle)
           @php $vName = $pData[$pIndex] ?? ''; @endphp
           <td @if (isset($fExts[$pIndex . '_col'])) colspan="{{$fExts[$pIndex . '_col']}}" @endif  @if (isset($fExts[$pIndex . '_row'])) rowspan="{{$fExts[$pIndex . '_row']}}" @endif style="text-align: center; border-left-width:1px;vertical-align:middle;">{!!$vName!!}</td>
           @endforeach
+          @endif
         </tr>
         @endforeach
       </tbody>

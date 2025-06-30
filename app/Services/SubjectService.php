@@ -100,7 +100,7 @@ class SubjectService extends AbstractService
         } else {
             $info = $this->getPointKnowledgeInfo($type, $code);
             $knowledgePath = $info->full_knowledge_path;
-            var_dump($knowledgePath);exit();
+            //var_dump($knowledgePath);exit();
             $fFile = '';
             if (!empty($knowledgePath)) {
                 $fFile = $knowledgePath . '.php';
@@ -167,7 +167,7 @@ class SubjectService extends AbstractService
             'luxunworks' => $base . 'books/鲁迅著作/works.php',
             'scholarism' => $base . 'books/学术名著/scholarism.php',
             'xfculture' => $base. '大国和组织/culture/西方哲学史/base.php',
-            //'qtculture' => $base. 'culture/其他/base.php',
+            'qtculture' => $base. '大国和组织/culture/其他文化/base.php',
             'judaism' => $base. '大国和组织/culture/其他文化/犹太教/base.php',
             'christianity' => $base. '大国和组织/culture/其他文化/基督教/base.php',
             'islam' => $base. '大国和组织/culture/其他文化/伊斯兰教/base.php',
@@ -176,6 +176,9 @@ class SubjectService extends AbstractService
             'wgliterature' => $base. '大国和组织/culture/外国文学/base.php',
             'other' => $base. '大国和组织/culture/外国文学/base.php',
         ];
+        if (!isset($datas[$sCode])) {
+            var_dump($sCode);exit();
+        }
         return is_null($sCode) ? $datas : $datas[$sCode] ?? $datas['other'];
     }
 
@@ -286,7 +289,7 @@ class SubjectService extends AbstractService
         }
         $baseDatas['commonTable']['base']['infos'] = $sourceDatas;
         $baseDatas['modalDatas'] = $modalDatas;
-        print_r($modalDatas);exit();
+        //print_r($modalDatas);exit();
         return [];
     }
 

@@ -42,8 +42,10 @@ return [
             'subDatas' => [
                 //'confucianism' => ['code' => 'confucianism', 'name' => '儒学历史'],
                 'zgculture' => ['code' => 'zgculture', 'name' => '中国思想史'],
+                'zgliterature' => ['code' => 'zgliterature', 'name' => '中国文学'],
                 'xfculture' => ['code' => 'xfculture', 'name' => '西方哲学史'],
-                'qtculture' => [
+                'qtculture' => ['code' => 'qtculture', 'name' => '宗教/其他文化'],
+                /*'qtculture' => [
                     'code' => 'qtculture',
                     'name' => '宗教/其他文化',
                     'subDatas' => [
@@ -54,8 +56,7 @@ return [
                         'gydculture' => ['code' => 'gydculture', 'name' => '古代印度文化'],
                         //'' => ['code' => '', 'name' => ''],
                     ],
-                ],
-                'zgliterature' => ['code' => 'zgliterature', 'name' => '中国文学'],
+                ],*/
                 'wgliterature' => ['code' => 'wgliterature', 'name' => '外国文学'],
             ],
         ],
@@ -95,8 +96,8 @@ return [
             'name' => '区域',
             'subDatas' => [
                 'worldregion' => ['code' => 'worldregion', 'name' => '世界政区'],
-                'situation' => ['code' => 'situation', 'name' => '局势'],
-                'trend' => ['code' => 'trend', 'name' => '趋势'],
+                //'situation' => ['code' => 'situation', 'name' => '局势'],
+                //'trend' => ['code' => 'trend', 'name' => '趋势'],
             ],
         ],
     ],

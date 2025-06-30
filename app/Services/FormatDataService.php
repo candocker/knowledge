@@ -27,7 +27,7 @@ class FormatDataService extends AbstractService
                 . "            'name' => '{$name}',\n"
                 . "            'eraname' => '{$eraname}',\n"
                 . "            'dynastic' => '{$dynastic}',\n"
-                . "            'major' => ''\n"
+                . "            'major' => '',\n"
                 . "        ],\n";
         }
         echo $str;
