@@ -41,7 +41,7 @@ class CountryCatalog extends AbstractModel
         if (!empty($this->path_point)) {
             return $this->path_point;
         }
-        if ($this->sort == 'gdempire') {
+        if ($this->bigsort == 'gdempire') {
             $path = '帝国历史/' . $this->name . '/base';
             return $path;
         }
@@ -53,5 +53,23 @@ class CountryCatalog extends AbstractModel
             return $path;
         }
         return '';
+    }
+
+    public function _formatBaseData($isMobile)
+    {
+        $jumpUrl = !empty($this->baidu_url) ? "<a href='{$this->baidu_url}'>百科</a>" : '';
+        //$jumpUrl .= $this->knowledge_path ? "---<a href='/wiki-country-{$this->code}.html'>详情</a>" : '';
+        $jumpUrl = trim($jumpUrl, '---');
+        $result = [
+            'tdkData' => ['title' => $this->name, 'description' => $this->description],
+            'pageData' => ['title' => $this->name . " （ {$jumpUrl} ）", 'brief' => $this->brief],
+        ];
+        return $result;
+    }
+
+    public function getFullKnowledgePathAttribute()
+    {
+        $base = $this->config->get('knowledge.knowledge_path');
+        return $this->knowledge_path ? $base . $this->knowledge_path . '/base' : '';
     }
 }

@@ -130,7 +130,7 @@ class TestController extends AbstractController
 
     public function _testKing2()
     {
-        $file = '/tmp/kd2.html';
+        $file = '/tmp/a.html';
         $crawler = new Crawler();
         $content = file_get_contents($file);
         $crawler->addContent($content);
@@ -139,10 +139,12 @@ class TestController extends AbstractController
         $titles = ['dynastic_title', 'posthumous_title', 'name', 'office_start_end', 'eraname', 'mausoleum', 'brief', 'birth_death', 'brief2'];
         $titles = ['serial', 'name', 'name_card', 'brief', 'country_code', 'brief2', 'brief3', 'capital', 'brief4'];
         $titles = ['name', 'name_card', 'brief', 'country_code', 'brief2', 'brief3', 'capital', 'brief4'];
-        $crawler->filter('tr')->each(function ($crawler) use (& $datas, $titles) {
+        $crawler->filter('.itemWrap_q4x7d')->each(function ($crawler) use (& $datas, $titles) {
+        //$crawler->filter('tr')->each(function ($crawler) use (& $datas, $titles) {
             $data = [];
             $i = 0;
-            $crawler->filter('td')->each(function ($subCrawler) use (& $data, & $i, $titles) {
+            $crawler->filter('.item-title_WzMib')->each(function ($subCrawler) use (& $data, & $i, $titles) {
+            //$crawler->filter('td')->each(function ($subCrawler) use (& $data, & $i, $titles) {
                 //echo $node->html();
                 $aDom = $subCrawler->filter('a');
                 $url = '';
@@ -167,18 +169,16 @@ class TestController extends AbstractController
                 $datas[] = $data;
             }
         });
-        var_export($datas);exit();
-        print_r($datas);
-        $sql = "INSERT INT `wp_dynasty` (`" . implode('`,`', $titles) . "`) VALUES \n";
+        $datas = array_reverse($datas);
+        //var_export($datas);exit();
+        $sql = "INSERT INT `wp_country` (`code`, `name`, `baidu_url`, `sort`) VALUES \n";
 
         foreach ($datas as & $data) {
-            if (!isset($data['name']) || in_array($data['name'], ['', '君主', '—', '姓名'])) {
-                continue;
-            }
-            $data['dynasty'] = 'qingchao';
+            //$code = str_replace(['aijidi', 'wangchaozaowangguoshiqi', 'wangchaoguwangguoshiqi', ''], ['egypt', '', '', ''], $data['code']);
+            $sql .= "('{$data['code']}', '{$data['name']}', '{$data['baidu_url']}', 'gdempire'),\n";
             //$this->getModelObj('country')->create($data);
         }
-        //echo $sql;exit();
+        echo $sql;exit();
         //print_r($datas);
         exit();
     }

@@ -17,7 +17,7 @@ trait OtherLoanTrait
         $loanAmount = 1970000;
         $loanPeriod = 312;
         $pointRate = request()->input('point_rate');
-        $rRate = $pointRate ?? '3.30';
+        $rRate = $pointRate ?? '3.20';
         $loans = [
             ['interestRate' => 5.145, 'loanNum' => 20, 'loanAmount' => '1907133.24'],
             ['interestRate' => 4.995, 'loanNum' => 24, 'loanAmount' => '1822537.11'],
@@ -28,7 +28,8 @@ trait OtherLoanTrait
             ['interestRate' => 4.28, 'loanNum' => 1, 'loanAmount' => '1730432.42'],
             ['interestRate' => 3.9, 'loanNum' => 2],
             ['interestRate' => '3.3', 'loanNum' => 6],
-            ['interestRate' => $rRate, 'loanNum' => 10],
+            ['interestRate' => $rRate, 'loanNum' => 3],
+            ['interestRate' => $rRate, 'loanNum' => 7],
             ['interestRate' => $rRate, 'loanNum' => 36],
             ['interestRate' => $rRate, 'loanNum' => 36],
             ['interestRate' => $rRate, 'loanNum' => 48],
