@@ -318,7 +318,7 @@ class SubjectService extends AbstractService
                 $iInfo = array_merge($iInfo, [
                     'title' => $rDetail ? ($rDetail['brief'] ?: $rDetail['name']) : '',
                     'description' => $rDetail ? $rDetail['description'] : '',
-                    'url' => $rDetail ? 'http://39.106.102.45/resource/' . $rDetail['filepath'] : '',
+                    'url' => $rDetail ? 'http://upfile.canliang.wang/' . $rDetail['filepath'] : '',
                 ]);
             }
         }
@@ -344,7 +344,7 @@ class SubjectService extends AbstractService
                 continue;
             }
             $sTitles = $ftData['titles'];
-            $fTitles = $fInfos = [];
+            $fTitles = $fInfos = $eDetails = [];
             $hField = $ftData['fixTitleField'];
             foreach ($infos as & $info) {
                 foreach ($sTitles as $sTitle => $sName) {
@@ -354,11 +354,26 @@ class SubjectService extends AbstractService
                         $fInfos[$sTitle][] = $info[$sTitle] ?: '<span style="color:white;">占位符</span>';
                     }
                 }
+                $eDetails[] = $info['extDetails'] ?? [];
+            }
+            foreach ($eDetails as & $eDetail) {
+                if (isset($eDetail['infos']) && !empty($eDetail['infos'])) {
+                    $eInfos = $eDetail['infos'];
+                    $neInfos = [];
+                    foreach ($eInfos as $eInfo) {
+                        foreach ($eInfos[0] as $eKey => $eValue) {
+                            $neInfos[$eKey][] = isset($eInfo[$eKey]) && !empty($eInfo[$eKey]) ? $eInfo[$eKey] : '<span style="color:white;">占位符</span>';
+                        }
+                    }
+                    $eDetail['infos'] = $neInfos;
+                }
             }
             $newData['titles'] = $fTitles;
             $newData['infos'] = array_values($fInfos);
+            $newData['extDetails'] = $eDetails;
             $results[$key] = $newData;
         }
+        //print_r($results);exit();
         return $results;
     }
 }

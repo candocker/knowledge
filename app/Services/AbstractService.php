@@ -129,7 +129,7 @@ abstract class AbstractService extends AbstractServiceBase
             $rInfo = $this->getModelObj('resourceDetail')->where(['id' => $values])->first();
             $imgUrl = $rInfo ? $rInfo['filepath'] : '';
             if (strpos($imgUrl, 'http') === false) {
-                $imgUrl = 'http://39.106.102.45/resource/' . $imgUrl;
+                $imgUrl = 'http://upfile.canliang.wang/' . $imgUrl;
             }
             return "<div style='text-align: center'><img width='50%' height='50%' src='{$imgUrl}'/></div>";
         }
@@ -141,7 +141,7 @@ abstract class AbstractService extends AbstractServiceBase
             //$infos = $this->getModelObj('resourceDetail')->where('filepath', 'like', "%{$baseName}%")->count();
             //var_dump($infos);
             if (strpos($imgUrl, 'http') === false) {
-                $imgUrl = 'http://39.106.102.45/' . $values;
+                $imgUrl = 'http://upfile.canliang.wang/' . $values;
             }
             return "<div style='text-align: center'><img width='50%' height='50%' src='{$imgUrl}'/></div>";
         }

@@ -151,7 +151,7 @@ class DealResourceService extends AbstractService
         if (empty($info)) {
             return '';
         }
-        return 'http://39.106.102.45/resource/' . $info->resourceDetailInfo->filepath;
+        return 'http://upfile.canliang.wang/' . $info->resourceDetailInfo->filepath;
     }
 
     public function getResourceData($app, $infoTable, $infoField, $infoId, $onlyOne = true)

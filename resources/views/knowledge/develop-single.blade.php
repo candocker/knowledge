@@ -23,7 +23,7 @@ if (isset($pageData['url'])) {
   @if (!empty($pageData))
   <div class="container">
     <div class="span12">
-      <h3 class="page-title" style="text-align: center; margin-bottom:0px">{!!$pageTitle!!} </h3>
+      <h3 class="page-title" style="font-size:24px;text-align: center; margin-bottom:10px">{!!$pageTitle!!} </h3>
       @if (isset($pageData['brief']))<h3 class="page-title" style="text-align: center; margin-top:0px"> <small>{!!$pageData['brief']!!}</small></h3>@endif
     </div>
   </div>
