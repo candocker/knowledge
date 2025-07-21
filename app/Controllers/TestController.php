@@ -139,12 +139,16 @@ class TestController extends AbstractController
         $titles = ['dynastic_title', 'posthumous_title', 'name', 'office_start_end', 'eraname', 'mausoleum', 'brief', 'birth_death', 'brief2'];
         $titles = ['serial', 'name', 'name_card', 'brief', 'country_code', 'brief2', 'brief3', 'capital', 'brief4'];
         $titles = ['name', 'name_card', 'brief', 'country_code', 'brief2', 'brief3', 'capital', 'brief4'];
-        $crawler->filter('.itemWrap_q4x7d')->each(function ($crawler) use (& $datas, $titles) {
-        //$crawler->filter('tr')->each(function ($crawler) use (& $datas, $titles) {
+        $fMark = '.itemWrap_q4x7d';
+        $fMark = '.para__C9Dx';
+        $fMark = 'tr';
+        $crawler->filter($fMark)->each(function ($crawler) use (& $datas, $titles) {
             $data = [];
             $i = 0;
-            $crawler->filter('.item-title_WzMib')->each(function ($subCrawler) use (& $data, & $i, $titles) {
-            //$crawler->filter('td')->each(function ($subCrawler) use (& $data, & $i, $titles) {
+            $sMark = '.item-title_WzMib';
+            $sMark = 'span';
+            $sMark = 'td';
+            $crawler->filter($sMark)->each(function ($subCrawler) use (& $data, & $i, $titles) {
                 //echo $node->html();
                 $aDom = $subCrawler->filter('a');
                 $url = '';
@@ -169,15 +173,26 @@ class TestController extends AbstractController
                 $datas[] = $data;
             }
         });
-        $datas = array_reverse($datas);
+        //$datas = array_reverse($datas);
         //var_export($datas);exit();
         $sql = "INSERT INT `wp_country` (`code`, `name`, `baidu_url`, `sort`) VALUES \n";
+        $str = '';
 
         foreach ($datas as & $data) {
             //$code = str_replace(['aijidi', 'wangchaozaowangguoshiqi', 'wangchaoguwangguoshiqi', ''], ['egypt', '', '', ''], $data['code']);
-            $sql .= "('{$data['code']}', '{$data['name']}', '{$data['baidu_url']}', 'gdempire'),\n";
+            //$sql .= "('{$data['code']}', '{$data['name']}', '{$data['baidu_url']}', 'gdempire'),\n";
             //$this->getModelObj('country')->create($data);
+            $baiduUrl = $data['baidu_url'] ?? '';
+            $name = $data['name'] ?? '';
+            $beginEnd = $data['name_card'] ?? '';
+            $brief = $data['brief'] ?? '';
+            echo "        [\n";
+            echo "            'name' => '<a href=\"{$baiduUrl}\">{$name}</a>',\n";
+            echo "            'begin_end' => '{$beginEnd}',\n";
+            echo "            'major' => '{$brief}',\n";
+            echo "        ],\n";
         }
+        echo $str;exit();
         echo $sql;exit();
         //print_r($datas);
         exit();
