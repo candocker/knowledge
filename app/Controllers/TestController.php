@@ -138,9 +138,13 @@ class TestController extends AbstractController
         //$titles = ['posthumous_title', 'serial', 'mausoleum', 'eraname', 'birth_death', 'office_start_end', 'name', 'office_start_end', 'office_duration', 'brief', 'brief2'];
         $titles = ['dynastic_title', 'posthumous_title', 'name', 'office_start_end', 'eraname', 'mausoleum', 'brief', 'birth_death', 'brief2'];
         $titles = ['serial', 'name', 'name_card', 'brief', 'country_code', 'brief2', 'brief3', 'capital', 'brief4'];
-        $titles = ['name', 'name_card', 'brief', 'country_code', 'brief2', 'brief3', 'capital', 'brief4'];
+        //$titles = ['name', 'name_card', 'brief', 'country_code', 'brief2', 'brief3', 'capital', 'brief4'];
+        $titles = ['begin_end', 'name_card', 'name', 'brief', 'brief2', 'brief3', 'capital', 'brief4'];
         $fMark = '.itemWrap_q4x7d';
         $fMark = '.para__C9Dx';
+        $fMark = 'li';
+        $fMark = '.para_WuljG';
+        $fMark = '.para_Fx2su';
         $fMark = 'tr';
         $crawler->filter($fMark)->each(function ($crawler) use (& $datas, $titles) {
             $data = [];
@@ -184,11 +188,20 @@ class TestController extends AbstractController
             //$this->getModelObj('country')->create($data);
             $baiduUrl = $data['baidu_url'] ?? '';
             $name = $data['name'] ?? '';
-            $beginEnd = $data['name_card'] ?? '';
+            $beginEnd = $data['begin_end'] ?? '';
             $brief = $data['brief'] ?? '';
+            $brief2 = $data['brief2'] ?? '';
+            $brief3 = $data['brief3'] ?? '';
+            $nameCard = $data['name_card'] ?? '';
+
+            $fName = $beginEnd;
+            if ($baiduUrl) {
+                $fName = "<a href=\"{$baiduUrl}\">{$fName}</a>";
+            }
             echo "        [\n";
-            echo "            'name' => '<a href=\"{$baiduUrl}\">{$name}</a>',\n";
-            echo "            'begin_end' => '{$beginEnd}',\n";
+            echo "            'name' => '{$fName}',\n";
+            echo "            'begin_end' => '{$nameCard}-{$name} 年',\n";
+            echo "            'name_english' => '',\n";
             echo "            'major' => '{$brief}',\n";
             echo "        ],\n";
         }

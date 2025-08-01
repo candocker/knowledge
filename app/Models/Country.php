@@ -21,9 +21,11 @@ class Country extends AbstractModel
         $jumpUrl = !empty($this->baidu_url) ? "<a href='{$this->baidu_url}'>百科</a>" : '';
         //$jumpUrl .= $this->knowledge_path ? "---<a href='/wiki-country-{$this->code}.html'>详情</a>" : '';
         $jumpUrl = trim($jumpUrl, '---');
+        $title = $this->name;
+        $title .= $jumpUrl ? " （ {$jumpUrl} ）" : '';
         $result = [
             'tdkData' => ['title' => $this->name, 'description' => $this->description],
-            'pageData' => ['title' => $this->name . " （ {$jumpUrl} ）", 'brief' => $this->brief],
+            'pageData' => ['title' => $title, 'brief' => $this->brief],
         ];
         return $result;
     }

@@ -120,7 +120,7 @@ class SubjectService extends AbstractService
 
             $fData = $info->formatBaseData($detailDatas['baseData'] ?? [], $isMobile);
             $detailDatas['tdkData'] = $fData['tdkData'] ?? [];
-            $detailDatas['pageData'] = $fData['pageData'] ?? [];
+            $detailDatas['pageData'] = $detailDatas['pageData'] ?? ($fData['pageData'] ?? []);
             $detailDatas['baseData'] = $fData['baseData'] ?? [];
         }
 
