@@ -64,13 +64,5 @@ if (isset($pageData['url'])) {
   @endif
   <div class="ajax-modal modal container hide fade" tabindex="-1"></div>
 
-  @if (isset($datas['footerDatas']))
-  <div class="container">
-    <div class="row-fluid margin-bottom-20">
-      @include('knowledge.components._simpleTable', ['simpleTableDatas' => $datas['footerDatas'], 'isMobile' => $isMobile])
-    </div>
-  </div>
-  @endif
-
 </div>
 @endsection

@@ -47,9 +47,16 @@ class CountryCatalog extends AbstractModel
         }
         //print_R($this->toArray());
         if ($this->bigsort == 'region') {
-            $path = '国家和地区/';
-            $path .= $this->parentInfo ? $this->parentInfo['name'] . '/' : '';
-            $path .= $this->name . '/base';
+            $path = '国家地区/';
+            $parentInfo = $this->parentInfo;
+            if (!empty($parentInfo)) {
+                $ppInfo = $parentInfo->parentInfo;
+                if ($ppInfo) {
+                    $path .=  $ppInfo['name'] . '/';
+                }
+                $path .= $parentInfo['name'] . '/';
+            }
+            $path .= $this->name;
             return $path;
         }
         return '';

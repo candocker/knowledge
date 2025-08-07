@@ -15,7 +15,6 @@ class KnowledgeController extends AbstractController
     {
         $navs = require(self_app_path($this->getAppCode(), '/resources/formatdata/nav.php'));
         $datas = $navs;
-        $datas['footerDatas'] = require(self_app_path($this->getAppCode(), '/resources/formatdata/footerDatas.php'));
         if (empty($navCode)) {
             $dDatas = require(self_app_path($this->getAppCode(), '/resources/formatdata/homedetail.php'));
             $dDatas['viewCode'] = 'simple';
@@ -108,7 +107,6 @@ class KnowledgeController extends AbstractController
         $datas['detailDatas'] =$detailDatas; 
 
         $datas['isMobile'] = $isMobile;
-        $datas['footerDatas'] = require(self_app_path($this->getAppCode(), '/resources/formatdata/footerDatas.php'));
         //print_r($datas);
         return $this->customView('develop-single', $datas);
     }

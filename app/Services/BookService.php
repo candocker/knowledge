@@ -81,8 +81,8 @@ class BookService extends AbstractService
     public function getRelateChapters($chapterInfo)
     {
         $where = ['book_code' => $chapterInfo['book_code']];
-        $pre = $this->getModelObj('chapter')->where($where)->where('serial', '<', $chapterInfo['serial'])->orderBy('serial', 'desc')->first();
-        $next = $this->getModelObj('chapter')->where($where)->where('serial', '>', $chapterInfo['serial'])->orderBy('serial', 'asc')->first();
+        $pre = $this->getModelObj('chapter')->where($where)->where('code', '<>', '')->where('serial', '<', $chapterInfo['serial'])->orderBy('serial', 'desc')->first();
+        $next = $this->getModelObj('chapter')->where($where)->where('code', '<>', '')->where('serial', '>', $chapterInfo['serial'])->orderBy('serial', 'asc')->first();
         return [
             'pre' => $pre ? $pre->toArray() : [],
             'next' => $next ? $next->toArray() :[],
