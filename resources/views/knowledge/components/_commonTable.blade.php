@@ -20,7 +20,7 @@ $formatedExtDatas = [];
   <div class="portlet-body" style="overflow: hidden">
       <h4 style="display: flex; justify-content: center; align-items: center;"><em>{!!$tData['name']!!}</em></h4>
     @if (isset($tData['brief']))<p class="page-title" style="text-align: center; margin-top:0px;color:red; font-weight:normal; font-style:oblique;"> <small>{!!$tData['brief']!!}</small></p>@endif
-    <table class="table table-striped table-bordered table-hover table-advance">
+    <table class="table table-striped table-bordered table-hover table-advance table-condensed">
       <thead>
         <tr>
           @php $fExts = []; if (isset($tTitles['fExts'])) { $fExts = $tTitles['fExts']; unset($tTitles['fExts']); } @endphp

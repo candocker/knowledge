@@ -19,4 +19,14 @@ class BookVolume extends AbstractModel
     {
         return $this->hasMany(BookPublish::class, 'book_volume_id', 'id');
     }
+
+    public function _formatBaseData($isMobile)
+    {
+        $pTitle = $this->name;
+        $result = [
+            'tdkData' => ['title' => $this->name, 'description' => $this->description],
+            'pageData' => ['title' => $pTitle, 'brief' => $this->brief],
+        ];
+        return $result;
+    }
 }

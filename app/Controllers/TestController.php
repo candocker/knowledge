@@ -153,6 +153,15 @@ class TestController extends AbstractController
             $sMark = 'span';
             $sMark = 'td';
             $crawler->filter($sMark)->each(function ($subCrawler) use (& $data, & $i, $titles) {
+                $text = $subCrawler->html();
+                $text = strip_tags($text, '<a>');
+                $text = str_replace(['class="innerLink_QMCk5" ', ' target="_blank" data-from-module=""', '?fromModule=lemma_inlink', '/item'], ['', '', '', 'https://baike.baidu.com/item'], $text);
+                $text = urldecode($text);
+                $title = $titles[$i] ?? '';
+                $data[$title] = $text;
+                $i++;
+                return ;
+
                 //echo $node->html();
                 $aDom = $subCrawler->filter('a');
                 $url = '';
@@ -203,6 +212,9 @@ class TestController extends AbstractController
             echo "            'begin_end' => '{$nameCard}-{$name} 年',\n";
             echo "            'name_english' => '',\n";
             echo "            'major' => '{$brief}',\n";
+            //echo "            'name' => '{$beginEnd}',\n";
+            //echo "            'capital' => '{$nameCard}',\n";
+            //echo "            'address' => '{$name}',\n";
             echo "        ],\n";
         }
         echo $str;exit();
