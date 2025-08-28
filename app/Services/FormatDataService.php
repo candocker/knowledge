@@ -5,6 +5,33 @@ namespace ModuleKnowledge\Services;
 
 class FormatDataService extends AbstractService
 {
+    public function dealBook($params)
+    {
+        $catalogCode = $params['catalog_code'] ?? '';
+        $bigInfos = $this->getModelObj('bookVolume')->where(['catalog_code' => $catalogCode])->get();
+        $str = '';
+        foreach ($bigInfos as $bigInfo) {
+            $infos = $this->getModelObj('bookListing')->where('catalog_volume_id', $bigInfo['id'])->orderBy('serial')->get();
+            foreach ($infos as $info) {
+                $book = $info->bookInfo;
+                $code = $book['code'];
+                $name = "<a href=\"/wiki-book-{$code}.html\">{$book['name']}</a>";
+                $author = $book->authorData();
+                $authorName = '';
+                if ($author && $author->name) {
+                    $authorName = "<a href=\"/wiki-figure-{$author['code']}.html\">{$author['name']}</a>";
+                }
+                $str .= "        [\n"
+                    . "            'name' => '{$name}',\n"
+                    //. "            'author' => '{$authorName}',\n"
+                    . "            'major' => '',\n"
+                    . "        ],\n";
+            }
+        }
+        echo $str;
+        exit();
+    }
+
     public function dealEmperor($params)
     {
         $dynasty = $params['dynasty'] ?? '';

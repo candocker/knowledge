@@ -14,6 +14,24 @@ $bodyClasses = [
 @yield('dynamicMeta')
 @include('layouts.website._header', ['layoutElem' => $layoutElem])
 @yield('header')
+<style>
+.special-section {
+  /*background-color:#e0e2ec
+  background-color:#82eeff;
+  background-color:#c4d5df;
+  background-color:#eed8dd;*/
+  background-color:#f5ecee;
+  color:#ba1683;
+}
+.mobile .sub-section {
+  font-size:10px;
+  color:green;
+}
+.sub-section {
+  font-size:16px;
+  color:green;
+}
+</style>
 </head>  
 <body @yield('bodyClass')>
     @include('layouts.website._loader-mobile', ['layoutElem' => $layoutElem])

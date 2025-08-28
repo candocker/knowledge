@@ -72,8 +72,10 @@ return [
             'name' => '历史',
             'subDatas' => [
                 'zgdynasty' => ['code' => 'zgdynasty', 'name' => '中国断代史'],
-                'bigcountry' => ['code' => 'bigcountry', 'name' => '大国历史'],
+                //'bigcountry' => ['code' => 'bigcountry', 'name' => '大国历史'],
                 'gdempire' => ['code' => 'gdempire', 'name' => '古代帝国'],
+                'hronicle' => ['code' => 'hronicle', 'name' => '编年史'],
+                'humanhistory' => ['code' => 'humanhistory', 'name' => '人史'],
                 //'zgemperor' => ['code' => 'zgemperor', 'name' => '历代帝王'],
                 //'zggeneral' => ['code' => 'zggeneral', 'name' => '战争和将领'],
                 //'zgminister' => ['code' => 'zgminister', 'name' => '历代显贵'],
@@ -95,6 +97,7 @@ return [
         'region' => [
             'name' => '区域',
             'subDatas' => [
+                'gjorganization' => ['code' => 'gjorganization', 'name' => '国际组织'],
                 'worldregion' => ['code' => 'worldregion', 'name' => '世界政区'],
                 //'situation' => ['code' => 'situation', 'name' => '局势'],
                 //'trend' => ['code' => 'trend', 'name' => '趋势'],
