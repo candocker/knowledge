@@ -5,6 +5,24 @@ namespace ModuleKnowledge\Services;
 
 class FormatDataService extends AbstractService
 {
+    public function dealChapter($params)
+    {
+        $bookCode = $params['book_code'] ?? '';
+        $str = '';
+        $infos = $this->getModelObj('chapter')->where('book_code', $bookCode)->where('code', '<>', '')->orderBy('serial')->get();
+        $i = 1;
+        foreach ($infos as $info) {
+            $str .= "        [\n"
+                . "            'serial' => '{$i}',\n"
+                . "            'name' => '{$info['name']}',\n"
+                . "            'major' => '{$info['brief']}',\n"
+                . "        ],\n";
+            $i++;
+        }
+        echo $str;
+        exit();
+    }
+
     public function dealBook($params)
     {
         $catalogCode = $params['catalog_code'] ?? '';

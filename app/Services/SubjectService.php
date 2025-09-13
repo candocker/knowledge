@@ -162,7 +162,10 @@ class SubjectService extends AbstractService
 
             'usasession' => $base . '大国和组织/美国/总统/session.php',
 
-            'worldregion' => $base. '国家地区/base.php',
+            'worldregion' => $base . '国家地区/base.php',
+            'hronicle' => $base . '编年史/base.php',
+            'humanhistory' => $base . '人史/base.php',
+            'gjorganization' => $base . '大国和组织/国际组织/base.php',
 
             'luxunworks' => $base . 'books/鲁迅著作/works.php',
             'scholarism' => $base . 'books/学术名著/scholarism.php',
