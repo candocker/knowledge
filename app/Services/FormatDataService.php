@@ -9,15 +9,48 @@ class FormatDataService extends AbstractService
     {
         $bookCode = $params['book_code'] ?? '';
         $str = '';
-        $infos = $this->getModelObj('chapter')->where('book_code', $bookCode)->where('code', '<>', '')->orderBy('serial')->get();
+        //$infos = $this->getModelObj('chapter')->where('book_code', $bookCode)->where('code', '<>', '')->orderBy('serial')->get();
+        $infos = $this->getModelObj('chapter')->where('book_code', $bookCode)->orderBy('serial')->get();
         $i = 1;
+        $namePre = '';
+        $names = [
+            '国风' => '15',
+            '小雅' => '8',
+            '大雅' => '3',
+            '颂' => '3',
+        ];
+        $nameFulls = [
+            '国风' => '<a href="https://baike.baidu.com/item/国风/4588">国风</a>',
+            '小雅' => '<a href="https://baike.baidu.com/item/诗经·小雅/4061775">小雅</a>',
+            '大雅' => '<a href="https://baike.baidu.com/item/诗经·大雅/6000551">大雅</a>',
+            '颂' => '<a href="https://baike.baidu.com/item/颂/20121717">颂</a>',
+        ];
+        $j = 0;
         foreach ($infos as $info) {
-            $str .= "        [\n"
-                . "            'serial' => '{$i}',\n"
-                . "            'name' => '{$info['name']}',\n"
-                . "            'major' => '{$info['brief']}',\n"
-                . "        ],\n";
-            $i++;
+            if ($info['chapter_type'] == 'top') {
+                //$number = $names[$info['name']];
+                $namePre = $info['name'];
+                $j = 1;
+                continue;
+            }
+            if (empty($info['code'])) {
+                $str .= "    ],\n";
+                $str .= "],\n";
+                $str .= "'yijing_{$info['id']}' => [\n";
+                $str .= "    'name' => '<a href=\"h\">{$info['name']}</a>·{$namePre}',\n";
+                $str .= "    'titles' => ['serial' => '序号', 'name' => '名称', 'major' => '简介'],\n";
+                $str .= "    'fixTitleField' => 'name',\n";
+                $str .= "    'brief' => '',\n";
+                $str .= "    'baseInfos' => [\n";
+                $j++;
+            } else {
+                $str .= "        [\n"
+                    . "            'serial' => '{$i}',\n"
+                    . "            'name' => '<a href=\"h\">{$info['name']}</a>',\n"
+                    . "            'major' => '{$info['brief']}',\n"
+                    . "        ],\n";
+                $i++;
+            }
         }
         echo $str;
         exit();
@@ -218,5 +251,38 @@ class FormatDataService extends AbstractService
         var_dump($i);
         echo $str;
         exit();
+    }
+
+    public function dealAnnals()
+    {
+        $annals = require(self_app_path($this->getAppCode(), '/resources/formatdata/annals.php'));
+        //print_R($annals);
+        $results = [];
+        $base = $this->config->get('knowledge.knowledge_path') . '编年史/';
+        foreach ($annals as $path => $elems) {
+            foreach ($elems as $eKey => $elem) {
+                $tmp = explode('_', $elem);
+                $start = $tmp[0];
+                $end = $tmp[1];
+                $end = $end === '至今' ? date('Y') : $end;
+                $start = str_replace('BC', '-', $start);
+                $end = str_replace('BC', '-', $end);
+                $start = intval($start);
+                $end = intval($end);
+                for ($i = $start; $i <= $end; $i++) {
+                    //var_dump($i);
+                    $iPath = str_replace('-', 'BC', strval($i));
+                    $fPath = $base . $path . '/';
+                    $fPath .= is_string($eKey) ? '' : $elem . '/';
+                    $fPath .= $iPath . '.php';
+                    $results[$i] = $fPath;
+                }
+                //var_dump($start);
+                //var_dump($end);
+            }
+        }
+        $this->getRepositoryObj('passport-user')->setPointCaches('annals_details', $results);
+        return true;
+        print_r($results);
     }
 }

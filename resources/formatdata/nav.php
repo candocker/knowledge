@@ -75,7 +75,7 @@ return [
                 //'bigcountry' => ['code' => 'bigcountry', 'name' => '大国历史'],
                 'gdempire' => ['code' => 'gdempire', 'name' => '古代帝国'],
                 'hronicle' => ['code' => 'hronicle', 'name' => '编年史'],
-                'humanhistory' => ['code' => 'humanhistory', 'name' => '人史'],
+                'subject' => ['code' => 'subject', 'name' => '专辑'],
                 //'zgemperor' => ['code' => 'zgemperor', 'name' => '历代帝王'],
                 //'zggeneral' => ['code' => 'zggeneral', 'name' => '战争和将领'],
                 //'zgminister' => ['code' => 'zgminister', 'name' => '历代显贵'],

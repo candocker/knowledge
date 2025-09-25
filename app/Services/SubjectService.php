@@ -97,6 +97,14 @@ class SubjectService extends AbstractService
     {
         if ($type == 'special') {
             $detailDatas = require($this->_specialKnowledgePath($code));
+        } else if ($type == 'annals') {
+            $annalsDetails = $this->getRepositoryObj('passport-user')->getPointCaches('annals_details');
+            $code = str_replace('BC', '-', $code);
+            $aFile = $annalsDetails[$code] ?? '';
+            if (empty($aFile) || !file_exists($aFile)) {
+                $this->resource->throwException(400, '信息不存在-' . $code);
+            }
+            $detailDatas = require($annalsDetails[$code]);
         } else {
             $info = $this->getPointKnowledgeInfo($type, $code);
             $knowledgePath = $info->full_knowledge_path;
@@ -116,13 +124,13 @@ class SubjectService extends AbstractService
             if (file_exists($fFile)) {
                 $detailDatas = require($fFile);
             }
-            $detailDatas = $this->formatDetailDatas($detailDatas, $isMobile);
-
             $fData = $info->formatBaseData($detailDatas['baseData'] ?? [], $isMobile);
-            $detailDatas['tdkData'] = $fData['tdkData'] ?? [];
-            $detailDatas['pageData'] = $detailDatas['pageData'] ?? ($fData['pageData'] ?? []);
-            $detailDatas['baseData'] = $fData['baseData'] ?? [];
         }
+        $detailDatas = $this->formatDetailDatas($detailDatas, $isMobile);
+
+        $detailDatas['tdkData'] = $fData['tdkData'] ?? [];
+        $detailDatas['pageData'] = $detailDatas['pageData'] ?? ($fData['pageData'] ?? []);
+        $detailDatas['baseData'] = $fData['baseData'] ?? [];
 
         $pData = $this->getPointSubjectDatas(['code' => $code], $isMobile, $detailDatas);
         $detailDatas = array_merge($detailDatas, $pData);
@@ -164,7 +172,7 @@ class SubjectService extends AbstractService
 
             'worldregion' => $base . '国家地区/base.php',
             'hronicle' => $base . '编年史/base.php',
-            'humanhistory' => $base . '人史/base.php',
+            'subject' => $base . '专辑/base.php',
             'gjorganization' => $base . '大国和组织/国际组织/base.php',
 
             'luxunworks' => $base . 'books/鲁迅著作/works.php',

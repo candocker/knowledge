@@ -63,6 +63,23 @@ class ReadController extends AbstractController
         return $this->customView('detail', $datas);
     }
 
+    public function bookDeep($deepCode)
+    {
+        $bookCode = $deepCode;
+        $chapterCode = '';
+        if (strpos($deepCode, '-')) {
+            $tmp = explode('-', $deepCode);
+            $bookCode = $tmp[0];
+            $chapterCode = $tmp[1];
+        }
+        $datas = $this->getBookServiceObj()->getDeepDetail($bookCode, $chapterCode);
+        $bookData = $datas['bookData'];
+
+        $datas['bookCode'] = $bookCode;
+
+        return $this->customView('deep', $datas);
+    }
+
     protected function getRelateInfo($sort, $bookCode, $code, $types = ['pre', 'next'])
     {
         $chapters = $this->getChapterInfos($sort, $bookCode);

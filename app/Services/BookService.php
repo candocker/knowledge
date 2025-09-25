@@ -59,6 +59,7 @@ class BookService extends AbstractService
             exit('no book');
         }
         $bookData = $bookInfo->toArray();
+        $bookData['full_path'] = $bookInfo->fullPath;
         if ($bookData['is_ancientread']) {
             $extSettings = require(self_app_path($this->getAppCode(), '/resources/formatdata/ancientbook.php'));
             $bookData = $extSettings[$bookData['code']] ? array_merge($extSettings[$bookData['code']], $bookData) : $bookData;
@@ -115,6 +116,18 @@ class BookService extends AbstractService
         $datas['relateChapters'] = $this->getRelateChapters($chapterInfo);
         $datas['tdkData']['title'] = $datas['currentChapterData']['name'] . '-' . $datas['bookData']['name'];
         //print_r($datas);exit();
+        return $datas;
+    }
+
+    public function getDeepDetail($bookCode, $chapterCode)
+    {
+        $datas = $this->_bookDetail($bookCode);
+
+        $file = $datas['bookData']['full_path'] . 'deep/';
+        $file .= $chapterCode ? $chapterCode . '.php' : 'all.php';
+        $contents = require($file);
+        $datas['contents'] = $contents;
+        $datas['tdkData']['title'] = $datas['bookData']['name'] . '-深度阅读';
         return $datas;
     }
 
