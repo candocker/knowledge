@@ -101,10 +101,24 @@ class SubjectService extends AbstractService
             $annalsDetails = $this->getRepositoryObj('passport-user')->getPointCaches('annals_details');
             $code = str_replace('BC', '-', $code);
             $aFile = $annalsDetails[$code] ?? '';
-            if (empty($aFile) || !file_exists($aFile)) {
+            if (empty($aFile)) {
+                $this->resource->throwException(400, '信息不存在-' . $code);
+            }
+            $autoCreate = request()->input('force_create_file');
+            if (!file_exists($aFile) && $autoCreate) {
+                $sFile = $this->config->get('knowledge.knowledge_path') . 'sourcefile/' . $autoCreate . '.php';
+                if (file_exists($sFile)) {
+                    file_put_contents($aFile, file_get_contents($sFile));
+                }
+            }
+            if (!file_exists($aFile)) {
                 $this->resource->throwException(400, '信息不存在-' . $code);
             }
             $detailDatas = require($annalsDetails[$code]);
+            $fData['tdkData'] = [
+                'title' => strip_tags($detailDatas['pageData']['title'] . '-' . $detailDatas['pageData']['brief']),
+                'description' => strip_tags($detailDatas['pageData']['brief']),
+            ];
         } else {
             $info = $this->getPointKnowledgeInfo($type, $code);
             $knowledgePath = $info->full_knowledge_path;
@@ -113,7 +127,7 @@ class SubjectService extends AbstractService
             if (!empty($knowledgePath)) {
                 $fFile = $knowledgePath . '.php';
                 $autoCreate = request()->input('force_create_file');
-                if ($autoCreate) {
+                if (!file_exists($fFile) && $autoCreate) {
                     $sFile = $this->config->get('knowledge.knowledge_path') . 'sourcefile/' . $autoCreate . '.php';
                     if (file_exists($sFile)) {
                         file_put_contents($fFile, file_get_contents($sFile));

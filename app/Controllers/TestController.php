@@ -130,6 +130,7 @@ class TestController extends AbstractController
 
     public function _testKing2()
     {
+        $showAnnals = request()->input('show_annals');
         $file = '/tmp/a.html';
         $crawler = new Crawler();
         $content = file_get_contents($file);
@@ -139,23 +140,29 @@ class TestController extends AbstractController
         $titles = ['dynastic_title', 'posthumous_title', 'name', 'office_start_end', 'eraname', 'mausoleum', 'brief', 'birth_death', 'brief2'];
         $titles = ['serial', 'name', 'name_card', 'brief', 'country_code', 'brief2', 'brief3', 'capital', 'brief4'];
         //$titles = ['name', 'name_card', 'brief', 'country_code', 'brief2', 'brief3', 'capital', 'brief4'];
-        $titles = ['begin_end', 'name_card', 'name', 'brief', 'brief2', 'brief3', 'capital', 'brief4'];
+        $titles = ['begin_end', 'name_card', 'name', 'brief', 'brief2', 'brief3', 'capital', 'brief4', 'brief5', 'brief6', 'brief7', 'brief8', 'brief9', 'brief10', 'brief11', 'brief12', 'brief13', 'brief14', 'brief15', 'brief16', 'brief17', 'brief18', 'brief19', 'brief20', 'brief21', 'brief22', 'brief23'];
         $fMark = '.itemWrap_q4x7d';
         $fMark = '.para__C9Dx';
         $fMark = 'li';
         $fMark = '.para_WuljG';
         $fMark = '.para_Fx2su';
         $fMark = 'tr';
-        $crawler->filter($fMark)->each(function ($crawler) use (& $datas, $titles) {
+        if ($showAnnals) {
+            $fMark = '.para_rjKcx';
+        }
+        $crawler->filter($fMark)->each(function ($crawler) use (& $datas, $titles, $showAnnals) {
             $data = [];
             $i = 0;
             $sMark = '.item-title_WzMib';
-            $sMark = 'span';
+            //$sMark = 'span';
             $sMark = 'td';
+            if ($showAnnals) {
+                $sMark = '.text_QYXSV';
+            }
             $crawler->filter($sMark)->each(function ($subCrawler) use (& $data, & $i, $titles) {
                 $text = $subCrawler->html();
                 $text = strip_tags($text, '<a>');
-                $text = str_replace(['class="innerLink_QMCk5" ', ' target="_blank" data-from-module=""', '?fromModule=lemma_inlink', '/item'], ['', '', '', 'https://baike.baidu.com/item'], $text);
+                $text = str_replace(['class="innerLink_7hUCa" ', ' target="_blank" data-from-module', 'class="innerLink_QMCk5" ', ' target="_blank" data-from-module=""', '?fromModule=lemma_inlink', '/item'], ['', '',  '', '', '', 'https://baike.baidu.com/item'], $text);
                 $text = urldecode($text);
                 $title = $titles[$i] ?? '';
                 $data[$title] = $text;
@@ -187,7 +194,10 @@ class TestController extends AbstractController
             }
         });
         //$datas = array_reverse($datas);
-        //var_export($datas);exit();
+        var_export($datas);exit();
+        if ($showAnnals) {
+            return $this->_formatAnnalsDatas($datas);
+        }
         $sql = "INSERT INT `wp_country` (`code`, `name`, `baidu_url`, `sort`) VALUES \n";
         $str = '';
 
@@ -208,10 +218,10 @@ class TestController extends AbstractController
                 $fName = "<a href=\"{$baiduUrl}\">{$fName}</a>";
             }
             echo "        [\n";
-            echo "            'name' => '{$fName}',\n";
-            echo "            'begin_end' => '{$nameCard}-{$name} 年',\n";
-            echo "            'name_english' => '',\n";
-            echo "            'major' => '{$brief}',\n";
+            echo "            'date' => '{$fName}',\n";
+            //echo "            'begin_end' => '{$nameCard}-{$name} 年',\n";
+            //echo "            'name_english' => '',\n";
+            echo "            'major' => '{$nameCard}',\n";
             //echo "            'name' => '{$beginEnd}',\n";
             //echo "            'capital' => '{$nameCard}',\n";
             //echo "            'address' => '{$name}',\n";
@@ -220,6 +230,31 @@ class TestController extends AbstractController
         echo $str;exit();
         echo $sql;exit();
         //print_r($datas);
+        exit();
+    }
+
+    public function _formatAnnalsDatas($datas)
+    {
+        //print_r($datas);
+        foreach ($datas as $data) {
+            $brief = implode('', $data);
+            $brief = str_replace(['class="innerLink_7hUCa" ', '当地时间', ' target="_blank" data-from-module'], ['', '', ''], $brief);
+            //var_dump($brief);
+            if (strpos($brief, '——') === false) {
+                $name = '';
+                $major = $brief;
+            } else {
+                $tmp = explode('——', $brief);
+                $name = $tmp[0];
+                unset($tmp[0]);
+                $major = implode('', $tmp);
+            }
+            echo "        [\n";
+            echo "            'name' => '{$name}',\n";
+            echo "            'major' => '{$major}',\n";
+            echo "        ],\n";
+            //var_dump($name . '---' . $major);
+        }
         exit();
     }
 
