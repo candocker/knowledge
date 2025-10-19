@@ -149,6 +149,9 @@ class TestController extends AbstractController
         $fMark = 'tr';
         if ($showAnnals) {
             $fMark = '.para_rjKcx';
+            $fMark = '.para_ZDNLn';
+            $fMark = '.para_Y9ue8';
+            $fMark = '.para_foMcK';
         }
         $crawler->filter($fMark)->each(function ($crawler) use (& $datas, $titles, $showAnnals) {
             $data = [];
@@ -158,11 +161,14 @@ class TestController extends AbstractController
             $sMark = 'td';
             if ($showAnnals) {
                 $sMark = '.text_QYXSV';
+                $sMark = '.text_zBf3n';
+                $sMark = '.text_afkPS';
+                $sMark = '.text_wPXe7';
             }
             $crawler->filter($sMark)->each(function ($subCrawler) use (& $data, & $i, $titles) {
                 $text = $subCrawler->html();
                 $text = strip_tags($text, '<a>');
-                $text = str_replace(['class="innerLink_7hUCa" ', ' target="_blank" data-from-module', 'class="innerLink_QMCk5" ', ' target="_blank" data-from-module=""', '?fromModule=lemma_inlink', '/item'], ['', '',  '', '', '', 'https://baike.baidu.com/item'], $text);
+                $text = str_replace(['="summary"', 'class="innerLink_WLbaT" ', 'class="innerLink_qvfoC" ', 'class="innerLink_7hUCa" ', ' target="_blank" data-from-module', 'class="innerLink_QMCk5" ', ' target="_blank" data-from-module=""', '?fromModule=lemma_inlink', '/item'], ['', '', '', '', '',  '', '', '', 'https://baike.baidu.com/item'], $text);
                 $text = urldecode($text);
                 $title = $titles[$i] ?? '';
                 $data[$title] = $text;
@@ -194,10 +200,12 @@ class TestController extends AbstractController
             }
         });
         //$datas = array_reverse($datas);
-        var_export($datas);exit();
+        //var_export($datas);exit();
         if ($showAnnals) {
             return $this->_formatAnnalsDatas($datas);
         }
+            //return $this->_formatAnnalsDatas($datas);
+        //return $this->_formatPointDealDatas($datas);
         $sql = "INSERT INT `wp_country` (`code`, `name`, `baidu_url`, `sort`) VALUES \n";
         $str = '';
 
@@ -233,18 +241,130 @@ class TestController extends AbstractController
         exit();
     }
 
+    public function _formatPointDealDatas($datas)
+    {
+        //print_r($datas);
+        $currentDate = '';
+        foreach ($datas as $data) {
+            $date = $data['begin_end'];
+            if (strpos($date, '月') !== false && strpos($date, '鲍月华') === false) {
+                //var_dump($date);
+                $currentDate = $date;
+                unset($data['begin_end']);
+                $name = $data['name_card'];
+                if (isset($data['brief'])) {
+                    $name .= " ({$data['brief']})";
+                }
+                $major = $data['name'];
+            } else {
+                $name = $data['begin_end'];
+                if (isset($data['name'])) {
+                    $name .= " ({$data['name']})";
+                }
+                $major = $data['name_card'];
+            }
+            echo "        [\n";
+            echo "            'date' => '{$currentDate}',\n";
+            echo "            'name' => '{$name}',\n";
+            echo "            'major' => '{$major}',\n";
+            echo "        ],\n";
+        }
+        exit();
+        $month = '8';
+        $results = [];
+        $lastDate = '1日';
+        foreach ($datas as $data) {
+            if (!isset($data['begin_end']) || empty($data['begin_end'])) {
+                print_R($data);
+                continue;
+            }
+            if (!isset($data['name_card']) || empty($data['name_card'])) {
+                //print_R($data);
+                continue;
+            }
+            $date = str_replace('：', '', $data['begin_end']);
+            //var_dump($date);
+            if ($lastDate != '1日' && $date == '1日') {
+                $month++;
+            }
+            $lastDate = $date;
+            $key = $month . '月' . $date;
+            unset($data['begin_end']);
+            $major = implode('', $data);
+            if (!isset($results[$key])) {
+                $results[$key] = $major;
+            } else {
+                $results[$key] .= '、' . $major;
+            }
+        }
+        //print_r($results);exit();
+        foreach ($results as $key => $value) {
+                echo "        [\n";
+                echo "            'date' => '{$key}',\n";
+                echo "            'major' => '{$value}',\n";
+                echo "        ],\n";
+        }
+        exit();
+        //print_r($datas);
+        $cDates = $results = [];
+        foreach ($datas as $data) {
+            if (!isset($data['begin_end']) || !in_array($data['begin_end'], ['日期', '逝世人物'])) {
+                print_r($data);
+                continue;
+            }
+            if ($data['begin_end'] == '日期') {
+                $cDates = [];
+                foreach ($data as $key => $date) {
+                    if ($key == 'begin_end') {
+                        continue;
+                    }
+                    $cDates[$key] = ['date' => $date];
+                }
+            }
+            if ($data['begin_end'] == '逝世人物') {
+                foreach ($data as $key => $value) {
+                    if ($key == 'begin_end') {
+                        continue;
+                    }
+                    $cDates[$key]['major'] = $value;
+                }
+                $results[] = $cDates;
+            }
+            //print_r($data);exit();
+        }
+        exit();
+        foreach ($results as $rData) {
+            foreach ($rData as $pData) {
+                //print_r($pData);exit();
+                if ($pData['date'] == '-' || $pData['major'] == '-' || $pData['major'] == '') {
+                    //print_r($pData);
+                    continue;
+                }
+                //print_r($pData);
+                echo "        [\n";
+                echo "            'date' => '月{$pData['date']}日',\n";
+                echo "            'major' => '{$pData['major']}',\n";
+                echo "        ],\n";
+            }
+        }
+        //print_r($results);
+        exit();
+    }
+
     public function _formatAnnalsDatas($datas)
     {
         //print_r($datas);
         foreach ($datas as $data) {
             $brief = implode('', $data);
-            $brief = str_replace(['class="innerLink_7hUCa" ', '当地时间', ' target="_blank" data-from-module'], ['', '', ''], $brief);
+            $brief = str_replace(['class="innerLink_7hUCa" ', 'class="innerLink_pp6qm" ', '当地时间', ' target="_blank" data-from-module'], ['', '', '', ''], $brief);
             //var_dump($brief);
-            if (strpos($brief, '——') === false) {
+            if (strpos($brief, '——') === false) {// && strpos($brief, '：') === false) {
                 $name = '';
                 $major = $brief;
             } else {
-                $tmp = explode('——', $brief);
+                $posStr = strpos($brief, '：') !== false ? '：' : '——';
+                $posStr = '——';
+                $tmp = explode($posStr, $brief);
                 $name = $tmp[0];
                 unset($tmp[0]);
                 $major = implode('', $tmp);
