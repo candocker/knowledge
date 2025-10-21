@@ -5,6 +5,8 @@ namespace ModuleKnowledge\Services;
 
 class FormatDataService extends AbstractService
 {
+    use FormatAnnalTrait;
+
     public function dealChapter($params)
     {
         $bookCode = $params['book_code'] ?? '';
@@ -251,38 +253,5 @@ class FormatDataService extends AbstractService
         var_dump($i);
         echo $str;
         exit();
-    }
-
-    public function dealAnnals()
-    {
-        $annals = require(self_app_path($this->getAppCode(), '/resources/formatdata/annals.php'));
-        //print_R($annals);
-        $results = [];
-        $base = $this->config->get('knowledge.knowledge_path') . '编年史/';
-        foreach ($annals as $path => $elems) {
-            foreach ($elems as $eKey => $elem) {
-                $tmp = explode('_', $elem);
-                $start = $tmp[0];
-                $end = $tmp[1];
-                $end = $end === '至今' ? date('Y') : $end;
-                $start = str_replace('BC', '-', $start);
-                $end = str_replace('BC', '-', $end);
-                $start = intval($start);
-                $end = intval($end);
-                for ($i = $start; $i <= $end; $i++) {
-                    //var_dump($i);
-                    $iPath = str_replace('-', 'BC', strval($i));
-                    $fPath = $base . $path . '/';
-                    $fPath .= is_string($eKey) ? '' : $elem . '/';
-                    $fPath .= $iPath . '.php';
-                    $results[$i] = $fPath;
-                }
-                //var_dump($start);
-                //var_dump($end);
-            }
-        }
-        $this->getRepositoryObj('passport-user')->setPointCaches('annals_details', $results);
-        return true;
-        print_r($results);
     }
 }

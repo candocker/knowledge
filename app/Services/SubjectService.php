@@ -114,11 +114,13 @@ class SubjectService extends AbstractService
             if (!file_exists($aFile)) {
                 $this->resource->throwException(400, '信息不存在-' . $code);
             }
+            $aPageData = $this->getAnnalPageData($code);
             $detailDatas = require($annalsDetails[$code]);
             $fData['tdkData'] = [
-                'title' => strip_tags($detailDatas['pageData']['title'] . '-' . $detailDatas['pageData']['brief']),
-                'description' => strip_tags($detailDatas['pageData']['brief']),
+                'title' => strip_tags($aPageData['title'] . '-' . $aPageData['brief']),
+                'description' => strip_tags($aPageData['brief']),
             ];
+            $detailDatas['pageData'] = $aPageData;
         } else {
             $info = $this->getPointKnowledgeInfo($type, $code);
             $knowledgePath = $info->full_knowledge_path;
@@ -149,6 +151,24 @@ class SubjectService extends AbstractService
         $pData = $this->getPointSubjectDatas(['code' => $code], $isMobile, $detailDatas);
         $detailDatas = array_merge($detailDatas, $pData);
         return $detailDatas;
+    }
+
+    public function getAnnalPageData($year)
+    {
+        $yearStr = $year < 0 ? '公元前' . abs($year) : $year;
+        $cnYear = 2697 + $year;
+        $lunarString = function_exists('getChineseYear') ? getChineseYear($year ?: 1) : '';
+        $eranameStr = function_exists('initEranameStr') ? initEranameStr($year ?: 1) : '';
+        $baikeDatas = $this->getRepositoryObj('passport-user')->getPointCaches('annals_baike');
+        $yBaike = $baikeDatas[$year] ?? '';
+        $title = $yBaike ? "<a href=\"{$yBaike}\">{$yearStr}年</a>" : $yearStr . '年';
+        $title .= "，黄帝纪年第{$cnYear}年。";
+        $pData = [
+            'title' => $title,
+            'brief' => "{$lunarString}{$eranameStr}",
+        ];
+        return $pData;
+
     }
 
     public function getPointKnowledgeInfo($type, $code)

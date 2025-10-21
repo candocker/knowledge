@@ -521,6 +521,8 @@ class TestController extends AbstractController
     public function _testFormatData()
     {
         $service = $this->getServiceObj('formatData');
+        //$service->_initCenturyData();exit();
+        //$service->formatBaikeDatas();exit();
         $sort = request()->input('sort');
         $method = 'deal' . ucfirst($sort);
         $params = request()->all();
