@@ -523,6 +523,7 @@ class TestController extends AbstractController
         $service = $this->getServiceObj('formatData');
         //$service->_initCenturyData();exit();
         //$service->formatBaikeDatas();exit();
+        //$service->_initAnnalsData();exit();
         $sort = request()->input('sort');
         $method = 'deal' . ucfirst($sort);
         $params = request()->all();

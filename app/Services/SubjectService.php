@@ -98,12 +98,8 @@ class SubjectService extends AbstractService
         if ($type == 'special') {
             $detailDatas = require($this->_specialKnowledgePath($code));
         } else if ($type == 'annals') {
-            $annalsDetails = $this->getRepositoryObj('passport-user')->getPointCaches('annals_details');
-            $code = str_replace('BC', '-', $code);
-            $aFile = $annalsDetails[$code] ?? '';
-            if (empty($aFile)) {
-                $this->resource->throwException(400, '信息不存在-' . $code);
-            }
+            $service = $this->getServiceObj('formatData');
+            $aFile = $service->getAnnalsFile($code);
             $autoCreate = request()->input('force_create_file');
             if (!file_exists($aFile) && $autoCreate) {
                 $sFile = $this->config->get('knowledge.knowledge_path') . 'sourcefile/' . $autoCreate . '.php';
@@ -115,7 +111,7 @@ class SubjectService extends AbstractService
                 $this->resource->throwException(400, '信息不存在-' . $code);
             }
             $aPageData = $this->getAnnalPageData($code);
-            $detailDatas = require($annalsDetails[$code]);
+            $detailDatas = require($aFile);
             $fData['tdkData'] = [
                 'title' => strip_tags($aPageData['title'] . '-' . $aPageData['brief']),
                 'description' => strip_tags($aPageData['brief']),
@@ -155,7 +151,13 @@ class SubjectService extends AbstractService
 
     public function getAnnalPageData($year)
     {
-        $yearStr = $year < 0 ? '公元前' . abs($year) : $year;
+        $pre = '';
+        if (strpos($year, 'BC') !== false) {
+            $year = str_replace('BC', '-', $year);
+            $pre = '公元前';
+        }
+        $year = intval($year);
+        $yearStr = $year < 0 ? $pre . abs($year) : $year;
         $cnYear = 2697 + $year;
         $lunarString = function_exists('getChineseYear') ? getChineseYear($year ?: 1) : '';
         $eranameStr = function_exists('initEranameStr') ? initEranameStr($year ?: 1) : '';

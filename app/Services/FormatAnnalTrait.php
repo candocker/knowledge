@@ -4,11 +4,34 @@ namespace ModuleKnowledge\Services;
 
 trait FormatAnnalTrait
 {
+    public function getAnnalsFile($year)
+    {
+        $pre = '';
+        if (strpos($year, 'BC') !== false) {
+            $year = str_replace('BC', '', $year);
+            $pre = 'BC';
+        }
+        $century = floor($year / 100) + 1;
+        $century = $pre . $century;
+        $ageNum = $year % 100;
+        $age = floor($ageNum / 10);
+        $base = $this->config->get('knowledge.knowledge_path') . '编年史/年表/';
+        return $file = $base . $century . '/' . $age . '/' . $year . '.php';
+    }
+
     public function dealAnnals()
     {
-        $annals = require(self_app_path($this->getAppCode(), '/resources/formatdata/annals.php'));
-        //print_R($annals);
+        $eranameDatas = $this->_initCenturyData();
+        $this->getRepositoryObj('passport-user')->setPointCaches('annals_eraname', $eranameDatas);
+        $baikeDatas = $this->formatBaikeDatas();
+        //print_R($baikeDatas);
+        $this->getRepositoryObj('passport-user')->setPointCaches('annals_baike', $baikeDatas);
+        //print_r($results);
+        return true;
+
         $results = [];
+        /*$annals = require(self_app_path($this->getAppCode(), '/resources/formatdata/annals.php'));
+        //print_R($annals);
         $base = $this->config->get('knowledge.knowledge_path') . '编年史/';
         foreach ($annals as $path => $elems) {
             foreach ($elems as $eKey => $elem) {
@@ -40,14 +63,8 @@ trait FormatAnnalTrait
                 //var_dump($end);
             }
         }
-        $this->getRepositoryObj('passport-user')->setPointCaches('annals_details', $results);
-        $eranameDatas = $this->_initCenturyData();
-        $this->getRepositoryObj('passport-user')->setPointCaches('annals_eraname', $eranameDatas);
-        $baikeDatas = $this->formatBaikeDatas();
-        //print_R($baikeDatas);
-        $this->getRepositoryObj('passport-user')->setPointCaches('annals_baike', $baikeDatas);
-        //print_r($results);
-        return true;
+        $results = ['noused'];
+        $this->getRepositoryObj('passport-user')->setPointCaches('annals_details', $results);*/
     }
 
     public function _initCenturyData()
@@ -180,5 +197,24 @@ trait FormatAnnalTrait
         file_put_contents($baikeFile, $str);
         //print_R($datas);
         return $datas;
+    }
+
+    public function _initAnnalsData()
+    {
+        $command = '';
+        $base = $this->config->get('knowledge.knowledge_path') . '编年史/年表/';
+        for ($i = -8; $i <= 21; $i++) {
+            if ($i == 0) {
+                continue;
+            }
+            $path = $i < 0 ? 'BC' . abs($i) : $i;
+            $fullPath = $base . $path;
+            $command .= "mkdir {$fullPath};\n";
+
+            for ($j = 0; $j <= 9; $j++) {
+                $command .= "mkdir {$fullPath}/{$j};\n";
+            }
+        }
+        echo $command;
     }
 }
