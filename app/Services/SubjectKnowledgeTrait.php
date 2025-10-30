@@ -80,6 +80,14 @@ trait SubjectKnowledgeTrait
         return $datas;
     }
 
+    public function _hroniclePointSubjectDatas($currentNav, $isMobile, & $baseDatas)
+    {
+        $service = $this->getServiceObj('formatData');
+        $fixDatas = $service->_initBaseData();
+        $baseDatas['commonFixTable1'] = $fixDatas;
+        return [];
+    }
+
     public function _zgculturePointSubjectDatas($currentNav, $isMobile, $baseDatas)
     {
         $data['simpleTable'][] = [

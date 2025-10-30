@@ -524,6 +524,8 @@ class TestController extends AbstractController
         //$service->_initCenturyData();exit();
         //$service->formatBaikeDatas();exit();
         //$service->_initAnnalsData();exit();
+        //$service->_initBaseData();exit();
+        //$service->getCenturyDatas($century);exit();
         $sort = request()->input('sort');
         $method = 'deal' . ucfirst($sort);
         $params = request()->all();

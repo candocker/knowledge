@@ -97,6 +97,9 @@ class SubjectService extends AbstractService
     {
         if ($type == 'special') {
             $detailDatas = require($this->_specialKnowledgePath($code));
+        } else if ($type == 'century') {
+            var_dump($code);exit();
+            $detailDatas = [];
         } else if ($type == 'annals') {
             $service = $this->getServiceObj('formatData');
             $aFile = $service->getAnnalsFile($code);
@@ -160,7 +163,11 @@ class SubjectService extends AbstractService
         $yearStr = $year < 0 ? $pre . abs($year) : $year;
         $cnYear = 2697 + $year;
         $lunarString = function_exists('getChineseYear') ? getChineseYear($year ?: 1) : '';
-        $eranameStr = function_exists('initEranameStr') ? initEranameStr($year ?: 1) : '';
+        $eranameStr = '';
+        $eranameDatas = $this->getRepositoryObj('passport-user')->getPointCaches('annals_eraname');
+        if (isset($eranameDatas[$year])) {
+            $eranameStr = implode('、', $eranameDatas[$year]);
+        }
         $baikeDatas = $this->getRepositoryObj('passport-user')->getPointCaches('annals_baike');
         $yBaike = $baikeDatas[$year] ?? '';
         $title = $yBaike ? "<a href=\"{$yBaike}\">{$yearStr}年</a>" : $yearStr . '年';
@@ -170,7 +177,6 @@ class SubjectService extends AbstractService
             'brief' => "{$lunarString}{$eranameStr}",
         ];
         return $pData;
-
     }
 
     public function getPointKnowledgeInfo($type, $code)
