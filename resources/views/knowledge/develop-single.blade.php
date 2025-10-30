@@ -40,6 +40,7 @@ if (isset($pageData['url'])) {
   @endif
 
   @foreach ($detailDatas as $ddKey => $ddDatas)
+  @if (!empty($ddDatas))
   @php if ($ddKey == 'simpleFixed') { $ddKey = $isMobile ? 'simpleFixed' : 'simpleTable'; } @endphp
   @php if (strpos($ddKey, 'commonFixTable') !== false) { $ddKey = $isMobile ? 'commonFixed' : 'commonTable'; } @endphp
   @php if (in_array($ddKey, ['simpleText', 'simpleText1', 'simpleText2'])) { $ddKey = 'simpleText'; } @endphp
@@ -55,6 +56,7 @@ if (isset($pageData['url'])) {
       @include('knowledge.components._' . $ddKey, [$ddKey . 'Datas' => $ddDatas, 'isMobile' => $isMobile])
     </div>
   </div>
+  @endif
   @endif
   @endforeach
 

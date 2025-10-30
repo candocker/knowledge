@@ -95,14 +95,11 @@ class SubjectService extends AbstractService
 
     public function getPointDetail($type, $code, $isMobile)
     {
+        $formatService = $this->getServiceObj('formatData');
         if ($type == 'special') {
             $detailDatas = require($this->_specialKnowledgePath($code));
-        } else if ($type == 'century') {
-            var_dump($code);exit();
-            $detailDatas = [];
         } else if ($type == 'annals') {
-            $service = $this->getServiceObj('formatData');
-            $aFile = $service->getAnnalsFile($code);
+            $aFile = $formatService->getAnnalsFile($code);
             $autoCreate = request()->input('force_create_file');
             if (!file_exists($aFile) && $autoCreate) {
                 $sFile = $this->config->get('knowledge.knowledge_path') . 'sourcefile/' . $autoCreate . '.php';
@@ -123,7 +120,6 @@ class SubjectService extends AbstractService
         } else {
             $info = $this->getPointKnowledgeInfo($type, $code);
             $knowledgePath = $info->full_knowledge_path;
-            //var_dump($knowledgePath);exit();
             $fFile = '';
             if (!empty($knowledgePath)) {
                 $fFile = $knowledgePath . '.php';
@@ -140,6 +136,7 @@ class SubjectService extends AbstractService
                 $detailDatas = require($fFile);
             }
             $fData = $info->formatBaseData($detailDatas['baseData'] ?? [], $isMobile);
+            $detailDatas = $info->wrapDetailDatas($detailDatas);
         }
         $detailDatas = $this->formatDetailDatas($detailDatas, $isMobile);
 
@@ -189,6 +186,7 @@ class SubjectService extends AbstractService
             'country' => ['mCode' => 'country', 'field' => 'code'],
             'countrycatalog' => ['mCode' => 'countryCatalog', 'field' => 'code'],
             'dynasty' => ['mCode' => 'dynasty', 'field' => 'code'],
+            'century' => ['mCode' => 'century', 'field' => 'code'],
         ];
         $param = $params[$type];
         //print_R([$param['field'] => $code]);

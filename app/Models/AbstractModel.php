@@ -45,6 +45,11 @@ class AbstractModel extends AbstractModelBase
         return [];
     }
 
+    public function wrapDetailDatas($detailDatas)
+    {
+        return $detailDatas;
+    }
+
     /*public function getDateinfo($type, $result = 'format')
     {
         $keyField = $this->getKeyField();
