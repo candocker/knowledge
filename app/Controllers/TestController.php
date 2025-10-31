@@ -522,7 +522,7 @@ class TestController extends AbstractController
     {
         $service = $this->getServiceObj('formatData');
         //$service->_initCenturyData();exit();
-        //$service->formatBaikeDatas();exit();
+        $service->formatBaikeDatas();exit();
         //$service->_initAnnalsData();exit();
         //$service->_initBaseData();exit();
         //$service->getCenturyDatas($century);exit();

@@ -8,18 +8,23 @@ class Century extends AbstractModel
 {
     protected $table = 'century';
     protected $guarded = ['id'];
+    public $timestamps = false;
 
     public function getFullKnowledgePathAttribute()
     {
         $base = $this->config->get('knowledge.knowledge_path');
-        return $base . $this->knowledge_path . '编年史/年表/' . $this->code . '/base';
+        return $base . '编年史/年表/' . $this->code . '/base';
     }
 
     public function _formatBaseData($isMobile)
     {
+        $pTitle = "<a href='/zghistory-hronicle'>编年史</a>-" . $this->name;
+        if (!empty($this->baidu_url)) {
+            $pTitle .= " (<a href='{$this->baidu_url}'>百科</a>)";
+        }
         $result = [
             'tdkData' => ['title' => $this->name, 'description' => $this->brief],
-            'pageData' => ['title' => $this->name, 'brief' => $this->brief],
+            'pageData' => ['title' => $pTitle, 'brief' => $this->brief],
         ];
         return $result;
     }
@@ -37,21 +42,23 @@ class Century extends AbstractModel
             '第一个十年', '第二个十年', '二十年代', '三十年代', '四十年代',
             '五十年代', '六十年代', '七十年代', '八十年代', '九十年代'
         ];
+        $eranameDatas = $this->getRepositoryObj('passport-user')->getPointCaches('annals_eraname');
         $infos = $this->getModelObj('chronology')->where(['century_code' => $this->code])->orderBy('orderlist')->get();
         $aDates = [];
         foreach ($infos as $info) {
             $year = abs($info->orderlist);
             $remain = $year % 100;
             $age = floor($remain / 10);
+            $eranameStr = isset($eranameDatas[$info->orderlist]) ? implode('、', $eranameDatas[$year]) : '';
             $aDatas[$age][] = [
                 'name' => "<a href='/wiki-annals-{$info['code']}.html'>{$info['name']}</a>",
-                'major' => $info['brief'],
+                'major' => $eranameStr,
             ];
         }
         foreach ($aDatas as $aKey => $infos) {
             $results['age_' . $aKey] = [
                 'name' => $ages[$aKey],
-                'titles' => ['name' => '年份', 'major' => '年代大事'],
+                'titles' => ['name' => '年份', 'major' => '王朝帝王'],
                 'fixTitleField' => 'name',
                 'brief' => '',
                 'baseInfos' => $infos,

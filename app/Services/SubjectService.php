@@ -98,25 +98,6 @@ class SubjectService extends AbstractService
         $formatService = $this->getServiceObj('formatData');
         if ($type == 'special') {
             $detailDatas = require($this->_specialKnowledgePath($code));
-        } else if ($type == 'annals') {
-            $aFile = $formatService->getAnnalsFile($code);
-            $autoCreate = request()->input('force_create_file');
-            if (!file_exists($aFile) && $autoCreate) {
-                $sFile = $this->config->get('knowledge.knowledge_path') . 'sourcefile/' . $autoCreate . '.php';
-                if (file_exists($sFile)) {
-                    file_put_contents($aFile, file_get_contents($sFile));
-                }
-            }
-            if (!file_exists($aFile)) {
-                $this->resource->throwException(400, '信息不存在-' . $code);
-            }
-            $aPageData = $this->getAnnalPageData($code);
-            $detailDatas = require($aFile);
-            $fData['tdkData'] = [
-                'title' => strip_tags($aPageData['title'] . '-' . $aPageData['brief']),
-                'description' => strip_tags($aPageData['brief']),
-            ];
-            $detailDatas['pageData'] = $aPageData;
         } else {
             $info = $this->getPointKnowledgeInfo($type, $code);
             $knowledgePath = $info->full_knowledge_path;
@@ -149,33 +130,6 @@ class SubjectService extends AbstractService
         return $detailDatas;
     }
 
-    public function getAnnalPageData($year)
-    {
-        $pre = '';
-        if (strpos($year, 'BC') !== false) {
-            $year = str_replace('BC', '-', $year);
-            $pre = '公元前';
-        }
-        $year = intval($year);
-        $yearStr = $year < 0 ? $pre . abs($year) : $year;
-        $cnYear = 2697 + $year;
-        $lunarString = function_exists('getChineseYear') ? getChineseYear($year ?: 1) : '';
-        $eranameStr = '';
-        $eranameDatas = $this->getRepositoryObj('passport-user')->getPointCaches('annals_eraname');
-        if (isset($eranameDatas[$year])) {
-            $eranameStr = implode('、', $eranameDatas[$year]);
-        }
-        $baikeDatas = $this->getRepositoryObj('passport-user')->getPointCaches('annals_baike');
-        $yBaike = $baikeDatas[$year] ?? '';
-        $title = $yBaike ? "<a href=\"{$yBaike}\">{$yearStr}年</a>" : $yearStr . '年';
-        $title .= "，黄帝纪年第{$cnYear}年。";
-        $pData = [
-            'title' => $title,
-            'brief' => "{$lunarString}{$eranameStr}",
-        ];
-        return $pData;
-    }
-
     public function getPointKnowledgeInfo($type, $code)
     {
         $params = [
@@ -187,6 +141,7 @@ class SubjectService extends AbstractService
             'countrycatalog' => ['mCode' => 'countryCatalog', 'field' => 'code'],
             'dynasty' => ['mCode' => 'dynasty', 'field' => 'code'],
             'century' => ['mCode' => 'century', 'field' => 'code'],
+            'annals' => ['mCode' => 'chronology', 'field' => 'code'],
         ];
         $param = $params[$type];
         //print_R([$param['field'] => $code]);

@@ -4,21 +4,6 @@ namespace ModuleKnowledge\Services;
 
 trait FormatAnnalTrait
 {
-    public function getAnnalsFile($year)
-    {
-        $pre = '';
-        if (strpos($year, 'BC') !== false) {
-            $year = str_replace('BC', '', $year);
-            $pre = 'BC';
-        }
-        $century = floor($year / 100) + 1;
-        $century = $pre . $century;
-        $ageNum = $year % 100;
-        $age = floor($ageNum / 10);
-        $base = $this->config->get('knowledge.knowledge_path') . '编年史/年表/';
-        return $file = $base . $century . '/' . $age . '/' . $year . '.php';
-    }
-
     public function dealAnnals()
     {
         $eranameDatas = $this->_initCenturyData();
@@ -160,45 +145,6 @@ trait FormatAnnalTrait
         return true;
     }
 
-    public function formatBaikeDatas()
-    {
-        $base = $this->config->get('knowledge.knowledge_path') . '编年史/';
-        $baikeFile = $base . '/annals/baike.php';
-        //var_dump($baikeFile);
-        $datas = require($baikeFile);
-        $datas = (array) $datas;
-        $sPath = '/data/log/tmp/annals/';
-        $files = scandir($sPath);
-        foreach ($files as $file) {
-            if ($file == '.' || $file == '..') {
-                continue;
-            }
-            $sFile = $sPath . $file;
-
-            $sDatas = file_get_contents($sFile);
-            $sDatas = json_decode($sDatas, true);
-            $lDatas = $sDatas['data'] ?? [];
-            $lDatas = $lDatas['list'] ?? [];
-            foreach ($lDatas as $lData) {
-                $baseStr = $lData['lemmaTitle'] ?? '';
-                $extStr = $lData['lemmaId'] ?? '';
-                $year = str_replace(['年'], [''], $baseStr);
-                $baikeUrl = 'https://baike.baidu.com/item/' . $baseStr . '/' . $extStr;
-                if (!isset($datas[$year])) {
-                    $datas[$year] = $baikeUrl;
-                    //var_dump($baikeUrl);
-                }
-            }
-            //print_r($sDatas);
-        }
-        ksort($datas);
-        $str = var_export($datas, true);
-        $str = "<?php return {$str};";
-        file_put_contents($baikeFile, $str);
-        //print_R($datas);
-        return $datas;
-    }
-
     public function _initAnnalsData()
     {
         $command = '';
@@ -287,109 +233,91 @@ trait FormatAnnalTrait
 
         $yearInfos = [];
         $ageDatas = ['0-10年代', '20-30年代', '40-50年代', '60-70年代', '80-90年代'];
-        for ($i = -1046; $i <= 2025; $i++) {
-            if ($i == 0) {
-                continue;
-            }
-
-            $pre = $i < 0 ? 'bc' : '';
-            $year = abs($i);
-            $century = floor($year / 100) + 1;
-
-            $key = 'sj_' . $pre . $century;
-            if (!isset($yearInfos[$key])) {
-                $preStr = $i < 0 ? '公元前' : '';
-                $centuryStr = $preStr . $century . '世纪';
-                $yearInfos[$key] = ['name' => $centuryStr];
-            }
-            $ageNum = $year % 100;
-            $age = floor($ageNum / 10);
-            if ($i <= -1000) {
-                $ageName = "第{$age}年代";
-            } else {
+        $centuryDatas = $this->getModelObj('century')->orderBy('orderlist')->get();
+        foreach ($centuryDatas as $cKey => $cData) {
+            $yDatas = [];
+            $yInfos = $this->getModelObj('chronology')->where(['century_code' => $cData['code']])->orderBy('orderlist')->get();
+            foreach ($yInfos as $yInfo) {
+                $year = abs($yInfo->orderlist);
+                $remain = $year % 100;
+                $age = floor($remain / 10);
                 $ageKey  = floor($age / 2);
-                $ageName = $ageDatas[$ageKey];
+                $ageName = $cData['code'] == 'BC11' ? "第{$age}年代" : $ageDatas[$ageKey];
+                if (!isset($yDatas[$ageName])) {
+                    $yDatas[$ageName] = ['name' => $ageName, 'major' => ''];
+                }
+                $yDatas[$ageName]['major'] .= "<a href='/wiki-annals-{$yInfo['code']}.html'>{$yInfo['name']}</a>、";
             }
-            $yCode = $i < 0 ? 'BC' . $year : $year;
-            $yStr = $i < 0 ? '前' . $year : $year;
-            $yStr = "<a href='/wiki-annals-{$yCode}.html'>{$yStr}</a>";
-            //$yStr = $yCode . '_' . $yStr;
-            $yearInfos[$key]['baseInfos'][$ageName][] = $yStr;
-        }
-        $baikeDatas = $this->_centuryDatas();
-        //print_r($baikeDatas);exit();
-        //print_r($yearInfos);exit();
-        //$sql = "INSERT INTO `wp_century` (`code`, `name`, `orderlist`, `chronology_url`) VALUES \n";
-        //$sql = "INSERT INTO `wp_century` (`code`, `name`, `orderlist`, `chronology_url`) VALUES \n";
-        //$sql = "INSERT INTO `wp_chronology` (`code`, `century_code`, `name`, `orderlist`) VALUES \n";
-        foreach ($yearInfos as $yKey => $yInfo) {
-            $yName = $yInfo['name'];
-            $yCode = str_replace(['sj_', 'bc'], ['', 'BC'], $yKey);
-            //$orderlist = str_replace('BC', '-', $yCode);
-            //$bUrl = $baikeDatas[$yKey] ?? '';
-            //$sql .= "('{$yCode}', '{$yName}', {$orderlist}, '{$bUrl}'),\n";
 
-            $yName = "<a href='/wiki-century-{$yCode}.html'>{$yName}</a>";
-            if (isset($baikeDatas[$yKey])) {
-                $yName .= " (<a href='{$baikeDatas[$yKey]}'>百科</a>)";
-            }
-            $results[$yKey] = [
+            $yName = $cData['name'];
+            $yName = "<a href='/wiki-century-{$cData['code']}.html'>{$yName}</a>";
+            $extName = !empty($cData['baidu_url']) ? "<a href='{$cData['baidu_url']}'>百科</a>、" : '';
+            $extName .= !empty($cData['chronology_url']) ? "<a href='{$cData['chronology_url']}'>年表</a>、" : '';
+            $yName .= !empty($extName) ? ' (' . trim($extName, '、') . ')' : '';
+            $results['sj_' . $cKey] = [
                 'name' => $yName,
                 'titles' => ['name' => '年代', 'major' => '明细'],
                 'fixTitleField' => 'name',
+                'brief' => '',
+                'baseInfos' => array_values($yDatas),
             ];
-            foreach ($yInfo['baseInfos'] as $aKey => $aInfos) {
-                /*foreach ($aInfos as $aInfo) {
-                    $tmpStr = explode('_', $aInfo);
-                    $orderlist = str_replace('BC', '-', $tmpStr[0]);
-                    $sql .= "('{$tmpStr[0]}', '{$yCode}', '{$tmpStr[1]}', {$orderlist}),\n";
-            }*/
-                $results[$yKey]['baseInfos'][] = [
-                    'name' => $aKey,
-                    'major' => implode('、', $aInfos),
-                ];
-            }
         }
-        //echo $sql;
         //print_r($results);exit();
         return $results;
     }
 
-    public function _centuryDatas()
+    /*public function formatBaikeDatas()
     {
-        return [
-            //'h',
-            'sj_bc8' => 'https://baike.baidu.com/starmap/view?nodeId=cbfa87f1f54fede382e2e362',
-            'sj_bc7' => 'https://baike.baidu.com/starmap/view?nodeId=570fd4bbf034988aebe3fc62',
-            'sj_bc6' => 'https://baike.baidu.com/starmap/view?nodeId=f9ba484ea27e9ef19e8afd62',
-            'sj_bc5' => 'https://baike.baidu.com/starmap/view?nodeId=b7a9e6fb318bcdbb98f1fe62',
-            'sj_bc4' => 'https://baike.baidu.com/starmap/view?nodeId=e1f2a8e89e3e514ecbbbff62',
-            'sj_bc3' => 'https://baike.baidu.com/starmap/view?nodeId=0d89feb3d32dfffb574ef862',
-            'sj_bc2' => 'https://baike.baidu.com/starmap/view?nodeId=f78312c88476b1e8f9fbf962',
-            'sj_bc1' => 'https://baike.baidu.com/starmap/view?nodeId=70e3fa169bfdf40e15800b62',
-            'sj_' => '',
-            'sj_' => '',
-            'sj_' => '',
-            'sj_4' => 'https://baike.baidu.com/starmap/view?nodeId=56eafc2064b03d28246b4163',
-            'sj_5' => 'https://baike.baidu.com/starmap/view?nodeId=e361767637ee226b0c084063',
-            'sj_6' => 'https://baike.baidu.com/starmap/view?nodeId=693724282bad0a08a0384763',
-            'sj_7' => 'https://baike.baidu.com/starmap/view?nodeId=3b693b6b02cea638ecde4663',
-            'sj_8' => 'https://baike.baidu.com/starmap/view?nodeId=242a1308b1feeade411c4563',
-            'sj_9' => 'https://baike.baidu.com/starmap/view?nodeId=0c49bf38fc18471cea204463',
-            'sj_' => '',
-            'sj_11' => 'https://baike.baidu.com/starmap/view?nodeId=a079f3de52daec20d6a44b63',
-            'sj_' => '',
-            'sj_' => '',
-            'sj_' => '',
-            'sj_15' => 'https://baike.baidu.com/starmap/view?nodeId=300006d98a17416e093d5362',
-            'sj_16' => 'https://baike.baidu.com/starmap/view?nodeId=19986ed3bdaa0f3d67355262',
-            'sj_17' => 'https://baike.baidu.com/starmap/view?nodeId=7192586ef4f961352a1a5162',
-            'sj_18' => 'https://baike.baidu.com/starmap/view?nodeId=472f163d9bf12c1af5e45062',
-            'sj_19' => 'https://baike.baidu.com/starmap/view?nodeId=078f17f92541fc13cb636562',
-            'sj_20' => 'https://baike.baidu.com/starmap/view?nodeId=ab5d18cee63dd285fa136662',
-            'sj_' => 'https://baike.baidu.com/starmap/view?nodeId=c400d7cf0e3a22d3041ad461',
-            'sj_' => 'https://baike.baidu.com/starmap/view?nodeId=c88e91fea717021a8490db61',
-            'sj_' => 'https://baike.baidu.com/starmap/view?nodeId=8ebf3bd386de829084e0da61',
-        ];
-    }
+        $base = $this->config->get('knowledge.knowledge_path') . '编年史/';
+        $baikeFile = $base . '/annals/baike.php';
+        //var_dump($baikeFile);
+        $datas = [];//require($baikeFile);
+        $datas = (array) $datas;
+        $sPath = '/data/log/tmp/annals/';
+        $files = scandir($sPath);
+        //print_r($files);exit();
+        foreach ($files as $file) {
+            if ($file == '.' || $file == '..') {
+                continue;
+            }
+            if ($file != 'bc2_1.json') {
+                //continue;
+            }
+            $sFile = $sPath . $file;
+
+            $sDatas = file_get_contents($sFile);
+            $sDatas = json_decode($sDatas, true);
+            $lDatas = $sDatas['data'] ?? [];
+            $lDatas = $lDatas['list'] ?? [];
+            foreach ($lDatas as $lData) {
+                $baseStr = $lData['lemmaTitle'] ?? '';
+                $extStr = $lData['lemmaId'] ?? '';
+                $year = str_replace(['年', '公元前', '公元'], ['', '-', ''], $baseStr);
+                $baikeUrl = 'https://baike.baidu.com/item/' . $baseStr . '/' . $extStr;
+                if (!isset($datas[$year])) {
+                    $datas[$year] = $baikeUrl;
+                    //var_dump($baikeUrl);
+                }
+            }
+            //print_r($sDatas);
+        }
+        foreach ($datas as $key => $data) {
+            $info = $this->getModelObj('chronology')->where(['orderlist' => $key])->first();
+            if (empty($info)) {
+                continue;
+            } else {
+                var_dump($info['code'] . '-' . $info['name'] . '-' . $key . '-' . $data);
+                $info->baidu_url = $data;
+                $info->save();
+            }
+        }
+        exit();
+        ksort($datas);
+        print_r($datas);exit();
+        $str = var_export($datas, true);
+        $str = "<?php return {$str};";
+        file_put_contents($baikeFile, $str);
+        //print_R($datas);
+        return $datas;
+    }*/
 }
