@@ -6,6 +6,7 @@ namespace ModuleKnowledge\Services;
 class FormatDataService extends AbstractService
 {
     use FormatAnnalTrait;
+    use FormatDateRangeTrait;
 
     public function dealChapter($params)
     {

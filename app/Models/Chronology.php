@@ -38,9 +38,7 @@ class Chronology extends AbstractModel
 
         $eranameStr = '';
         $eranameDatas = $this->getRepositoryObj('passport-user')->getPointCaches('annals_eraname');
-        if (isset($eranameDatas[$year])) {
-            $eranameStr = implode('、', $eranameDatas[$year]);
-        }
+        $eranameStr = $eranameDatas[$year] ?? '';
         $brief = "<a href='/zghistory-hronicle'>编年史</a>/<a href='/wiki-century-{$this->century_code}.html'>{$centuryInfo['name']}</a>/";
         $brief .= "{$lunarString}{$eranameStr}";
 

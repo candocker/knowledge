@@ -50,6 +50,15 @@ class AbstractModel extends AbstractModelBase
         return $detailDatas;
     }
 
+    public function accurateDatas()
+    {
+        return [
+            0 => '',
+            1 => '约',
+            9 => '至今',
+        ];
+    }
+
     /*public function getDateinfo($type, $result = 'format')
     {
         $keyField = $this->getKeyField();

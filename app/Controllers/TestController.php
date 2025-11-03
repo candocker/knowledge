@@ -200,7 +200,7 @@ class TestController extends AbstractController
             }
         });
         //$datas = array_reverse($datas);
-        //var_export($datas);exit();
+        var_export($datas);exit();
         if ($showAnnals) {
             return $this->_formatAnnalsDatas($datas);
         }
@@ -522,10 +522,12 @@ class TestController extends AbstractController
     {
         $service = $this->getServiceObj('formatData');
         //$service->_initCenturyData();exit();
-        $service->formatBaikeDatas();exit();
+        //$service->formatBaikeDatas();exit();
         //$service->_initAnnalsData();exit();
         //$service->_initBaseData();exit();
         //$service->getCenturyDatas($century);exit();
+        //$service->initDateData();exit();
+        //$service->initPeriodData();exit();
         $sort = request()->input('sort');
         $method = 'deal' . ucfirst($sort);
         $params = request()->all();

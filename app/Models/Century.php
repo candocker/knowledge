@@ -49,7 +49,7 @@ class Century extends AbstractModel
             $year = abs($info->orderlist);
             $remain = $year % 100;
             $age = floor($remain / 10);
-            $eranameStr = isset($eranameDatas[$info->orderlist]) ? implode('、', $eranameDatas[$year]) : '';
+            $eranameStr = $eranameDatas[$info->orderlist] ?? '';
             $aDatas[$age][] = [
                 'name' => "<a href='/wiki-annals-{$info['code']}.html'>{$info['name']}</a>",
                 'major' => $eranameStr,

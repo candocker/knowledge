@@ -8,139 +8,46 @@ trait FormatAnnalTrait
     {
         $eranameDatas = $this->_initCenturyData();
         $this->getRepositoryObj('passport-user')->setPointCaches('annals_eraname', $eranameDatas);
-        $baikeDatas = $this->formatBaikeDatas();
-        //print_R($baikeDatas);
-        $this->getRepositoryObj('passport-user')->setPointCaches('annals_baike', $baikeDatas);
-        //print_r($results);
         return true;
-
-        $results = [];
-        /*$annals = require(self_app_path($this->getAppCode(), '/resources/formatdata/annals.php'));
-        //print_R($annals);
-        $base = $this->config->get('knowledge.knowledge_path') . '编年史/';
-        foreach ($annals as $path => $elems) {
-            foreach ($elems as $eKey => $elem) {
-                $tmp = explode('_', $elem);
-                $subPath = $base . $path;
-                if (!is_dir($subPath)) {
-                    mkdir($subPath);
-                }
-                $subPathFull = $subPath . '/' . $elem;
-                if (!is_dir($subPathFull)) {
-                    mkdir($subPathFull);
-                }
-                $start = $tmp[0];
-                $end = $tmp[1];
-                $end = $end === '至今' ? date('Y') : $end;
-                $start = str_replace('BC', '-', $start);
-                $end = str_replace('BC', '-', $end);
-                $start = intval($start);
-                $end = intval($end);
-                for ($i = $start; $i <= $end; $i++) {
-                    //var_dump($i);
-                    $iPath = str_replace('-', 'BC', strval($i));
-                    $fPath = $base . $path . '/';
-                    $fPath .= is_string($eKey) ? '' : $elem . '/';
-                    $fPath .= $iPath . '.php';
-                    $results[$i] = $fPath;
-                }
-                //var_dump($start);
-                //var_dump($end);
-            }
-        }
-        $results = ['noused'];
-        $this->getRepositoryObj('passport-user')->setPointCaches('annals_details', $results);*/
     }
 
     public function _initCenturyData()
     {
         $base = $this->config->get('knowledge.knowledge_path') . '编年史/annals/';
-        $elems = [
-            'china' => '', 'japan' => '日', 'us' => '美',
-        ];
         $eranameDatas = [];
-        foreach ($elems as $cKey => $cName) {
-            $file = $base . $cKey . '.php';
-            $data = require($file);
-            $this->dealCenturyData($cName, $data, $eranameDatas);
-            //print_r($data);
+        $infos = $this->getModelObj('period')->get();
+        //$infos = $this->getModelObj('period')->whereIn('id', [24, 25])->get();
+        foreach ($infos as $info) {
+            $this->dealCenturyData($info, $eranameDatas);
         }
+        foreach ($eranameDatas as $year => & $value) {
+            $orderlist = array_column($value, 'orderlist');
+            array_multisort($orderlist, SORT_ASC, $value);
+            $str = '';
+            foreach ($value as $vData) {
+                $str .= $vData['title'] . '、';
+            }
+            $value = trim($str, '、');
+        }
+        print_r($eranameDatas);
         return $eranameDatas;
     }
 
-    public function dealCenturyData($cName, $data, & $eranameDatas)
+    public function dealCenturyData($info, & $eranameDatas)
     {
-        foreach ($data as $topName => $topElems) {
-            //var_dump($topName);
-            $topIgnore = false;
-            if (isset($topElems['ignore'])) {
-                $topIgnore = $topElems['ignore'];
-                unset($topElems['ignore']);
+        $startYear = $info->start_year;
+        $endYear = $info->end_accurate == 9 ? date('Y') : $info->end_year;
+        $title = $info->getCurrentTitle();
+        $index = 1;
+        for ($i = $startYear; $i <= $endYear; $i++) {
+            if ($i == 0) {
+                continue;
             }
-            $topIgnoreElems = [];
-            if (isset($topElems['ignoreElems'])) {
-                $topIgnoreElems = $topElems['ignoreElems'];
-                unset($topElems['ignoreElems']);
+            if (!isset($eranameDatas[$i])) {
+                $eranameDatas[$i] = [];
             }
-
-            foreach ($topElems as $bigName => $bigElems) {
-                $showTop = false;
-                if (empty($topIgnore) && !in_array($bigName, $topIgnoreElems)) {
-                    $showTop = true;
-                }
-                //var_dump($showTop);
-
-                $bigIgnore = false;
-                if (isset($bigElems['ignore'])) {
-                    $bigIgnore = $bigElems['ignore'];
-                    unset($bigElems['ignore']);
-                }
-                $bigIgnoreElems = [];
-                if (isset($bigElems['ignoreElems'])) {
-                    $bigIgnoreElems = $bigElems['ignoreElems'];
-                    unset($bigElems['ignoreElems']);
-                }
- 
-                foreach ($bigElems as $eName => $startEnd) {
-                    $showBig = false;
-                    if (empty($bigIgnore) && !in_array($eName, $bigIgnoreElems)) {
-                        $showBig = true;
-                    }
-                    //var_dump($showBig);
-
-                    if (strpos($startEnd, '_') === false) {
-                        $start = $startEnd;
-                        $end = $end;
-                    } else {
-                        $tmp = explode('_', $startEnd);
-                        $start = $tmp[0];
-                        $end = $tmp[1];
-                    }
-                    $cYear = $start;
-                    $cIndex = 1;
-                    do {
- 
-                        if ($cYear == 0) {
-                            $cYear++;
-                            continue;
-                        }
-                        $extName = $cName ? "{$cName}/" : '';
-                        $extName .= $showTop ? "{$topName}/" : '';
-                        $extName .= $showBig ? "{$bigName}/" : '';
-                        $extName = trim($extName, '/');
-                        $str = $extName ? "({$extName})" : '';
-                        $str .= $eName . $cIndex . '年';
-                        if (!isset($eranameDatas[$cYear])) {
- 
-                            $eranameDatas[$cYear] = [];
-                        }
-                         $eranameDatas[$cYear][] = $str;
-                        $cYear++;
-                        $cIndex++;
-                    } while ($cYear <= $end);
-                }
-            }
-            //print_r($eranameDatas);
+            $eranameDatas[$i][] = ['title' => $title . $index . '年', 'orderlist' => $info['orderlist']];
+            $index++;
         }
         return true;
     }
@@ -319,5 +226,98 @@ trait FormatAnnalTrait
         file_put_contents($baikeFile, $str);
         //print_R($datas);
         return $datas;
+    }*/
+
+    /*public function _initCenturyData()
+    {
+        $base = $this->config->get('knowledge.knowledge_path') . '编年史/annals/';
+        $elems = [
+            'china' => '', 'japan' => '日', 'us' => '美',
+        ];
+        $eranameDatas = [];
+        foreach ($elems as $cKey => $cName) {
+            $file = $base . $cKey . '.php';
+            $data = require($file);
+            $this->dealCenturyData($cName, $data, $eranameDatas);
+            //print_r($data);
+        }
+        return $eranameDatas;
+    }
+
+    public function dealCenturyData($cName, $data, & $eranameDatas)
+    {
+        foreach ($data as $topName => $topElems) {
+            //var_dump($topName);
+            $topIgnore = false;
+            if (isset($topElems['ignore'])) {
+                $topIgnore = $topElems['ignore'];
+                unset($topElems['ignore']);
+            }
+            $topIgnoreElems = [];
+            if (isset($topElems['ignoreElems'])) {
+                $topIgnoreElems = $topElems['ignoreElems'];
+                unset($topElems['ignoreElems']);
+            }
+
+            foreach ($topElems as $bigName => $bigElems) {
+                $showTop = false;
+                if (empty($topIgnore) && !in_array($bigName, $topIgnoreElems)) {
+                    $showTop = true;
+                }
+                //var_dump($showTop);
+
+                $bigIgnore = false;
+                if (isset($bigElems['ignore'])) {
+                    $bigIgnore = $bigElems['ignore'];
+                    unset($bigElems['ignore']);
+                }
+                $bigIgnoreElems = [];
+                if (isset($bigElems['ignoreElems'])) {
+                    $bigIgnoreElems = $bigElems['ignoreElems'];
+                    unset($bigElems['ignoreElems']);
+                }
+ 
+                foreach ($bigElems as $eName => $startEnd) {
+                    $showBig = false;
+                    if (empty($bigIgnore) && !in_array($eName, $bigIgnoreElems)) {
+                        $showBig = true;
+                    }
+                    //var_dump($showBig);
+
+                    if (strpos($startEnd, '_') === false) {
+                        $start = $startEnd;
+                        $end = $end;
+                    } else {
+                        $tmp = explode('_', $startEnd);
+                        $start = $tmp[0];
+                        $end = $tmp[1];
+                    }
+                    $cYear = $start;
+                    $cIndex = 1;
+                    do {
+ 
+                        if ($cYear == 0) {
+                            $cYear++;
+                            continue;
+                        }
+                        $extName = $cName ? "{$cName}/" : '';
+                        $extName .= $showTop ? "{$topName}/" : '';
+                        $extName .= $showBig ? "{$bigName}/" : '';
+                        $extName = trim($extName, '/');
+                        $str = $extName ? "({$extName})" : '';
+                        $str .= $eName . $cIndex . '年';
+                        if (!isset($eranameDatas[$cYear])) {
+ 
+                            $eranameDatas[$cYear] = [];
+                        }
+                         $eranameDatas[$cYear][] = $str;
+                        $cYear++;
+                        $cIndex++;
+                    } while ($cYear <= $end);
+                }
+            }
+            //print_r($eranameDatas);
+        }
+        return true;
     }*/
 }
