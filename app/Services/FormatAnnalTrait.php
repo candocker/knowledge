@@ -228,23 +228,7 @@ trait FormatAnnalTrait
         return $datas;
     }*/
 
-    /*public function _initCenturyData()
-    {
-        $base = $this->config->get('knowledge.knowledge_path') . '编年史/annals/';
-        $elems = [
-            'china' => '', 'japan' => '日', 'us' => '美',
-        ];
-        $eranameDatas = [];
-        foreach ($elems as $cKey => $cName) {
-            $file = $base . $cKey . '.php';
-            $data = require($file);
-            $this->dealCenturyData($cName, $data, $eranameDatas);
-            //print_r($data);
-        }
-        return $eranameDatas;
-    }
-
-    public function dealCenturyData($cName, $data, & $eranameDatas)
+    /*public function dealCenturyData($cName, $data, & $eranameDatas)
     {
         foreach ($data as $topName => $topElems) {
             //var_dump($topName);

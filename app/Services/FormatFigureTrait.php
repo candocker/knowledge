@@ -4,7 +4,41 @@ namespace ModuleKnowledge\Services;
 
 trait FormatFigureTrait
 {
-    public function initFigureDatas()
+    public function initEmperorData()
+    {
+    }
+
+    public function formatPointBirthDeath($str, $nameStr, $info)
+    {
+        $ext = strpos($str, ' ') !== false ? substr($str, strpos($str, ' ')) : '';
+        $bdStr = strpos($str, ' ') !== false ? substr($str, 0, strpos($str, ' ')) : $str;
+        if (strpos($bdStr, '-') === false) {
+            //var_dump($bdStr . '==' . $nameStr . "<br />");
+            echo "'{$info['code']}',";
+            return ;
+        }
+        $tmp = explode('-', $bdStr);
+        $birthData = $this->_splitDateData($tmp[0]);
+        $deathData = $this->_splitDateData($tmp[1]);
+    }
+
+    public function _splitDateData($str)
+    {
+        if ($str == '至今' || $str === '') {
+            return ['accurate' => 'running', 'year' => 0, 'month' => 0, 'day' => 0];
+        }
+        $accurate = '';
+        if (strpos($str, '约') !== false ) {
+            $accurate = 'probably';
+            $str = str_replace(['约'], [''], $str);
+        }
+        $str = str_replace(['前', 'BC'], ['-', '-'], $str);
+        $tmp = explode('/', $str);
+
+        return ['accurate' => $accurate, 'year' => intval($tmp[0] ?? 0), 'month' => intval($tmp[1] ?? 0), 'day' => intval($tmp[2] ?? 0)];
+    }
+
+    /*public function initFigureDatas()
     {
         //$infos = $this->getModelObj('figure')->where(['status' => 0])->limit(500)->get();
         //$infos = $this->getModelObj('figure')->where(['status' => 0])->limit(500)->get();
@@ -33,9 +67,9 @@ trait FormatFigureTrait
             $info->save();
         }
         exit();
-    }
+    }*/
 
-    public function initDateData()
+    /*public function initDateData()
     {
         $infos = $this->getModelObj('figure')->where('extfield', '<>', '')->get();
         foreach ($infos as $info) {
@@ -87,9 +121,9 @@ trait FormatFigureTrait
         echo 'sss';
         exit();
 
-    }
+    }*/
 
-    public function formatPointBirthDeath($str, $nameStr, $info)
+    /*public function formatPointBirthDeath($str, $nameStr, $info)
     {
         $ext = strpos($str, ' ') !== false ? substr($str, strpos($str, ' ')) : '';
         $bdStr = strpos($str, ' ') !== false ? substr($str, 0, strpos($str, ' ')) : $str;
@@ -153,21 +187,5 @@ trait FormatFigureTrait
 
         //print_r($birthData);print_r($deathData);
         return ['bStr' => implode('', $birthData), 'dStr' => implode('', $deathData)];
-    }
-
-    public function _splitDateData($str)
-    {
-        if ($str == '至今' || $str === '') {
-            return ['accurate' => 'running', 'year' => 0, 'month' => 0, 'day' => 0];
-        }
-        $accurate = '';
-        if (strpos($str, '约') !== false ) {
-            $accurate = 'probably';
-            $str = str_replace(['约'], [''], $str);
-        }
-        $str = str_replace(['前', 'BC'], ['-', '-'], $str);
-        $tmp = explode('/', $str);
-
-        return ['accurate' => $accurate, 'year' => intval($tmp[0] ?? 0), 'month' => intval($tmp[1] ?? 0), 'day' => intval($tmp[2] ?? 0)];
-    }
+    }*/
 }
