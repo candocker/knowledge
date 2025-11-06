@@ -111,7 +111,7 @@ class Figure extends AbstractModel
 
     public function formatDate($types = ['birth', 'death'])
     {
-        $accurateValues = ['' => '', 'running' => '至今', 'probably' => '约', 'unknown' => '未知'];
+        $accurateValues = $this->getAccurateDatas();
         $results = [];
         foreach ($types as $type) {
             $fields = ['accurate', 'year', 'month', 'day'];

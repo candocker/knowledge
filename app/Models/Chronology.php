@@ -27,6 +27,38 @@ class Chronology extends AbstractModel
         if (!empty($figureDatas)) {
             $detailDatas['commonFixTableBirthDeath'] = $figureDatas;
         }
+        $affairTypes = $this->getModelObj('affair')->getAffairTypes();
+        $affairDatas = $this->getAffairDatas();
+        if (isset($affairDatas['keypoint'])) {
+            $detailDatas['commonFixTableKeypoint'] = [
+                'topName' => $affairTypes['keypoint'],
+                'keypoint' => [
+                    'name' => '',
+                    'titles' => ['name' => '标题', 'major' => '简介'],
+                    'fixTitleField' => 'name',
+                    'brief' => '',
+                    'baseInfos' => $affairDatas['keypoint'],
+                ],
+            ];
+            unset($affairDatas['keypoint']);
+        }
+        if (empty($affairData)) {
+            return $detailDatas;
+        }
+        $affairDetails = [
+            'topName' => '事件列表',
+        ];
+
+        foreach ($affairDatas as $aType => $infos) {
+            $affairDetails[$aType] = [
+                'name' => $affairTypes[$aType],
+                'titles' => ['date' => '日期', 'major' => '简介'],
+                'fixTitleField' => 'date',
+                'brief' => '',
+                'baseInfos' => $infos,
+            ];
+        }
+        $detailDatas['commonFixTableAffair'] = $affairDetails;
         //print_r($detailDatas);exit();
         return $detailDatas;
     }
@@ -65,6 +97,32 @@ class Chronology extends AbstractModel
             ];
         }
         return $results;
+    }
+
+    public function getAffairDatas()
+    {
+        $affairs = $this->getModelObj('affair')->where('year', $this->orderlist)->orderBy('month')->orderBy('day')->get();
+        if ($affairs->count() < 1) {
+            return [];
+        }
+
+        $formatDatas = [];
+        foreach ($affairs as $affair) {
+            $dateInfo = $affair->foramtDataInfo();
+            $brief = $affair->brief;
+            if (!empty($affair['point_path'])) {
+                $brief .= "<a href='/wiki-affair-{$affair['id']}.html'>详情</a>";
+            }
+            if (!empty($affair['baidu_url'])) {
+                $brief .= "<a href='{$affair['baidu_url']}.html'>(百科)</a>";
+            }
+            $formatDatas[$affair['affair_type']][] = [
+                'date' => $affair->dateInfo['monthDay2'],
+                'title' => $affair->title,
+                'major' => $brief,
+            ];
+        }
+        return $formatDatas;
     }
 
     public function _formatBaseData($isMobile)

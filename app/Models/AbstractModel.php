@@ -15,6 +15,11 @@ class AbstractModel extends AbstractModelBase
         return 'knowledge';
     }
 
+    public function getAccurateDatas()
+    {
+        return ['' => '', 'running' => '至今', 'probably' => '约', 'unknown' => '未知'];
+    }
+
     public function figureInfo()
     {
         return $this->hasOne(Figure::class, 'code', 'figure_code');
