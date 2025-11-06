@@ -22,7 +22,49 @@ class Chronology extends AbstractModel
     public function wrapDetailDatas($detailDatas)
     {
         unset($detailDatas['pageData']);
+        $figureDatas = $this->getFigureDatas();
+        //print_r($figureDatas);exit();
+        if (!empty($figureDatas)) {
+            $detailDatas['commonFixTableBirthDeath'] = $figureDatas;
+        }
+        //print_r($detailDatas);exit();
         return $detailDatas;
+    }
+
+    public function getFigureDatas()
+    {
+        $birthFigures = $this->getModelObj('figure')->where('birth_year', $this->orderlist)->orderBy('birth_month')->orderBy('birth_day')->get();
+        $birthNum = $birthFigures->count();
+        $deathFigures = $this->getModelObj('figure')->where('death_year', $this->orderlist)->orderBy('death_month')->orderBy('birth_day')->get();
+        $deathNum = $deathFigures->count();
+        if (empty($birthNum) && empty($deathFigures)) {
+            return [];
+        }
+        $results = ['topName' => '年度出生和逝世人物'];
+        $aDates = [];
+        foreach (['birth' => $birthFigures, 'death' => $deathFigures] as $type => $infos) {
+            if ($infos->count() < 1) {
+                continue;
+            }
+            $eTitle = $type == 'birth' ? '出生人物' : '逝世人物';
+            $baseInfos = [];
+            foreach ($infos as $info) {
+                $dateInfo = $info->formatDate([$type]);
+                $baseInfos[] = [
+                    'date' => $dateInfo[$type]['monthDay2'],
+                    'name' => "<a href='wiki-figure-{$info['code']}.html'>{$info->name}</a>",
+                    'major' => $info['description'],
+                ];
+            }
+            $results[$type] = [
+                'name' => $eTitle,
+                'titles' => ['date' => '日期', 'name' => '姓名', 'major' => '简介'],
+                'fixTitleField' => 'date',
+                'brief' => '',
+                'baseInfos' => $baseInfos,
+            ];
+        }
+        return $results;
     }
 
     public function _formatBaseData($isMobile)

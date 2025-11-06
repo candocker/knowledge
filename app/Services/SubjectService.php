@@ -113,6 +113,7 @@ class SubjectService extends AbstractService
                 }
             }
             $detailDatas = [];
+            //var_dump($fFile);exit();
             if (file_exists($fFile)) {
                 $detailDatas = require($fFile);
             }

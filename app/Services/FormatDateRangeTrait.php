@@ -4,6 +4,10 @@ namespace ModuleKnowledge\Services;
 
 trait FormatDateRangeTrait
 {
+    public function initEmperorDatas()
+    {
+    }
+
     public function initPeriodData()
     {
         $sql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `title`, `start_accurate`, `start_year`, `end_accurate`, `end_year`) VALUES ;";
@@ -52,27 +56,5 @@ trait FormatDateRangeTrait
         }
         echo $sql;
         exit();
-    }
-
-    public function initDateData()
-    {
-        $sql = "SELECT * FROM `wp_dateinfo` WHERE `type` IN ('deathday', 'birthday');";
-        $infos = \DB::connection('knowledge')->select($sql);
-        $figures = [];
-        foreach ($infos as $info) {
-            $iKey = $info->info_key;
-            if (!isset($figures[$iKey])) {
-                $figure = $this->getModelObj('figure')->where(['code' => $iKey])->first();
-                $figure = empty($figure) ? $this->getModelObj('figure')->where(['codebak' => $iKey])->first() : $figure;
-                if (empty($figure)) {
-                    print_r($info);
-                    continue;
-                }
-                $figures[$iKey]['name'] = $figure->baidu_url ? "<a href='{$figure->baidu_url}' target='_blank'>{$figure['name']}</a>" :$figure['name'];
-            }
-            $figures[$info->type] = $info->era_type . '-' . $info->accurate . '-' . $info->year . '/' . $info->month . '/' . $info->day;
-        }
-        //print_r($figures);
-
     }
 }

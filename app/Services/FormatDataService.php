@@ -7,6 +7,7 @@ class FormatDataService extends AbstractService
 {
     use FormatAnnalTrait;
     use FormatDateRangeTrait;
+    use FormatFigureTrait;
 
     public function dealChapter($params)
     {
