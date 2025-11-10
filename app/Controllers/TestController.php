@@ -524,6 +524,7 @@ class TestController extends AbstractController
         //$service->_initCenturyData();exit();
         //$service->_initAnnalsData();exit();
         //$service->initPeriodData();exit();
+        //$service->initEmperorData();
 
         //$service->_initBaseData();exit();
         $sort = request()->input('sort');

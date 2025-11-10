@@ -15,7 +15,7 @@ class Figure extends AbstractModel
     public function getFullKnowledgePathAttribute()
     {
         $base = $this->config->get('knowledge.knowledge_path');
-        return $this->knowledge_path ? $base . $this->knowledge_path . '/figure' : '';
+        return $this->knowledge_path ? $base . $this->knowledge_path : '';
     }
 
     public function getFullNameAttribute()
@@ -62,10 +62,13 @@ class Figure extends AbstractModel
             $path = $countryInfo->formatKnowledgePath();
         }
         $path = rtrim($path, '/') . '/人物/';
-        if (!empty($this->path_label)) {
-            $path .= $this->path_label . '/';
+        if (empty($this->path_label) && empty($this->path_gather)) {
+            $path .= $this->name . '/figure';
+            return $path;
         }
-        $path .= $this->name . '/';
+
+        $path .= $this->path_label ? $this->path_label . '/' : '';
+        $path .= $this->path_gather ? $this->path_gather : $this->name;
         return $path;
     }
 
@@ -80,12 +83,17 @@ class Figure extends AbstractModel
     public function _formatBaseData($isMobile)
     {
         $jumpUrl = !empty($this->baidu_url) ? "<a href='{$this->baidu_url}'>百科</a>" : '';
-        //$jumpUrl .= $this->knowledge_path ? "---<a href='/wiki-figure-{$this->code}.html'>详情</a>" : '';
-        $jumpUrl = trim($jumpUrl, '---');
+        $formatDate = $this->formatDate();
+        $commonData = $formatDate['common'] ?? [];
+        $dateStr = $commonData['birthDeathStrAge'] ?? '';
+        $bInfos = [
+            '姓名' => $this->name,
+        ];
+        if (!empty($dateStr)) {
+            $bInfos['生卒日期 '] = $dateStr;
+        }
         $baseData = [
-            'infos' => [
-                '姓名' => $this->name,
-            ],
+            'infos' => $bInfos,
             'brief' => $this->name,
             'desc' => $this->description,
             'headerPicUrl' => $this->photoUrl,
@@ -93,7 +101,6 @@ class Figure extends AbstractModel
         $title = $this->name;
         if ($jumpUrl) {
             $title .= $jumpUrl ? " （ {$jumpUrl} ）" : '';
-            $baseData['infos']['跳转'] = $jumpUrl;
         }
 
         $books = $this->getModelObj('figureListing')->where(['type' => 'author', 'figure_code' => $this->code])->get();
@@ -107,6 +114,16 @@ class Figure extends AbstractModel
             'headerPicUrl' => $this->photoUrl,
         ];
         return $result;
+    }
+
+    public function wrapDetailDatas($detailDatas)
+    {
+        if ($this->birth_year != 0 && ($this->death_accurate == 'running' || $this->death_year != 0)) {
+            $start = $this->birth_year;
+            $end = $this->death_accurate == 'running' ? date('Y') : $this->death_year;
+            $detailDatas['commonFixTableYear'] = $this->getCommonYearDetails($this->name, $start, $end);
+        }
+        return $detailDatas;
     }
 
     public function formatDate($types = ['birth', 'death'])
@@ -155,6 +172,24 @@ class Figure extends AbstractModel
                 'monthDay2' => $monthStr . $dayStr,
                 'fullStr' => $fullStr,
             ];
+        }
+        if (isset($results['death']) && isset($results['birth'])) {
+            $birthData = $results['birth'];
+            $deathData = $results['death'];
+            $bdStr = $birthData['fullStr'] ?: '?';
+            $bdStr .= '-' . ($deathData['fullStr'] ?: '?');
+            if ($bdStr == '?-?') {
+                $bdStr = '';
+            }
+            $age = '';
+            if ($birthData['sourceData']['year'] != 0 && $deathData['sourceData']['year'] != 0) {
+                $age = $deathData['sourceData']['year'] - $birthData['sourceData']['year'] + 1;
+            }
+            $ageStr = $age ? $age . '岁' : '';
+            $results['common']['age'] = $age;
+            $results['common']['ageStr'] = $age;
+            $results['common']['birthDeathStr'] = $bdStr;
+            $results['common']['birthDeathStrAge'] = $bdStr . ($ageStr ? " ({$ageStr})" : '');
         }
         return $results;
     }

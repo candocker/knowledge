@@ -6,6 +6,28 @@ trait FormatFigureTrait
 {
     public function initEmperorData()
     {
+        $dynasty = 'mingchao';
+        // UPDATE `wp_figure` AS `f`, `wp_figure_listing` AS `fl`SET `f`.`path_label` = '君主' WHERE `f`.`country_code` = 'qingchao' AND `f`.`code` = `fl`.`figure_code` AND `fl`.`type` = 'cnemperor';
+        $sql = "SELECT * FROM `online_knowledge`.`ztmp_wp_emperor` WHERE `dynasty` = '{$dynasty}';";
+        $sql = "SELECT * FROM `work_knowledge`.`wp_emperor` WHERE `dynasty` = '{$dynasty}';";
+        //echo $sql;
+        $infos = \DB::select($sql);
+        $infos = $this->getModelObj('figure')->where(['country_code' => 'mingchao'])->get();
+        //print_r($infos);
+        $fields = ['path_gather', 'birth_accurate', 'birth_year', 'birth_month', 'birth_day', 'death_accurate', 'death_year', 'death_month', 'death_day'];
+        foreach ($infos as $info) {
+            $str = "UPDATE `wp_figure` SET ";
+            foreach ($fields as $field) {
+                if (in_array($field, ['path_gather', 'path_label', 'birth_accurate', 'death_accurate'])) {
+                    $str .= "`{$field}` = '',";
+                } else {
+                    $str .= "`{$field}` = 0,";
+                }
+            }
+            echo $str . " WHERE `code` = '{$info['code']}'; ----{$info['name']}\n";
+        }
+
+        exit();
     }
 
     public function formatPointBirthDeath($str, $nameStr, $info)

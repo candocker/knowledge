@@ -36,7 +36,7 @@ trait FormatAnnalTrait
     public function dealCenturyData($info, & $eranameDatas)
     {
         $startYear = $info->start_year;
-        $endYear = $info->end_accurate == 9 ? date('Y') : $info->end_year;
+        $endYear = $info->end_accurate == 'running' ? date('Y') : $info->end_year;
         $title = $info->getCurrentTitle();
         $index = 1;
         for ($i = $startYear; $i <= $endYear; $i++) {

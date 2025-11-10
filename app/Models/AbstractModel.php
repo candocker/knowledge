@@ -64,6 +64,39 @@ class AbstractModel extends AbstractModelBase
         ];
     }
 
+    public function getCommonYearDetails($title, $start, $end, $eranames = [], $groupNum = 20)
+    {
+        $results = ['topName' => $title . '年份明细'];
+        $eranameDatas = $this->getRepositoryObj('passport-user')->getPointCaches('annals_eraname');
+        $infos = $this->getModelObj('chronology')->where('orderlist', '>=', $start)->where('orderlist', '<=', $end)->orderBy('orderlist')->get();
+        $aDatas = [];
+        $key = 1;
+        $num = 0;
+        foreach ($infos as $info) {
+            if ($num >= $groupNum) {
+                $key++;
+                $num = 1;
+            } else {
+                $num++;
+            }
+            $eranameStr = $eranameDatas[$info->orderlist] ?? '';
+            $aDatas[$key][] = [
+                'name' => "<a href='/wiki-annals-{$info['code']}.html'>{$info['name']}</a>",
+                'major' => $eranameStr,
+            ];
+        }
+        foreach ($aDatas as $aKey => $infos) {
+            $results['age_' . $aKey] = [
+                'name' => count($aDatas) > 1 ? "第{$aKey}个{$groupNum}年" : '',
+                'titles' => ['name' => '年份', 'major' => '王朝帝王'],
+                'fixTitleField' => 'name',
+                'brief' => '',
+                'baseInfos' => $infos,
+            ];
+        }
+        return $results;
+    }
+
     /*public function getDateinfo($type, $result = 'format')
     {
         $keyField = $this->getKeyField();
