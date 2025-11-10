@@ -37,7 +37,14 @@ class Century extends AbstractModel
 
     public function _getYearDetails()
     {
-        $results = ['topName' => $this->name . '年份明细'];
+        $showAnnals = request()->input('show_annals');
+        $topName = $this->name;
+        if ($showAnnals) {
+            $topName .= "纪年明细 (<a href='?show_annals=0' style='color:red;'>年份明细</a>)";
+        } else {
+            $topName .= "年份明细 (<a href='?show_annals=1' style='color:red;'>纪年明细</a>)";
+        }
+        $results = ['topName' => $topName];
         $ages = [
             '第一个十年', '第二个十年', '二十年代', '三十年代', '四十年代',
             '五十年代', '六十年代', '七十年代', '八十年代', '九十年代'
@@ -49,10 +56,10 @@ class Century extends AbstractModel
             $year = abs($info->orderlist);
             $remain = $year % 100;
             $age = floor($remain / 10);
-            $eranameStr = $eranameDatas[$info->orderlist] ?? '';
+            $yearBrief = $showAnnals || empty($info->brief) ? $info->getEranameStr() : $info->brief;
             $aDatas[$age][] = [
                 'name' => "<a href='/wiki-annals-{$info['code']}.html'>{$info['name']}</a>",
-                'major' => $eranameStr,
+                'major' => $yearBrief,
             ];
         }
         foreach ($aDatas as $aKey => $infos) {

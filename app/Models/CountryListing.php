@@ -13,11 +13,6 @@ class CountryListing extends AbstractModel
     protected $guarded = ['id'];
     public $timestamps = false;
 
-    public function countryInfo()
-    {
-        return $this->hasOne(Country::class, 'code', 'country_code');
-    }
-
     public function catalogInfo()
     {
         return $this->hasOne(CountryCatalog::class, 'code', 'catalog_code');

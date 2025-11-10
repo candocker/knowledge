@@ -6,7 +6,7 @@ $formatedExtDatas = [];
   @if (isset($commonFixedDatas['topName']))
   <div class="portlet-title">
     <div class="caption">
-      <b>{{$commonFixedDatas['topName']}}</b>
+      <b>{!!$commonFixedDatas['topName']!!}</b>
     </div>
     <div class="tools">
       @if (isset($commonFixedDatas['showUrl']) && !empty($commonFixedDatas['showUrl']))<a href="{{$commonFixedDatas['showUrl']}}" style="color:red;">详情</a>@endif

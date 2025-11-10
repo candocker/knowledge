@@ -8,6 +8,8 @@ use Framework\Baseapp\Models\AbstractModel as AbstractModelBase;
 
 class AbstractModel extends AbstractModelBase
 {
+    use RelateInfoTrait;
+
     protected $connection = 'knowledge';
 
     protected function getAppcode()
@@ -18,11 +20,6 @@ class AbstractModel extends AbstractModelBase
     public function getAccurateDatas()
     {
         return ['' => '', 'running' => '至今', 'probably' => '约', 'unknown' => '未知'];
-    }
-
-    public function figureInfo()
-    {
-        return $this->hasOne(Figure::class, 'code', 'figure_code');
     }
 
     public function getFullKnowledgePathAttribute()
@@ -55,6 +52,16 @@ class AbstractModel extends AbstractModelBase
         return $detailDatas;
     }
 
+    public function periodTypeDatas()
+    {
+        return [
+            'country' => '国家',
+            'emperor' => '君主',
+            'bigman' => '大人物',
+            'eraname' => '年号',
+        ];
+    }
+
     public function accurateDatas()
     {
         return [
@@ -66,8 +73,16 @@ class AbstractModel extends AbstractModelBase
 
     public function getCommonYearDetails($title, $start, $end, $eranames = [], $groupNum = 20)
     {
-        $results = ['topName' => $title . '年份明细'];
-        $eranameDatas = $this->getRepositoryObj('passport-user')->getPointCaches('annals_eraname');
+        $showAnnals = request()->input('show_annals');
+
+        $topName = $title;
+        if ($showAnnals) {
+            $topName .= "纪年明细 (<a href='?show_annals=0' style='color:red;'>逐年记</a>)";
+        } else {
+            $topName .= "逐年记 (<a href='?show_annals=1' style='color:red;'>纪年明细</a>)";
+        }
+        $results = ['topName' => $topName];
+        //$eranameDatas = $this->getRepositoryObj('passport-user')->getPointCaches('annals_eraname');
         $infos = $this->getModelObj('chronology')->where('orderlist', '>=', $start)->where('orderlist', '<=', $end)->orderBy('orderlist')->get();
         $aDatas = [];
         $key = 1;
@@ -79,10 +94,11 @@ class AbstractModel extends AbstractModelBase
             } else {
                 $num++;
             }
-            $eranameStr = $eranameDatas[$info->orderlist] ?? '';
+            //$eranameStr = $eranameDatas[$info->orderlist] ?? '';
+            $yearBrief = $showAnnals || empty($info->brief) ? $info->getEranameStr() : $info->brief;
             $aDatas[$key][] = [
                 'name' => "<a href='/wiki-annals-{$info['code']}.html'>{$info['name']}</a>",
-                'major' => $eranameStr,
+                'major' => $yearBrief,
             ];
         }
         foreach ($aDatas as $aKey => $infos) {

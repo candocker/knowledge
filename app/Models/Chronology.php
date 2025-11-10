@@ -27,6 +27,11 @@ class Chronology extends AbstractModel
         if (!empty($figureDatas)) {
             $detailDatas['commonFixTableBirthDeath'] = $figureDatas;
         }
+        $periodDatas = $this->getModelObj('periodYear')->getPointPeriodYearDatas($this->orderlist, $this->name);
+        if (!empty($periodDatas)) {
+            $detailDatas['commonFixTablePeriod'] = $periodDatas;
+        }
+
         $affairTypes = $this->getModelObj('affair')->getAffairTypes();
         $affairDatas = $this->getAffairDatas();
         if (isset($affairDatas['keypoint'])) {
@@ -136,9 +141,7 @@ class Chronology extends AbstractModel
 
         $lunarString = $this->getChineseYear($year);
 
-        $eranameStr = '';
-        $eranameDatas = $this->getRepositoryObj('passport-user')->getPointCaches('annals_eraname');
-        $eranameStr = $eranameDatas[$year] ?? '';
+        $eranameStr = $this->getEranameStr();
         $brief = "<a href='/zghistory-hronicle'>编年史</a>/<a href='/wiki-century-{$this->century_code}.html'>{$centuryInfo['name']}</a>/";
         $brief .= "{$lunarString}{$eranameStr}";
 
@@ -147,6 +150,25 @@ class Chronology extends AbstractModel
             'pageData' => ['title' => $pTitle, 'brief' => $brief],
         ];
         return $result;
+    }
+
+    public function getEranameStr()
+    {
+        if (empty($this->period_status)) {
+            return $this->period_brief;
+        }
+
+        $pyInfos = $this->getModelObj('periodYear')->where(['year' => $this->orderlist])->orderBy('show_type', 'desc')->orderBy('orderlist')->limit(5)->get();
+        $str = '';
+        foreach ($pyInfos as $pyInfo) {
+            $str .= $pyInfo['title'] . '、';
+        }
+        $str = trim($str, '、');
+        $this->period_brief = $str;
+        $this->period_status = 0;
+        $this->save();
+        return $str;
+
     }
 
     public function getChineseYear($year, $return = 'string')

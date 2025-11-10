@@ -7,7 +7,7 @@ $formatedExtDatas = [];
   @if (isset($commonTableDatas['topName']))
   <div class="portlet-title">
     <div class="caption">
-      <b>{{$commonTableDatas['topName']}}</b>
+      <b>{!!$commonTableDatas['topName']!!}</b>
     </div>
     <div class="tools">
       @if (isset($commonTableDatas['showUrl']) && !empty($commonTableDatas['showUrl']))<a href="{{$commonTableDatas['showUrl']}}" style="color:red;">详情</a>@endif

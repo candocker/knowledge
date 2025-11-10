@@ -16,20 +16,36 @@ trait FormatAnnalTrait
         $base = $this->config->get('knowledge.knowledge_path') . '编年史/annals/';
         $eranameDatas = [];
         $infos = $this->getModelObj('period')->get();
+
+        $tSuffix = date('md') . '_' . rand(1, 100);
+        $bSql = "RENAME TABLE `online_knowledge`.`wp_period_year` TO `online_knowledge`.`wp_period_year_{$tSuffix}`;";
+        \DB::connection('knowledge')->select($bSql);
+        $iSql = "CREATE TABLE `online_knowledge`.`wp_period_year` LIKE `online_knowledge`.`wp_period_year_{$tSuffix}`;";
+        \DB::connection('knowledge')->select($iSql);
+
         //$infos = $this->getModelObj('period')->whereIn('id', [24, 25])->get();
+        $newDatas = [];
         foreach ($infos as $info) {
-            $this->dealCenturyData($info, $eranameDatas);
+            $pDatas = $this->dealCenturyData($info, $eranameDatas);
+            $newDatas = array_merge($newDatas, $pDatas);
         }
-        foreach ($eranameDatas as $year => & $value) {
-            $orderlist = array_column($value, 'orderlist');
-            array_multisort($orderlist, SORT_ASC, $value);
+        $this->getModelObj('periodYear')->insert($newDatas);
+        $uSql = "UPDATE `wp_period_year` AS `py`, `wp_period_year_{$tSuffix}` AS `po` SET `py`.`show_type` = `po`.`show_type` WHERE `py`.`period_code` = `po`.`period_code`;";
+        \DB::connection('knowledge')->select($uSql);
+        $uSql = "UPDATE `wp_chronology` SET `period_status` = 1;";
+        \DB::connection('knowledge')->select($uSql);
+        return true;
+        //print_r($newDatas);
+        /*foreach ($eranameDatas as $year => & $yDatas) {
+            $orderlist = array_column($yDatas, 'orderlist');
+            array_multisort($orderlist, SORT_ASC, $yDatas);
             $str = '';
-            foreach ($value as $vData) {
+            foreach ($yDatas as $vData) {
                 $str .= $vData['title'] . '、';
             }
-            $value = trim($str, '、');
-        }
-        print_r($eranameDatas);
+            $yDatas['brief'] = trim($str, '、');
+        }*/
+        //print_r($eranameDatas);
         return $eranameDatas;
     }
 
@@ -39,6 +55,7 @@ trait FormatAnnalTrait
         $endYear = $info->end_accurate == 'running' ? date('Y') : $info->end_year;
         $title = $info->getCurrentTitle();
         $index = 1;
+        $pDatas = [];
         for ($i = $startYear; $i <= $endYear; $i++) {
             if ($i == 0) {
                 continue;
@@ -46,10 +63,23 @@ trait FormatAnnalTrait
             if (!isset($eranameDatas[$i])) {
                 $eranameDatas[$i] = [];
             }
-            $eranameDatas[$i][] = ['title' => $title . $index . '年', 'orderlist' => $info['orderlist']];
+            $pTitle = $title . $index . '年';
+            //$eranameDatas[$i][] = ['title' => $title . $index . '年', 'orderlist' => $info['orderlist']];
+            $pDatas[] = [
+                'year' => $i,
+                'country_code' => $info['country_code'],
+                'figure_code' => $info['figure_code'],
+                'period_type' => $info['period_type'],
+                'eraname' => $info['eraname'],
+                'title' => $pTitle,
+                'orderlist' => $info['orderlist'],
+                'baidu_url' => $info['baidu_url'],
+                'brief' => $info['brief'],
+                'period_code' => $info['country_code'] . '_' . $info['figure_code'] . '_' . $info['eraname'],
+            ];
             $index++;
         }
-        return true;
+        return $pDatas;
     }
 
     public function _initAnnalsData()

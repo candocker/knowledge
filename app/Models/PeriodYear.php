@@ -1,0 +1,47 @@
+<?php
+
+declare(strict_types = 1);
+
+namespace ModuleKnowledge\Models;
+
+class PeriodYear extends AbstractModel
+{
+    protected $table = 'period_year';
+    protected $guarded = ['id'];
+
+    public function getPointPeriodYearDatas($year, $title)
+    {
+        $infos = $this->where('year', $year)->orderBy('orderlist')->get();
+        $bDatas = [];
+        $periodTypes = $this->periodTypeDatas();
+        foreach ($infos as $info) {
+            $bDatas[] = [
+                'type' => $periodTypes[$info->period_type] ?? $info->period_type,
+                'name' => $info->title,
+                'major' => $info->getMajorStr(),
+            ];
+        }
+        $results = [
+            'topName' => $title . '纪年明细',
+            'baselist' => [
+                'name' => '',
+                'titles' => ['type' => '类型', 'name' => '标题', 'major' => '简介'],
+                'fixTitleField' => 'type',
+                'brief' => '',
+                'baseInfos' => $bDatas,
+            ],
+        ];
+        return $results;
+    }
+
+    public function getMajorStr()
+    {
+        if ($this->period_type == 'country') {
+            return $this->countryInfo->brief;
+        }
+        if (in_array($this->period_type, ['bigman', 'emperor'])) {
+            return $this->figureInfo->brief;
+        }
+        return $this->brief;
+    }
+}

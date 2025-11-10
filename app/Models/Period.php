@@ -14,18 +14,23 @@ class Period extends AbstractModel
         if (!empty($info['title'])) {
            return $info['title'];
         }
-        $cInfo = $this->getModelObj('country')->where(['code' => $this->country_code])->first();
+        $cInfo = $this->countryInfo;
         $cName = $cInfo['name_short'] ? $cInfo['name_short'] : $cInfo['name'];
-        $titles[] = $cName;
-        $fInfo = $this->getModelObj('figure')->where(['code' => $this->figure_code])->first();
+        $cStr = "<a href='/wiki-country-{$this->country_code}.html'>{$cName}</a>";
+        if ($this->period_type == 'country') {
+            return $cStr;
+        }
+        $fInfo = $this->figureInfo;
         $fName = $fInfo ? $fInfo['name'] : '';
-        if (!empty($fName)) {
-            $titles[] = $fName;
+        $fStr = $fName ? "<a href='/wiki-figure-{$this->figure_code}.html'>{$fName}</a>" : '';
+        if (in_array($this->period_type, ['bigman', 'emperor'])) {
+            return "({$cStr})" . $fStr;
         }
-        if (!empty($this->eraname)) {
-            $titles[] = $this->eraname;
+        if (empty($this->eraname)) {
+            return '异常';
         }
-
-        return implode('/', $titles);
+        $eName = $this->eraname;
+        $eName = $this->baidu_url ? "<a href='{$this->baidu_url}'>{$eName}</a>" : $eName;
+        return "({$cStr}/{$fStr})" . $eName;
     }
 }
