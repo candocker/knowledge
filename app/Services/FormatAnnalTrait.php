@@ -17,10 +17,10 @@ trait FormatAnnalTrait
         $eranameDatas = [];
         $infos = $this->getModelObj('period')->get();
 
-        $tSuffix = date('md') . '_' . rand(1, 100);
-        $bSql = "RENAME TABLE `online_knowledge`.`wp_period_year` TO `online_knowledge`.`wp_period_year_{$tSuffix}`;";
+        $tmpTable = 'wp_period_year_tmp';
+        $bSql = "RENAME TABLE `online_knowledge`.`wp_period_year` TO `online_knowledge`.`{$tmpTable}`;";
         \DB::connection('knowledge')->select($bSql);
-        $iSql = "CREATE TABLE `online_knowledge`.`wp_period_year` LIKE `online_knowledge`.`wp_period_year_{$tSuffix}`;";
+        $iSql = "CREATE TABLE `online_knowledge`.`wp_period_year` LIKE `online_knowledge`.`{$tmpTable}`;";
         \DB::connection('knowledge')->select($iSql);
 
         //$infos = $this->getModelObj('period')->whereIn('id', [24, 25])->get();
@@ -30,9 +30,11 @@ trait FormatAnnalTrait
             $newDatas = array_merge($newDatas, $pDatas);
         }
         $this->getModelObj('periodYear')->insert($newDatas);
-        $uSql = "UPDATE `wp_period_year` AS `py`, `wp_period_year_{$tSuffix}` AS `po` SET `py`.`show_type` = `po`.`show_type` WHERE `py`.`period_code` = `po`.`period_code`;";
+        $uSql = "UPDATE `wp_period_year` AS `py`, `{$tmpTable}` AS `po` SET `py`.`show_type` = `po`.`show_type` WHERE `py`.`period_code` = `po`.`period_code`;";
         \DB::connection('knowledge')->select($uSql);
         $uSql = "UPDATE `wp_chronology` SET `period_status` = 1;";
+        \DB::connection('knowledge')->select($uSql);
+        $uSql = "DROP TABLE `{$tmpTable}`;";
         \DB::connection('knowledge')->select($uSql);
         return true;
         //print_r($newDatas);

@@ -7,14 +7,26 @@ trait FormatFigureTrait
     public function initEmperorData()
     {
         $nhDatas = require('/data/htmlwww/laravel-system/vendor/candocker/knowledge/resources/nh.php');
-        $sql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `eraname`, `brief`, `baidu_url`, `start_year`, `end_year`) VALUES\n";
+        $sql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `eraname`, `brief`, `baidu_url`, `start_year`, `end_year`, `orderlist`) VALUES\n";
+        $lastData = [];
         foreach ($nhDatas as $nhData) {
+            if (count($nhData) == 4) {
+                $tmpData = $nhData;
+                $nhData = $lastData;
+                $nhData['name'] = $tmpData['begin_end'];
+                $nhData['brief'] = $tmpData['name_card'];
+                $nhData['brief2'] = $tmpData['name'];
+                $nhData['brief3'] = $tmpData['brief'];
+            } else {
+                $lastData = $nhData;
+            }
             $name = $nhData['begin_end'];
             $nUrl = substr($name, strpos($name, 'https'));
             $nUrl = substr($nUrl, 0, strpos($nUrl, '">'));
             //var_dump($nUrl);
             $name = strip_tags($name);
-            $name = substr($name, strpos($name, '朱'));
+            //$name = substr($name, strpos($name, '朱'));
+            $name = substr($name, 9);
             $figures = $this->getModelObj('figure')->where(['name' => $name])->get();
             if ($figures->count() > 1) {
                 //var_dump($name);
@@ -57,20 +69,25 @@ trait FormatFigureTrait
             $nhUrl = substr($nhUrl, strpos($nhUrl, 'https'));
             $nhUrl = substr($nhUrl, 0, strpos($nhUrl, '">'));
         //$sql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `eraname`, `brief`, `baidu_url`, `start_year`, `end_year`) VALUES\n";
-            $sql .= "('emperor', 'mingchao', '{$figure['code']}', '', '', '', {$sStart}, {$sEnd}),\n";
-            $sql .= "('eraname', 'mingchao', '{$figure['code']}', '{$nhName}', '{$nhBrief}', '{$nhUrl}', {$nhStart}, {$nhEnd}),\n";
+            $sql .= "('emperor', 'qingchao', '{$figure['code']}', '', '', '', {$sStart}, {$sEnd}, 1),\n";
+            $sql .= "('eraname', 'qingchao', '{$figure['code']}', '{$nhName}', '{$nhBrief}', '{$nhUrl}', {$nhStart}, {$nhEnd}, 1),\n";
             //var_dump($nhName . '-' . $nhUrl);
         }
         echo $sql;
         //print_r($nhDatas);
         exit();
-        $dynasty = 'mingchao';
+    }
+
+    public function initEmperorData1()
+    {
+        $dynasty = 'qingchao';
+        //$dynasty = 'houjinqing';
         // UPDATE `wp_figure` AS `f`, `wp_figure_listing` AS `fl`SET `f`.`path_label` = '君主' WHERE `f`.`country_code` = 'qingchao' AND `f`.`code` = `fl`.`figure_code` AND `fl`.`type` = 'cnemperor';
         $sql = "SELECT * FROM `online_knowledge`.`ztmp_wp_emperor` WHERE `dynasty` = '{$dynasty}';";
         $sql = "SELECT * FROM `work_knowledge`.`wp_emperor` WHERE `dynasty` = '{$dynasty}';";
         //echo $sql;
         $infos = \DB::select($sql);
-        $infos = $this->getModelObj('figure')->where(['country_code' => 'mingchao'])->where('birth_year', 0)->get();
+        $infos = $this->getModelObj('figure')->where(['country_code' => $dynasty])->where('birth_year', 0)->get();
         //print_r($infos);
         $fields = ['birth_accurate', 'birth_year', 'birth_month', 'birth_day'];
         $fields2 = ['death_accurate', 'death_year', 'death_month', 'death_day'];
@@ -84,7 +101,7 @@ trait FormatFigureTrait
                 }
             }
             $str = trim($str, ',');
-            $str .= " WHERE `code` = '{$info['code']}';\nUPDATE `wp_figure` SET ";
+            $str .= " WHERE `code` = '{$info['code']}';\n<br />UPDATE `wp_figure` SET ";
             foreach ($fields2 as $field) {
                 if (in_array($field, ['path_gather', 'path_label', 'birth_accurate', 'death_accurate'])) {
                     $str .= "`{$field}` = '',";
@@ -93,7 +110,8 @@ trait FormatFigureTrait
                 }
             }
             $str = trim($str, ',');
-            echo $str . " WHERE `code` = '{$info['code']}'; ----{$info['name']}\n";
+            echo $str . " WHERE `code` = '{$info['code']}'; ----<a href='{$info['baidu_url']}' target='_blank'>{$info['name']}</a>\n<br />";
+            //echo $str . " WHERE `code` = '{$info['code']}'; <br />";
         }
 
         exit();
