@@ -1,4 +1,313 @@
 <?php
+return array(
+  608 => 
+  array (
+    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明太祖/2329247">明太祖</a>朱元璋',
+    'name_card' => '1368年—1398年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/洪武/1268395">洪武</a>',
+    'brief' => '1368年—1398年',
+    'brief2' => '31年',
+    'brief3' => '三十一年闰五月明惠帝即位沿用。朝鲜自1370年起使用明朝年号',
+  ),
+  609 => 
+  array (
+    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明惠宗/8295167">明惠宗</a>朱允炆',
+    'name_card' => '1398年—1402年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/建文/10137833">建文</a>',
+    'brief' => '1399年—1402年',
+    'brief2' => '4年',
+    'brief3' => '四年六月明成祖废除建文年号，复称洪武三十五年',
+  ),
+  610 => 
+  array (
+    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明成祖/449258">明成祖</a>朱棣',
+    'name_card' => '1402年—1424年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/永乐/28505">永乐</a>',
+    'brief' => '1403年—1424年',
+    'brief2' => '22年',
+    'brief3' => '明成祖即位沿用',
+  ),
+  611 => 
+  array (
+    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明仁宗/2346048">明仁宗</a>朱高炽',
+    'name_card' => '1424年—1425年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/洪熙/2292806">洪熙</a>',
+    'brief' => '1425年',
+    'brief2' => '1年',
+    'brief3' => '明仁宗即位沿用',
+  ),
+  612 => 
+  array (
+    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明宣宗/1314301">明宣宗</a>朱瞻基',
+    'name_card' => '1425年—1435年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/宣德/19774482">宣德</a>',
+    'brief' => '1426年—1435年',
+    'brief2' => '10年',
+    'brief3' => '明宣宗即位沿用',
+  ),
+  613 => 
+  array (
+    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明英宗/1314227">明英宗</a>朱祁镇',
+    'name_card' => '1435年—1449年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/正统/3701008">正统</a>',
+    'brief' => '1436年—1449年',
+    'brief2' => '14年',
+    'brief3' => '明英宗即位沿用',
+  ),
+  614 => 
+  array (
+    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明代宗/2677642">明代宗</a>朱祁钰',
+    'name_card' => '1449年—1457年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/景泰/13301">景泰</a>',
+    'brief' => '1450年—1457年',
+    'brief2' => '7年',
+    'brief3' => '明代宗即位沿用',
+  ),
+  615 => 
+  array (
+    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明英宗/1314227">明英宗</a>朱祁镇',
+    'name_card' => '1457年—1464年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/天顺/9547058">天顺</a>',
+    'brief' => '1457年—1464年',
+    'brief2' => '8年',
+    'brief3' => '明英宗复位沿用',
+  ),
+  616 => 
+  array (
+    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明宪宗/2541184">明宪宗</a>朱见深',
+    'name_card' => '1464年—1487年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/成化/2677711">成化</a>',
+    'brief' => '1465年—1487年',
+    'brief2' => '23年',
+    'brief3' => '明宪宗即位沿用',
+  ),
+  617 => 
+  array (
+    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明孝宗/1576501">明孝宗</a>朱祐樘',
+    'name_card' => '1487年—1505年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/弘治/15692">弘治</a>',
+    'brief' => '1488年—1505年',
+    'brief2' => '18年',
+    'brief3' => '明孝宗即位沿用',
+  ),
+  618 => 
+  array (
+    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明武宗/3307060">明武宗</a>朱厚照',
+    'name_card' => '1505年—1521年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/正德/9533372">正德</a>',
+    'brief' => '1506年—1521年',
+    'brief2' => '16年',
+    'brief3' => '明武宗即位沿用',
+  ),
+  619 => 
+  array (
+    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明世宗/2541260">明世宗</a>朱厚熜',
+    'name_card' => '1521年—1566年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/嘉靖/5520882">嘉靖</a>',
+    'brief' => '1522年—1566年',
+    'brief2' => '45年',
+    'brief3' => '明世宗即位沿用',
+  ),
+  620 => 
+  array (
+    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明穆宗/778688">明穆宗</a>朱载坖',
+    'name_card' => '1567年—1572年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/隆庆/15693">隆庆</a>',
+    'brief' => '1567年—1572年',
+    'brief2' => '6年',
+    'brief3' => '明穆宗即位沿用',
+  ),
+  621 => 
+  array (
+    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明神宗/704547">明神宗</a>朱翊钧',
+    'name_card' => '1572年—1620年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/万历/704569">万历</a>',
+    'brief' => '1573年—1620年',
+    'brief2' => '48年',
+    'brief3' => '明神宗即位沿用',
+  ),
+  622 => 
+  array (
+    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明光宗/2598499">明光宗</a>朱常洛',
+    'name_card' => '1620年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/泰昌/92110">泰昌</a>',
+    'brief' => '1620年',
+    'brief2' => '1年',
+    'brief3' => '明光宗即位沿用',
+  ),
+  623 => 
+  array (
+    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明熹宗/1576474">明熹宗</a>朱由校',
+    'name_card' => '1620年—1627年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/天启/3816119">天启</a>',
+    'brief' => '1621年—1627年',
+    'brief2' => '7年',
+    'brief3' => '明熹宗即位沿用',
+  ),
+  624 => 
+  array (
+    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明思宗/2260979">明思宗</a>朱由检',
+    'name_card' => '1627年—1644年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/崇祯/2086019">崇祯</a>',
+    'brief' => '1628年—1644年',
+    'brief2' => '17年',
+    'brief3' => '明思宗即位沿用',
+  ),
+  625 => 
+  array (
+    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明安宗/835636">明安宗</a>朱由崧',
+    'name_card' => '1644年—1645年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/弘光/580071">弘光</a>',
+    'brief' => '1644年—1645年',
+    'brief2' => '1年',
+    'brief3' => '',
+  ),
+  626 => 
+  array (
+    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明绍宗/5138478">明绍宗</a>朱聿键',
+    'name_card' => '1645年—1646年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/隆武/10614148">隆武</a>',
+    'brief' => '1645年—1646年',
+    'brief2' => '1年',
+    'brief3' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/永历/61937">永历</a>元年（1647年）淮安起事者张华山用此年号起事',
+  ),
+  627 => 
+  array (
+    'begin_end' => '明文宗<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/朱聿鐭/1298581">朱聿鐭</a>',
+    'name_card' => '1646年—1647年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/绍武/12739047">绍武</a>',
+    'brief' => '1646年—1647年',
+    'brief2' => '40天',
+    'brief3' => '清军攻入广州兵败被杀（一说自杀）',
+  ),
+  628 => 
+  array (
+    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明昭宗/5085296">明昭宗</a>朱由榔',
+    'name_card' => '1646年—1662年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/永历/61937">永历</a>',
+    'brief' => '1646年—1662年',
+    'brief2' => '16年',
+    'brief3' => '死后台湾一直延用至永历三十七年（1683年）十二月<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/郑克塽/6711805">郑克塽</a>降清止',
+  ),
+);
+return array(
+  629 => 
+  array (
+    'begin_end' => '清太祖<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/努尔哈赤/212072">努尔哈赤</a>',
+    'name_card' => '1616年—1626年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/天命/3822645">天命</a>',
+    'brief' => '1616年—1626年',
+    'brief2' => '11年',
+    'brief3' => '有学者认为后金只使用<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/汗号/5485409">汗号</a>纪年，实际并无年号。《<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/清实录/1997221">清实录</a>》用“建元天命”，是编者附会汉制所做',
+  ),
+  630 => 
+  array (
+    'begin_end' => '清太宗<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/皇太极/179283">皇太极</a>',
+    'name_card' => '1626年—1643年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/天聪/10811121">天聪</a>',
+    'brief' => '1627年—1636年',
+    'brief2' => '10年',
+    'brief3' => '同上',
+  ),
+  631 => 
+  array (
+    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/崇德/15695">崇德</a>',
+    'name_card' => '1636年—1643年',
+    'name' => '8年',
+    'brief' => '清世祖即位沿用',
+  ),
+  632 => 
+  array (
+    'begin_end' => '清世祖<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/福临/978617">福临</a>',
+    'name_card' => '1643年—1661年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/顺治/301130">顺治</a>',
+    'brief' => '1644年—1661年',
+    'brief2' => '18年',
+    'brief3' => '清圣祖即位沿用；朝鲜开始使用清朝年号',
+  ),
+  633 => 
+  array (
+    'begin_end' => '清圣祖<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/玄烨/443763">玄烨</a>',
+    'name_card' => '1661年—1722年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/康熙/130006">康熙</a>',
+    'brief' => '1662年—1722年',
+    'brief2' => '61年',
+    'brief3' => '清世宗即位沿用',
+  ),
+  634 => 
+  array (
+    'begin_end' => '清世宗<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/胤禛/2044288">胤禛</a>',
+    'name_card' => '1722年—1735年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/雍正/130080">雍正</a>',
+    'brief' => '1723年—1735年',
+    'brief2' => '13年',
+    'brief3' => '清高宗即位沿用',
+  ),
+  635 => 
+  array (
+    'begin_end' => '清高宗<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/弘历/2044475">弘历</a>',
+    'name_card' => '1735年—1796年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/乾隆/129924">乾隆</a>',
+    'brief' => '1736年—1795年',
+    'brief2' => '60年',
+    'brief3' => '清仁宗即位沿用',
+  ),
+  636 => 
+  array (
+    'begin_end' => '清仁宗<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/颙琰/2044588">颙琰</a>',
+    'name_card' => '1795年—1820年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/嘉庆/19774466">嘉庆</a>',
+    'brief' => '1796年—1820年',
+    'brief2' => '25年',
+    'brief3' => '清宣宗即位沿用',
+  ),
+  637 => 
+  array (
+    'begin_end' => '清宣宗<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/旻宁/613167">旻宁</a>',
+    'name_card' => '1820年—1850年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/道光/10953324">道光</a>',
+    'brief' => '1821年—1850年',
+    'brief2' => '30年',
+    'brief3' => '清文宗即位沿用',
+  ),
+  638 => 
+  array (
+    'begin_end' => '清文宗<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/奕詝/2044835">奕詝</a>',
+    'name_card' => '1850年—1861年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/咸丰/653">咸丰</a>',
+    'brief' => '1851年—1861年',
+    'brief2' => '11年',
+    'brief3' => '清穆宗即位沿用',
+  ),
+  639 => 
+  array (
+    'begin_end' => '清穆宗<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/载淳/2044995">载淳</a>',
+    'name_card' => '1861年—1875年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/同治/398464">同治</a>',
+    'brief' => '1862年—1874年',
+    'brief2' => '13年',
+    'brief3' => '清德宗即位沿用',
+  ),
+  640 => 
+  array (
+    'begin_end' => '清德宗<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/载湉/2045202">载湉</a>',
+    'name_card' => '1874年—1908年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/光绪/558952">光绪</a>',
+    'brief' => '1875年—1908年',
+    'brief2' => '34年',
+    'brief3' => '清末帝即位沿用',
+  ),
+  641 => 
+  array (
+    'begin_end' => '清末帝<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/溥仪/373386">溥仪</a>',
+    'name_card' => '1909年—1912年',
+    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/宣统/1523933">宣统</a>',
+    'brief' => '1909年—1912年',
+    'brief2' => '3年',
+    'brief3' => '1912年1月1日中华民国成立废除年号纪年，实行民国纪年，2月12日清帝退位；1917年7月1日—12日张勋拥立溥仪复辟，以当年为“宣统九年”',
+  ),
+);
+
 return 
 array (
   0 => 
@@ -1147,7 +1456,7 @@ array (
     'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/元熙/8885">元熙</a>',
     'brief' => '419年—420年',
     'brief2' => '2年',
-    'brief3' => ' [4]',
+    'brief3' => '',
   ),
   150 => 
   array (
@@ -4792,309 +5101,5 @@ array (
     'name_card' => '1341年—1370年',
     'name' => '30年',
     'brief' => '',
-  ),
-  608 => 
-  array (
-    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明太祖/2329247">明太祖</a>朱元璋',
-    'name_card' => '1368年—1398年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/洪武/1268395">洪武</a>',
-    'brief' => '1368年—1398年',
-    'brief2' => '31年',
-    'brief3' => '三十一年闰五月明惠帝即位沿用。朝鲜自1370年起使用明朝年号',
-  ),
-  609 => 
-  array (
-    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明惠宗/8295167">明惠宗</a>朱允炆',
-    'name_card' => '1398年—1402年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/建文/10137833">建文</a>',
-    'brief' => '1399年—1402年',
-    'brief2' => '4年',
-    'brief3' => '四年六月明成祖废除建文年号，复称洪武三十五年',
-  ),
-  610 => 
-  array (
-    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明成祖/449258">明成祖</a>朱棣',
-    'name_card' => '1402年—1424年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/永乐/28505">永乐</a>',
-    'brief' => '1403年—1424年',
-    'brief2' => '22年',
-    'brief3' => '明成祖即位沿用',
-  ),
-  611 => 
-  array (
-    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明仁宗/2346048">明仁宗</a>朱高炽',
-    'name_card' => '1424年—1425年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/洪熙/2292806">洪熙</a>',
-    'brief' => '1425年',
-    'brief2' => '1年',
-    'brief3' => '明仁宗即位沿用',
-  ),
-  612 => 
-  array (
-    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明宣宗/1314301">明宣宗</a>朱瞻基',
-    'name_card' => '1425年—1435年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/宣德/19774482">宣德</a>',
-    'brief' => '1426年—1435年',
-    'brief2' => '10年',
-    'brief3' => '明宣宗即位沿用',
-  ),
-  613 => 
-  array (
-    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明英宗/1314227">明英宗</a>朱祁镇',
-    'name_card' => '1435年—1449年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/正统/3701008">正统</a>',
-    'brief' => '1436年—1449年',
-    'brief2' => '14年',
-    'brief3' => '明英宗即位沿用',
-  ),
-  614 => 
-  array (
-    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明代宗/2677642">明代宗</a>朱祁钰',
-    'name_card' => '1449年—1457年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/景泰/13301">景泰</a>',
-    'brief' => '1450年—1457年',
-    'brief2' => '7年',
-    'brief3' => '明代宗即位沿用',
-  ),
-  615 => 
-  array (
-    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明英宗/1314227">明英宗</a>朱祁镇',
-    'name_card' => '1457年—1464年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/天顺/9547058">天顺</a>',
-    'brief' => '1457年—1464年',
-    'brief2' => '8年',
-    'brief3' => '明英宗复位沿用',
-  ),
-  616 => 
-  array (
-    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明宪宗/2541184">明宪宗</a>朱见深',
-    'name_card' => '1464年—1487年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/成化/2677711">成化</a>',
-    'brief' => '1465年—1487年',
-    'brief2' => '23年',
-    'brief3' => '明宪宗即位沿用',
-  ),
-  617 => 
-  array (
-    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明孝宗/1576501">明孝宗</a>朱祐樘',
-    'name_card' => '1487年—1505年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/弘治/15692">弘治</a>',
-    'brief' => '1488年—1505年',
-    'brief2' => '18年',
-    'brief3' => '明孝宗即位沿用',
-  ),
-  618 => 
-  array (
-    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明武宗/3307060">明武宗</a>朱厚照',
-    'name_card' => '1505年—1521年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/正德/9533372">正德</a>',
-    'brief' => '1506年—1521年',
-    'brief2' => '16年',
-    'brief3' => '明武宗即位沿用',
-  ),
-  619 => 
-  array (
-    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明世宗/2541260">明世宗</a>朱厚熜',
-    'name_card' => '1521年—1566年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/嘉靖/5520882">嘉靖</a>',
-    'brief' => '1522年—1566年',
-    'brief2' => '45年',
-    'brief3' => '明世宗即位沿用',
-  ),
-  620 => 
-  array (
-    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明穆宗/778688">明穆宗</a>朱载坖',
-    'name_card' => '1567年—1572年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/隆庆/15693">隆庆</a>',
-    'brief' => '1567年—1572年',
-    'brief2' => '6年',
-    'brief3' => '明穆宗即位沿用',
-  ),
-  621 => 
-  array (
-    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明神宗/704547">明神宗</a>朱翊钧',
-    'name_card' => '1572年—1620年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/万历/704569">万历</a>',
-    'brief' => '1573年—1620年',
-    'brief2' => '48年',
-    'brief3' => '明神宗即位沿用',
-  ),
-  622 => 
-  array (
-    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明光宗/2598499">明光宗</a>朱常洛',
-    'name_card' => '1620年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/泰昌/92110">泰昌</a>',
-    'brief' => '1620年',
-    'brief2' => '1年',
-    'brief3' => '明光宗即位沿用',
-  ),
-  623 => 
-  array (
-    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明熹宗/1576474">明熹宗</a>朱由校',
-    'name_card' => '1620年—1627年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/天启/3816119">天启</a>',
-    'brief' => '1621年—1627年',
-    'brief2' => '7年',
-    'brief3' => '明熹宗即位沿用',
-  ),
-  624 => 
-  array (
-    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明思宗/2260979">明思宗</a>朱由检',
-    'name_card' => '1627年—1644年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/崇祯/2086019">崇祯</a>',
-    'brief' => '1628年—1644年',
-    'brief2' => '17年',
-    'brief3' => '明思宗即位沿用',
-  ),
-  625 => 
-  array (
-    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明安宗/835636">明安宗</a>朱由崧',
-    'name_card' => '1644年—1645年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/弘光/580071">弘光</a>',
-    'brief' => '1644年—1645年 [2]',
-    'brief2' => '1年',
-    'brief3' => '',
-  ),
-  626 => 
-  array (
-    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明绍宗/5138478">明绍宗</a>朱聿键',
-    'name_card' => '1645年—1646年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/隆武/10614148">隆武</a>',
-    'brief' => '1645年—1646年 [3]',
-    'brief2' => '1年',
-    'brief3' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/永历/61937">永历</a>元年（1647年）淮安起事者张华山用此年号起事',
-  ),
-  627 => 
-  array (
-    'begin_end' => '明文宗<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/朱聿鐭/1298581">朱聿鐭</a>',
-    'name_card' => '1646年—1647年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/绍武/12739047">绍武</a>',
-    'brief' => '1646年—1647年',
-    'brief2' => '40天',
-    'brief3' => '清军攻入广州兵败被杀（一说自杀）',
-  ),
-  628 => 
-  array (
-    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/明昭宗/5085296">明昭宗</a>朱由榔',
-    'name_card' => '1646年—1662年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/永历/61937">永历</a>',
-    'brief' => '1646年—1662年',
-    'brief2' => '16年',
-    'brief3' => '死后台湾一直延用至永历三十七年（1683年）十二月<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/郑克塽/6711805">郑克塽</a>降清止',
-  ),
-  629 => 
-  array (
-    'begin_end' => '清太祖<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/努尔哈赤/212072">努尔哈赤</a>',
-    'name_card' => '1616年—1626年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/天命/3822645">天命</a>',
-    'brief' => '1616年—1626年',
-    'brief2' => '11年',
-    'brief3' => '有学者认为后金只使用<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/汗号/5485409">汗号</a>纪年，实际并无年号。《<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/清实录/1997221">清实录</a>》用“建元天命”，是编者附会汉制所做',
-  ),
-  630 => 
-  array (
-    'begin_end' => '清太宗<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/皇太极/179283">皇太极</a>',
-    'name_card' => '1626年—1643年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/天聪/10811121">天聪</a>',
-    'brief' => '1627年—1636年',
-    'brief2' => '10年',
-    'brief3' => '同上',
-  ),
-  631 => 
-  array (
-    'begin_end' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/崇德/15695">崇德</a>',
-    'name_card' => '1636年—1643年',
-    'name' => '8年',
-    'brief' => '清世祖即位沿用',
-  ),
-  632 => 
-  array (
-    'begin_end' => '清世祖<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/福临/978617">福临</a>',
-    'name_card' => '1643年—1661年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/顺治/301130">顺治</a>',
-    'brief' => '1644年—1661年',
-    'brief2' => '18年',
-    'brief3' => '清圣祖即位沿用；朝鲜开始使用清朝年号',
-  ),
-  633 => 
-  array (
-    'begin_end' => '清圣祖<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/玄烨/443763">玄烨</a>',
-    'name_card' => '1661年—1722年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/康熙/130006">康熙</a>',
-    'brief' => '1662年—1722年',
-    'brief2' => '61年',
-    'brief3' => '清世宗即位沿用',
-  ),
-  634 => 
-  array (
-    'begin_end' => '清世宗<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/胤禛/2044288">胤禛</a>',
-    'name_card' => '1722年—1735年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/雍正/130080">雍正</a>',
-    'brief' => '1723年—1735年',
-    'brief2' => '13年',
-    'brief3' => '清高宗即位沿用',
-  ),
-  635 => 
-  array (
-    'begin_end' => '清高宗<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/弘历/2044475">弘历</a>',
-    'name_card' => '1735年—1796年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/乾隆/129924">乾隆</a>',
-    'brief' => '1736年—1795年',
-    'brief2' => '60年',
-    'brief3' => '清仁宗即位沿用',
-  ),
-  636 => 
-  array (
-    'begin_end' => '清仁宗<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/颙琰/2044588">颙琰</a>',
-    'name_card' => '1795年—1820年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/嘉庆/19774466">嘉庆</a>',
-    'brief' => '1796年—1820年',
-    'brief2' => '25年',
-    'brief3' => '清宣宗即位沿用',
-  ),
-  637 => 
-  array (
-    'begin_end' => '清宣宗<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/旻宁/613167">旻宁</a>',
-    'name_card' => '1820年—1850年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/道光/10953324">道光</a>',
-    'brief' => '1821年—1850年',
-    'brief2' => '30年',
-    'brief3' => '清文宗即位沿用',
-  ),
-  638 => 
-  array (
-    'begin_end' => '清文宗<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/奕詝/2044835">奕詝</a>',
-    'name_card' => '1850年—1861年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/咸丰/653">咸丰</a>',
-    'brief' => '1851年—1861年',
-    'brief2' => '11年',
-    'brief3' => '清穆宗即位沿用',
-  ),
-  639 => 
-  array (
-    'begin_end' => '清穆宗<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/载淳/2044995">载淳</a>',
-    'name_card' => '1861年—1875年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/同治/398464">同治</a>',
-    'brief' => '1862年—1874年',
-    'brief2' => '13年',
-    'brief3' => '清德宗即位沿用',
-  ),
-  640 => 
-  array (
-    'begin_end' => '清德宗<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/载湉/2045202">载湉</a>',
-    'name_card' => '1874年—1908年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/光绪/558952">光绪</a>',
-    'brief' => '1875年—1908年',
-    'brief2' => '34年',
-    'brief3' => '清末帝即位沿用',
-  ),
-  641 => 
-  array (
-    'begin_end' => '清末帝<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/溥仪/373386">溥仪</a>',
-    'name_card' => '1909年—1912年',
-    'name' => '<a class="innerLink_R0Ri3" href="https://baike.baidu.com/item/宣统/1523933">宣统</a>',
-    'brief' => '1909年—1912年',
-    'brief2' => '3年',
-    'brief3' => '1912年1月1日中华民国成立废除年号纪年，实行民国纪年，2月12日清帝退位；1917年7月1日—12日张勋拥立溥仪复辟，以当年为“宣统九年”',
   ),
 );

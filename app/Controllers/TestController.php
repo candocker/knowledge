@@ -533,8 +533,8 @@ class TestController extends AbstractController
         $service->$method($params);
         exit();
         //$service->initFigureDatas();exit();
-        //$service->initDateData();exit();
         //$service->formatBaikeDatas();exit();
+        //$service->initDateData();exit();
     }
 
     public function _test()

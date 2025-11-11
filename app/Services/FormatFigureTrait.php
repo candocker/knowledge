@@ -6,24 +6,93 @@ trait FormatFigureTrait
 {
     public function initEmperorData()
     {
+        $nhDatas = require('/data/htmlwww/laravel-system/vendor/candocker/knowledge/resources/nh.php');
+        $sql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `eraname`, `brief`, `baidu_url`, `start_year`, `end_year`) VALUES\n";
+        foreach ($nhDatas as $nhData) {
+            $name = $nhData['begin_end'];
+            $nUrl = substr($name, strpos($name, 'https'));
+            $nUrl = substr($nUrl, 0, strpos($nUrl, '">'));
+            //var_dump($nUrl);
+            $name = strip_tags($name);
+            $name = substr($name, strpos($name, '朱'));
+            $figures = $this->getModelObj('figure')->where(['name' => $name])->get();
+            if ($figures->count() > 1) {
+                //var_dump($name);
+            } else {
+                $figure = $figures[0];
+            }
+            //print_r($figure->toArray());
+            if ($figure->baidu_url != $nUrl) {
+                //echo "<a href='{$nUrl}' target='_blank'>当前<a>、<a href='{$figure->baidu_url}' target='_blank'>{$figure['name']}</a>{$figure['baidu_url']}<br />";
+            }
+            $sEnd = $nhData['name_card'];
+            $sEnd = str_replace(['年'], [''], $sEnd);
+            if (strpos($sEnd, '—') === false) {
+                $sStart = $sEnd;
+                $sEnd = $sEnd;
+            } else {
+                $sEndTmp = explode('—', $sEnd);
+                $sStart = $sEndTmp[0];
+                $sEnd = $sEndTmp[1];
+
+            }
+            //var_dump($sStart . '-' . $sEnd);
+            $nhEnd = $nhData['brief'];
+
+            $nhEnd = str_replace(['年'], [''], $nhEnd);
+            if (strpos($nhEnd, '—') === false) {
+                $nhStart = $nhEnd;
+                $nhEnd = $nhEnd;
+            } else {
+                $nhEndTmp = explode('—', $nhEnd);
+                $nhStart = $nhEndTmp[0];
+                $nhEnd = $nhEndTmp[1];
+
+            }
+            //var_dump($nhStart . '=' . $nhEnd);
+            $nhBrief = $nhData['brief3'];
+
+            $nhName = strip_tags($nhData['name']);
+            $nhUrl = $nhData['name'];
+            $nhUrl = substr($nhUrl, strpos($nhUrl, 'https'));
+            $nhUrl = substr($nhUrl, 0, strpos($nhUrl, '">'));
+        //$sql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `eraname`, `brief`, `baidu_url`, `start_year`, `end_year`) VALUES\n";
+            $sql .= "('emperor', 'mingchao', '{$figure['code']}', '', '', '', {$sStart}, {$sEnd}),\n";
+            $sql .= "('eraname', 'mingchao', '{$figure['code']}', '{$nhName}', '{$nhBrief}', '{$nhUrl}', {$nhStart}, {$nhEnd}),\n";
+            //var_dump($nhName . '-' . $nhUrl);
+        }
+        echo $sql;
+        //print_r($nhDatas);
+        exit();
         $dynasty = 'mingchao';
         // UPDATE `wp_figure` AS `f`, `wp_figure_listing` AS `fl`SET `f`.`path_label` = '君主' WHERE `f`.`country_code` = 'qingchao' AND `f`.`code` = `fl`.`figure_code` AND `fl`.`type` = 'cnemperor';
         $sql = "SELECT * FROM `online_knowledge`.`ztmp_wp_emperor` WHERE `dynasty` = '{$dynasty}';";
         $sql = "SELECT * FROM `work_knowledge`.`wp_emperor` WHERE `dynasty` = '{$dynasty}';";
         //echo $sql;
         $infos = \DB::select($sql);
-        $infos = $this->getModelObj('figure')->where(['country_code' => 'mingchao'])->get();
+        $infos = $this->getModelObj('figure')->where(['country_code' => 'mingchao'])->where('birth_year', 0)->get();
         //print_r($infos);
-        $fields = ['path_gather', 'birth_accurate', 'birth_year', 'birth_month', 'birth_day', 'death_accurate', 'death_year', 'death_month', 'death_day'];
+        $fields = ['birth_accurate', 'birth_year', 'birth_month', 'birth_day'];
+        $fields2 = ['death_accurate', 'death_year', 'death_month', 'death_day'];
         foreach ($infos as $info) {
             $str = "UPDATE `wp_figure` SET ";
             foreach ($fields as $field) {
                 if (in_array($field, ['path_gather', 'path_label', 'birth_accurate', 'death_accurate'])) {
                     $str .= "`{$field}` = '',";
                 } else {
-                    $str .= "`{$field}` = 0,";
+                    $str .= "`{$field}` = ,";
                 }
             }
+            $str = trim($str, ',');
+            $str .= " WHERE `code` = '{$info['code']}';\nUPDATE `wp_figure` SET ";
+            foreach ($fields2 as $field) {
+                if (in_array($field, ['path_gather', 'path_label', 'birth_accurate', 'death_accurate'])) {
+                    $str .= "`{$field}` = '',";
+                } else {
+                    $str .= "`{$field}` = ,";
+                }
+            }
+            $str = trim($str, ',');
             echo $str . " WHERE `code` = '{$info['code']}'; ----{$info['name']}\n";
         }
 
@@ -93,6 +162,46 @@ trait FormatFigureTrait
 
     /*public function initDateData()
     {
+        //$infos = $this->getModelObj('figureListing')->where(['type' =>'usapresident'])->get();
+        $infos = \DB::select('SELECT * FROM `work_culture`.`wp_figure_resume`');
+        $sql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `brief`, `orderlist`, `start_year`, `end_year`) VALUES \n";
+        $datas = [];
+        foreach ($infos as $info) {
+            //print_R($info);
+            $sSql = "SELECT * FROM `wp_dateinfo` WHERE `info_type` = 'figure_resume' AND `info_key` = {$info->id} AND `type` = 'start';";
+            $sData = \DB::connection('knowledge')->select($sSql);
+            $sData = $sData[0];
+            $eSql = "SELECT * FROM `wp_dateinfo` WHERE `info_type` = 'figure_resume' AND `info_key` = {$info->id} AND `type` = 'end';";
+            $eData = \DB::connection('knowledge')->select($eSql);
+            $eData = $eData[0];
+            $fCode = $info->figure_code;
+            $fCode = $fCode == 'cleveland' && $sData->year == 1893 ? $info->figure_code . '_2' : $fCode;
+            //var_dump($fCode);
+            if (isset($datas[$fCode])) {
+                $datas[$fCode]['end'] = $eData;
+                $datas[$fCode]['num'] += 1;
+            } else {
+                $datas[$fCode]['start'] = $sData;
+                $datas[$fCode]['end'] = $eData;
+                $datas[$fCode]['num'] = 1;
+            }
+        }
+        $term = 1;
+        foreach ($datas as $fCode => $dInfo) {
+            //var_dump($fCode);
+            //print_r($dInfo);
+            $sData = $dInfo['start'];
+            $eData = $dInfo['end'];
+            //print_r($eData);
+            $numStr = $dInfo['num'] > 1 ? "({$dInfo['num']})" : '';
+            $brief = "第{$term}任，任期{$numStr}：{$sData->year}/{$sData->month}/{$sData->day}-{$eData->year}/{$eData->month}/{$eData->day}";
+            $term++;
+            $sql .= "('emperor', 'us', '{$fCode}', '{$brief}', 100, {$sData->year}, {$eData->year}),\n";
+            //print_r($data);exit();
+
+        }
+        echo $sql;exit();
+
         $infos = $this->getModelObj('figure')->where('extfield', '<>', '')->get();
         foreach ($infos as $info) {
             $nameStr = $info['name'] . '-' . "<a href='http://mu.canliang.wang/wiki-figure-{$info['code']}.html'>{$info['code']}</a>";

@@ -158,7 +158,7 @@ class Chronology extends AbstractModel
             return $this->period_brief;
         }
 
-        $pyInfos = $this->getModelObj('periodYear')->where(['year' => $this->orderlist])->orderBy('show_type', 'desc')->orderBy('orderlist')->limit(5)->get();
+        $pyInfos = $this->getModelObj('periodYear')->where(['year' => $this->orderlist])->whereNotIn('show_type_base', [-1])->orderBy('show_type', 'desc')->orderBy('orderlist')->limit(5)->get();
         $str = '';
         foreach ($pyInfos as $pyInfo) {
             $str .= $pyInfo['title'] . '、';

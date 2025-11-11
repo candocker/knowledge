@@ -75,6 +75,7 @@ trait FormatAnnalTrait
                 'orderlist' => $info['orderlist'],
                 'baidu_url' => $info['baidu_url'],
                 'brief' => $info['brief'],
+                'show_type_base' => $info['show_type_base'],
                 'period_code' => $info['country_code'] . '_' . $info['figure_code'] . '_' . $info['eraname'],
             ];
             $index++;
