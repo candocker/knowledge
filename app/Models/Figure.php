@@ -15,7 +15,7 @@ class Figure extends AbstractModel
     public function getFullKnowledgePathAttribute()
     {
         $base = $this->config->get('knowledge.knowledge_path');
-        return $this->knowledge_path ? $base . $this->knowledge_path : '';
+        return $this->knowledge_path ? $base . $this->knowledge_path . '.php' : '';
     }
 
     public function getFullNameAttribute()
@@ -192,6 +192,38 @@ class Figure extends AbstractModel
             $results['common']['birthDeathStrAge'] = $bdStr . ($ageStr ? " ({$ageStr})" : '');
         }
         return $results;
+    }
+
+    public function formatCacheData()
+    {
+        $country = $this->countryInfo;
+        $fPath = $this->full_knowledge_path;
+        $baseData = [
+            'code' => $this->code,
+            'name' => "<a href='/wiki-figure-{$this->code}'>{$this->name}</a>",
+            'name_card' => $this->name_card,
+            'country_code' => $country ? $country['code'] : '',
+            'country_name' => $country ? "<a href='/wiki-country-{$country['code']}.html'>{$country['name']}</a>" : '',
+            'full_knowledge_path' => $fPath,
+        ];
+        $extData = [];
+        if (file_exists($fPath)) {
+            $details = require($fPath);
+            $extData = $details['baseData'] ?? [];
+        }
+        $descs['base'] = $this->description;
+        if (isset($extData['descs'])) {
+            $descs = array_merge($descs, $extData['descs']);
+        }
+
+        $birthDeathDate = $this->formatDate();
+        $cacheData = [
+            'baseData' => $baseData,
+            'extInfos' => $extData['infos'] ?? [],
+            'birthDeathDate' => $birthDeathDate,
+            'desc' => $descs,
+        ];
+        return $cacheData;
     }
 
     /*public function afterSave()

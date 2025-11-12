@@ -16,7 +16,7 @@ class Chronology extends AbstractModel
         $year = abs($this->orderlist);
         $ageNum = $year % 100;
         $age = floor($ageNum / 10);
-        return $base . $age . '/' . $year;
+        return $base . $age . '/' . $year . '.php';
     }
 
     public function wrapDetailDatas($detailDatas)
@@ -158,7 +158,8 @@ class Chronology extends AbstractModel
             return $this->period_brief;
         }
 
-        $pyInfos = $this->getModelObj('periodYear')->where(['year' => $this->orderlist])->whereNotIn('show_type_base', [-1])->orderBy('show_type', 'desc')->orderBy('orderlist')->limit(5)->get();
+        $typeStr = 'country,emperor,eraname';
+        $pyInfos = $this->getModelObj('periodYear')->where(['year' => $this->orderlist])->whereNotIn('show_type_base', [-1])->orderBy('show_type', 'desc')->orderBy('orderlist')->orderByRaw("FIND_IN_SET(period_type, '{$typeStr}') asc")->limit(5)->get();
         $str = '';
         foreach ($pyInfos as $pyInfo) {
             $str .= $pyInfo['title'] . '、';

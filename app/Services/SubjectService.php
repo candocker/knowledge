@@ -103,7 +103,7 @@ class SubjectService extends AbstractService
             $knowledgePath = $info->full_knowledge_path;
             $fFile = '';
             if (!empty($knowledgePath)) {
-                $fFile = $knowledgePath . '.php';
+                $fFile = $knowledgePath;
                 $autoCreate = request()->input('force_create_file');
                 if (!file_exists($fFile) && $autoCreate) {
                     $sFile = $this->config->get('knowledge.knowledge_path') . 'sourcefile/' . $autoCreate . '.php';

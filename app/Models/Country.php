@@ -13,7 +13,7 @@ class Country extends AbstractModel
     public function getFullKnowledgePathAttribute()
     {
         $base = $this->config->get('knowledge.knowledge_path');
-        return $this->knowledge_path ? $base . $this->knowledge_path . '/base' : $base . $this->formatKnowledgePath() . '/base';
+        return $this->knowledge_path ? $base . $this->knowledge_path . '/base' : $base . $this->formatKnowledgePath() . '/base.php';
     }
 
     public function _formatBaseData($isMobile)
@@ -91,5 +91,25 @@ class Country extends AbstractModel
         }
         $kPath .= "/{$this->name}";
         return $kPath;
+    }
+
+    public function wrapDetailDatas($detailDatas)
+    {
+        $emperorDatas = $detailDatas['commonFixTableEmperor'] ?? [];
+        if (!empty($emperorDatas)) {
+            $detailDatas['commonFixTableEmperor'] = $this->_formatEmperorDatas($emperorDatas);
+            //unset($detailDatas['commonFixTableEmperor']);
+        }
+        return $detailDatas;
+    }
+
+    public function _formatEmperorDatas($eDatas)
+    {
+        foreach ($eDatas as $key => & $eData) {
+            if ($key == 'topName') {
+                continue;
+            }
+            print_R($eData);exit();
+        }
     }
 }

@@ -25,7 +25,7 @@ class AbstractModel extends AbstractModelBase
     public function getFullKnowledgePathAttribute()
     {
         $base = $this->config->get('knowledge.knowledge_path');
-        return $this->knowledge_path ? $base . $this->knowledge_path : '';
+        return $this->knowledge_path ? $base . $this->knowledge_path . '.php' : '';
     }
 
     public function formatBaseData($baseData, $isMobile)

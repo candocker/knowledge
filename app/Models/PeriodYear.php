@@ -11,7 +11,8 @@ class PeriodYear extends AbstractModel
 
     public function getPointPeriodYearDatas($year, $title)
     {
-        $infos = $this->where('year', $year)->orderBy('orderlist')->get();
+        $typeStr = 'country,emperor,eraname';
+        $infos = $this->where('year', $year)->orderBy('orderlist')->orderByRaw("FIND_IN_SET(period_type, '{$typeStr}') asc")->get();
         $bDatas = [];
         $periodTypes = $this->periodTypeDatas();
         foreach ($infos as $info) {

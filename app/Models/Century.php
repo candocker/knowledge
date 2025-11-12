@@ -13,7 +13,7 @@ class Century extends AbstractModel
     public function getFullKnowledgePathAttribute()
     {
         $base = $this->config->get('knowledge.knowledge_path');
-        return $base . '编年史/年表/' . $this->code . '/base';
+        return $base . '编年史/年表/' . $this->code . '/base.php';
     }
 
     public function _formatBaseData($isMobile)

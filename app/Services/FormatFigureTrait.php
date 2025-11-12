@@ -4,7 +4,7 @@ namespace ModuleKnowledge\Services;
 
 trait FormatFigureTrait
 {
-    public function initEmperorData()
+    public function initEmperorData2()
     {
         $nhDatas = require('/data/htmlwww/laravel-system/vendor/candocker/knowledge/resources/nh.php');
         $sql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `eraname`, `brief`, `baidu_url`, `start_year`, `end_year`, `orderlist`) VALUES\n";
@@ -27,9 +27,20 @@ trait FormatFigureTrait
             $name = strip_tags($name);
             //$name = substr($name, strpos($name, '朱'));
             $name = substr($name, 9);
+            //var_dump($name);continue;
             $figures = $this->getModelObj('figure')->where(['name' => $name])->get();
-            if ($figures->count() > 1) {
-                //var_dump($name);
+            $count = $figures->count();
+            if ($count < 1) {
+                $name = substr($name, 3);
+                $figures = $this->getModelObj('figure')->where(['name' => $name])->get();
+                $count = $figures->count();
+            }
+            if ($count > 1) {
+                var_dump($name . '===');
+                continue;
+            } elseif ($count < 1) {
+                var_dump($name);
+                continue;
             } else {
                 $figure = $figures[0];
             }
@@ -62,7 +73,7 @@ trait FormatFigureTrait
 
             }
             //var_dump($nhStart . '=' . $nhEnd);
-            $nhBrief = $nhData['brief3'];
+            $nhBrief = strip_tags($nhData['brief3']);
 
             $nhName = strip_tags($nhData['name']);
             $nhUrl = $nhData['name'];
@@ -78,20 +89,26 @@ trait FormatFigureTrait
         exit();
     }
 
-    public function initEmperorData1()
+    public function initEmperorData()
     {
+        $dynasty = 'houjinqing';
         $dynasty = 'qingchao';
-        //$dynasty = 'houjinqing';
+        $dynasty = 'yuanchao';
+        $dynasty = 'menggu';
+        $dynasty = 'mingchao';
+
         // UPDATE `wp_figure` AS `f`, `wp_figure_listing` AS `fl`SET `f`.`path_label` = '君主' WHERE `f`.`country_code` = 'qingchao' AND `f`.`code` = `fl`.`figure_code` AND `fl`.`type` = 'cnemperor';
         $sql = "SELECT * FROM `online_knowledge`.`ztmp_wp_emperor` WHERE `dynasty` = '{$dynasty}';";
         $sql = "SELECT * FROM `work_knowledge`.`wp_emperor` WHERE `dynasty` = '{$dynasty}';";
         //echo $sql;
         $infos = \DB::select($sql);
         $infos = $this->getModelObj('figure')->where(['country_code' => $dynasty])->where('birth_year', 0)->get();
+        $infos = $this->getModelObj('figure')->where(['country_code' => $dynasty])->orderBy('birth_year')->get();
         //print_r($infos);
         $fields = ['birth_accurate', 'birth_year', 'birth_month', 'birth_day'];
         $fields2 = ['death_accurate', 'death_year', 'death_month', 'death_day'];
         foreach ($infos as $info) {
+            echo "        '{$info['code']}', // {$info['name']}\n";continue;
             $str = "UPDATE `wp_figure` SET ";
             foreach ($fields as $field) {
                 if (in_array($field, ['path_gather', 'path_label', 'birth_accurate', 'death_accurate'])) {

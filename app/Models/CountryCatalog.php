@@ -77,6 +77,6 @@ class CountryCatalog extends AbstractModel
     public function getFullKnowledgePathAttribute()
     {
         $base = $this->config->get('knowledge.knowledge_path');
-        return $this->knowledge_path ? $base . $this->knowledge_path . '/base' : '';
+        return $this->knowledge_path ? $base . $this->knowledge_path . '/base.php' : '';
     }
 }
