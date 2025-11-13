@@ -19,7 +19,7 @@ class PeriodYear extends AbstractModel
             $bDatas[] = [
                 'type' => $periodTypes[$info->period_type] ?? $info->period_type,
                 'name' => $info->title,
-                'major' => $info->getMajorStr(),
+                'major' => $info->periodInfo->getMajorStr(),
             ];
         }
         $results = [
@@ -33,16 +33,5 @@ class PeriodYear extends AbstractModel
             ],
         ];
         return $results;
-    }
-
-    public function getMajorStr()
-    {
-        if ($this->period_type == 'country') {
-            return $this->countryInfo->brief;
-        }
-        if (in_array($this->period_type, ['bigman', 'emperor'])) {
-            return $this->figureInfo->brief;
-        }
-        return $this->brief;
     }
 }

@@ -42,11 +42,6 @@ class Figure extends AbstractModel
         $this->setAttribute('id', $id);
     }
 
-    public function countryInfo()
-    {
-        return $this->hasOne(Country::class, 'code', 'country_code');
-    }
-
     public function getKnowledgePathAttribute()
     {
         //return $this->path_old;
@@ -82,34 +77,28 @@ class Figure extends AbstractModel
 
     public function _formatBaseData($isMobile)
     {
-        $jumpUrl = !empty($this->baidu_url) ? "<a href='{$this->baidu_url}'>百科</a>" : '';
-        $formatDate = $this->formatDate();
-        $commonData = $formatDate['common'] ?? [];
-        $dateStr = $commonData['birthDeathStrAge'] ?? '';
-        $bInfos = [
-            '姓名' => $this->name,
-        ];
-        if (!empty($dateStr)) {
-            $bInfos['生卒日期 '] = $dateStr;
+        $cacheData = $this->getCacheData($this);
+        //print_r($cacheData);exit();
+
+        $name = $cacheData['baseData']['name'];
+        $bInfos['姓名'] = $name;
+        $nameCard = $cacheData['baseData']['name_card'];
+        if (!empty($nameCard) && $nameCard != $name) {
+            $bInfos['名字'] = $nameCard;
         }
+        $bInfos['生卒日期 '] = $cacheData['birthDeathDate']['common']['birthDeathStrAge'];
+
+        $desc = $cacheData['descs']['base'];
         $baseData = [
             'infos' => $bInfos,
-            'brief' => $this->name,
-            'desc' => $this->description,
-            'headerPicUrl' => $this->photoUrl,
+            //'brief' => $this->name,
+            //'desc' => $desc,
+            'headerPicUrl' => $cacheData['baseData']['headerPicUrl'],
         ];
-        $title = $this->name;
-        if ($jumpUrl) {
-            $title .= $jumpUrl ? " （ {$jumpUrl} ）" : '';
-        }
-
-        $books = $this->getModelObj('figureListing')->where(['type' => 'author', 'figure_code' => $this->code])->get();
-        $bookDatas = [];
-        foreach ($books as $bookData) {
-        }
+        $title = $cacheData['baseData']['name_jump_full'];
         $result = [
-            'tdkData' => ['title' => $this->name, 'description' => $this->description],
-            'pageData' => ['title' => $title, 'brief' => $this->description],
+            'tdkData' => ['title' => $this->name, 'description' => $desc],
+            'pageData' => ['title' => $title, 'brief' => $desc],
             'baseData' => $baseData,
             'headerPicUrl' => $this->photoUrl,
         ];
@@ -118,12 +107,58 @@ class Figure extends AbstractModel
 
     public function wrapDetailDatas($detailDatas)
     {
+        $cacheData = $this->getCacheData($this);
+        if (isset($cacheData['emperorData']) && !empty($cacheData['emperorData'])) {
+            $detailDatas['commonFixTableEmperor'] = [
+                'topName' => '主政信息',
+                'baselist' => [
+                    'name' => '',
+                    'titles' => ['type' => '类型', 'name' => '标题', 'major' => '简介'],
+                    'fixTitleField' => 'type',
+                    'brief' => '',
+                    'baseInfos' => $cacheData['emperorData']['details'],
+                ],
+            ];
+        }
+        $bookDatas = $this->getBookDatas();
+        if (!empty($bookDatas)) {
+            $detailDatas['commonFixTableBook'] = [
+                'topName' => '著作',
+                'baselist' => [
+                    'name' => '',
+                    'titles' => ['name' => '书名', 'major' => '简介'],
+                    'fixTitleField' => 'name',
+                    'brief' => '',
+                    'baseInfos' => $bookDatas,
+                ],
+            ];
+        }
         if ($this->birth_year != 0 && ($this->death_accurate == 'running' || $this->death_year != 0)) {
             $start = $this->birth_year;
             $end = $this->death_accurate == 'running' ? date('Y') : $this->death_year;
             $detailDatas['commonFixTableYear'] = $this->getCommonYearDetails($this->name, $start, $end);
         }
         return $detailDatas;
+    }
+
+    public function getBookDatas()
+    {
+        $books = $this->getModelObj('figureListing')->where(['type' => 'author', 'figure_code' => $this->code])->get();
+        if ($books->count() < 1) {
+            return [];
+        }
+        $results = [];
+        foreach ($books as $book) {
+            $bookInfo = $book->bookInfo;
+            if (empty($bookInfo)) {
+                continue;
+            }
+            $results[] = [
+                'name' => "<a href='/wiki-book-{$bookInfo['code']}.html'>{$bookInfo['name']}</a>",
+                'major' => $bookInfo['description'],
+            ];
+        }
+        return $results;
     }
 
     public function formatDate($types = ['birth', 'death'])
@@ -186,24 +221,87 @@ class Figure extends AbstractModel
                 $age = $deathData['sourceData']['year'] - $birthData['sourceData']['year'] + 1;
             }
             $ageStr = $age ? $age . '岁' : '';
+            $simpleStr = $birthData['sourceData']['year'] != 0 ? $birthData['sourceData']['year'] : '?';
+            $simpleStr .= '-';
+            $simpleStr .= $deathData['sourceData']['year'] != 0 ? $deathData['sourceData']['year'] : '?';
             $results['common']['age'] = $age;
             $results['common']['ageStr'] = $age;
             $results['common']['birthDeathStr'] = $bdStr;
             $results['common']['birthDeathStrAge'] = $bdStr . ($ageStr ? " ({$ageStr})" : '');
+            $results['common']['birthDeathStrAgeSimple'] = $simpleStr . ($ageStr ? " ({$ageStr})" : '');
         }
+        //print_r($results);exit();
         return $results;
+    }
+
+    public function _formatEmperorData()
+    {
+        $infos = $this->getModelObj('period')->where(['figure_code' => $this->code])->whereIn('period_type', ['emperor', 'eraname'])->get();
+        if ($infos->count() < 1) {
+            return [];
+        }
+        $terms = $details = [];
+        $periodTypes = $this->periodTypeDatas();
+        foreach ($infos as $info) {
+            $termNum = $info['term_num'];
+            if (!isset($terms[$termNum])) {
+                $terms[$termNum] = [];
+            }
+            $duration = $info->start_year . '-' . $info->end_year;
+            $diff = $info->end_year - $info->start_year;
+            $diffStr = $diff < 1 ? '不足1年' : $diff . '年';
+            if ($info['period_type'] == 'emperor') {
+                $terms[$termNum]['duration'] = $duration;
+                $terms[$termNum]['durationStr'] = "{$diffStr}/{$duration}";
+            }
+            if ($info['period_type'] == 'eraname') {
+                $eraname = !empty($info->baidu_url) ? "<a href='{$info->baidu_url}'>{$info->eraname}</a>" : $info->ername;
+                $terms[$termNum]['eraname'][] = "{$eraname} ({$diffStr}/{$duration})";
+            }
+
+            $details[] = [
+                'type' => $periodTypes[$info->period_type] ?? $info->period_type,
+                'name' => $info->getCurrentTitle() . " ({$diffStr}/{$duration})",
+                'major' => $info->getMajorStr(),
+            ];
+        }
+        return ['terms' => $terms, 'details' => $details];
+    }
+
+    public function getCacheData($info, $force = true)
+    {
+        if (is_string($info)) {
+            $info = $this->where(['code' => $info])->first();
+        }
+        $key = 'kk_figure_data_' . $info['code'];
+        if ($force) {
+            $data = $info->formatCacheData();
+            $this->getRepositoryObj('passport-user')->setPointCaches($key, $data);
+            return $data;
+        }
+        $data = $this->getRepositoryObj('passport-user')->getPointCaches($key);
+        if (empty($data)) {
+            $data = $info->formatCacheData();
+            $this->getRepositoryObj('passport-user')->setPointCaches($key, $data);
+        }
+        return $data;
     }
 
     public function formatCacheData()
     {
         $country = $this->countryInfo;
         $fPath = $this->full_knowledge_path;
+        $nameJump = "<a href='/wiki-figure-{$this->code}.html?force_create_file=figure'>{$this->name}</a>";
+        $nameJumpFull = $this->baidu_url ? $nameJump . " (<a href='{$this->baidu_url}'>百科</a>)" : $nameJump;
         $baseData = [
             'code' => $this->code,
-            'name' => "<a href='/wiki-figure-{$this->code}'>{$this->name}</a>",
+            'name' => $this->name,
+            'name_jump' => $nameJump,
+            'name_jump_full' => $nameJumpFull,
             'name_card' => $this->name_card,
             'country_code' => $country ? $country['code'] : '',
             'country_name' => $country ? "<a href='/wiki-country-{$country['code']}.html'>{$country['name']}</a>" : '',
+            'headerPicUrl' => $this->photoUrl,
             'full_knowledge_path' => $fPath,
         ];
         $extData = [];
@@ -220,8 +318,9 @@ class Figure extends AbstractModel
         $cacheData = [
             'baseData' => $baseData,
             'extInfos' => $extData['infos'] ?? [],
+            'descs' => $descs,
             'birthDeathDate' => $birthDeathDate,
-            'desc' => $descs,
+            'emperorData' => $this->_formatEmperorData(),
         ];
         return $cacheData;
     }

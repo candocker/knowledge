@@ -520,9 +520,9 @@ class TestController extends AbstractController
 
     public function _testFormatData()
     {
-        $info = $this->getModelObj('figure')->where(['code' => 'kongzi'])->first();
+        /*$info = $this->getModelObj('figure')->where(['code' => 'mghubilie'])->first();
         $r = $info->formatCacheData();
-        print_r($r);exit();
+        print_r($r);exit();*/
 
         $service = $this->getServiceObj('formatData');
         //$service->_initCenturyData();exit();

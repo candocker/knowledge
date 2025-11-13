@@ -30,7 +30,7 @@ trait FormatAnnalTrait
             $newDatas = array_merge($newDatas, $pDatas);
         }
         $this->getModelObj('periodYear')->insert($newDatas);
-        $uSql = "UPDATE `wp_period_year` AS `py`, `{$tmpTable}` AS `po` SET `py`.`show_type` = `po`.`show_type` WHERE `py`.`period_code` = `po`.`period_code`;";
+        $uSql = "UPDATE `wp_period_year` AS `py`, `{$tmpTable}` AS `po` SET `py`.`show_type` = `po`.`show_type` WHERE `py`.`period_id` = `po`.`period_id`;";
         \DB::connection('knowledge')->select($uSql);
         $uSql = "UPDATE `wp_chronology` SET `period_status` = 1;";
         \DB::connection('knowledge')->select($uSql);
@@ -75,10 +75,8 @@ trait FormatAnnalTrait
                 'eraname' => $info['eraname'],
                 'title' => $pTitle,
                 'orderlist' => $info['orderlist'],
-                'baidu_url' => $info['baidu_url'],
-                'brief' => $info['brief'],
                 'show_type_base' => $info['show_type_base'],
-                'period_code' => $info['country_code'] . '_' . $info['figure_code'] . '_' . $info['eraname'],
+                'period_id' => $info['id'],
             ];
             $index++;
         }

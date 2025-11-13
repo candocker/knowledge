@@ -15,4 +15,14 @@ trait RelateInfoTrait
     {
         return $this->hasOne(Figure::class, 'code', 'figure_code');
     }
+
+    public function periodInfo()
+    {
+        return $this->hasOne(Period::class, 'id', 'period_id');
+    }
+
+    public function bookInfo()
+    {
+        return $this->belongsTo(Book::class, 'book_code', 'code');
+    }
 }

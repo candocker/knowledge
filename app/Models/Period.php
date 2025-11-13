@@ -33,4 +33,15 @@ class Period extends AbstractModel
         $eName = $this->baidu_url ? "<a href='{$this->baidu_url}'>{$eName}</a>" : $eName;
         return "({$cStr}/{$fStr})" . $eName;
     }
+
+    public function getMajorStr()
+    {
+        if ($this->period_type == 'country') {
+            return $this->countryInfo->brief;
+        }
+        if (in_array($this->period_type, ['bigman', 'emperor'])) {
+            return $this->figureInfo->description;
+        }
+        return $this->brief;
+    }
 }

@@ -13,7 +13,7 @@ class Country extends AbstractModel
     public function getFullKnowledgePathAttribute()
     {
         $base = $this->config->get('knowledge.knowledge_path');
-        return $this->knowledge_path ? $base . $this->knowledge_path . '/base' : $base . $this->formatKnowledgePath() . '/base.php';
+        return $this->knowledge_path ? $base . $this->knowledge_path . '/base.php' : $base . $this->formatKnowledgePath() . '/base.php';
     }
 
     public function _formatBaseData($isMobile)
@@ -109,7 +109,52 @@ class Country extends AbstractModel
             if ($key == 'topName') {
                 continue;
             }
-            print_R($eData);exit();
+            $emperors = $eData['emperors'];
+            $baseInfos = [];
+            unset($eData['emperors']);
+            foreach ($emperors as $emperor) {
+                $term = 0;
+                if (strpos($emperor, '_mul_') !== false) {
+                    $tmp = explode('_mul_', $emperor);
+                    $emperor = $tmp[0];
+                    $term = $tmp[1];
+                }
+                $eInfo = $this->getModelObj('figure')->getCacheData($emperor);
+                //print_r($eInfo);exit();
+                $emperorData = $eInfo['emperorData'] ?? [];
+                $emperorData = $emperorData['terms'] ?? [];
+                $emperorData = $emperorData[$term] ?? [];
+                $data = [];
+                foreach ($eData['titles'] as $field => $fName) {
+                    switch ($field) {
+                    case 'temple_name':
+                        $templeName = $eInfo['extInfos']['庙号'] ?? '';
+                        $value = $eInfo['baseData']['name'] . ($templeName ? " ({$templeName})" : '');
+                        break;
+                    case 'posthumous_name':
+                        $posthumousName = $eInfo['extInfos']['谥号'] ?? '';
+                        $value = $eInfo['baseData']['name'] . ($posthumousName ? " ({$posthumousName})" : '');
+                    case 'name':
+                        $value = $eInfo['baseData']['name_jump'];
+                        break;
+                    case 'eraname':
+                        $value = isset($emperorData['eraname']) ? implode('、', $emperorData['eraname']) : '';
+                        break;
+                    case 'birth_death':
+                        $value = $eInfo['birthDeathDate']['common']['birthDeathStrAgeSimple'];
+                        break;
+                    case 'major':
+                        $value = $eInfo['descs']['base'];
+                        break;
+                    default:
+                        $value = '未知';
+                    }
+                    $data[$field] = $value;
+                }
+                $baseInfos[] = $data;
+            }
+            $eData['baseInfos'] = $baseInfos;
         }
+        return $eDatas;
     }
 }
