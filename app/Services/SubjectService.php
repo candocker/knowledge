@@ -116,6 +116,10 @@ class SubjectService extends AbstractService
             //var_dump($fFile);exit();
             if (file_exists($fFile)) {
                 $detailDatas = require($fFile);
+                if ($info->path_gather) {
+                    $detailDatas = $detailDatas[$info['code']] ?? [];
+                }
+                //print_r($detailDatas);exit();
             }
             $fData = $info->formatBaseData($detailDatas['baseData'] ?? [], $isMobile);
             $detailDatas = $info->wrapDetailDatas($detailDatas);

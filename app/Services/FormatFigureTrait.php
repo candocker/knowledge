@@ -95,7 +95,7 @@ trait FormatFigureTrait
         $dynasty = 'qingchao';
         $dynasty = 'yuanchao';
         $dynasty = 'menggu';
-        $dynasty = 'mingchao';
+        //$dynasty = 'mingchao';
 
         // UPDATE `wp_figure` AS `f`, `wp_figure_listing` AS `fl`SET `f`.`path_label` = '君主' WHERE `f`.`country_code` = 'qingchao' AND `f`.`code` = `fl`.`figure_code` AND `fl`.`type` = 'cnemperor';
         $sql = "SELECT * FROM `online_knowledge`.`ztmp_wp_emperor` WHERE `dynasty` = '{$dynasty}';";
@@ -108,7 +108,8 @@ trait FormatFigureTrait
         $fields = ['birth_accurate', 'birth_year', 'birth_month', 'birth_day'];
         $fields2 = ['death_accurate', 'death_year', 'death_month', 'death_day'];
         foreach ($infos as $info) {
-            echo "        '{$info['code']}', // {$info['name']}\n";continue;
+            //echo "        '{$info['code']}', // {$info['name']}\n";continue;
+            echo "        '{$info['code']}', // <a href='{$info['baidu_url']}' target='_blank'>{$info['name']}</a><br />\n";continue;
             $str = "UPDATE `wp_figure` SET ";
             foreach ($fields as $field) {
                 if (in_array($field, ['path_gather', 'path_label', 'birth_accurate', 'death_accurate'])) {

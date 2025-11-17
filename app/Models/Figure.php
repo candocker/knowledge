@@ -87,6 +87,7 @@ class Figure extends AbstractModel
             $bInfos['名字'] = $nameCard;
         }
         $bInfos['生卒日期 '] = $cacheData['birthDeathDate']['common']['birthDeathStrAge'];
+        $bInfos['国家/王朝'] = $cacheData['baseData']['country_name'];
 
         $desc = $cacheData['descs']['base'];
         $baseData = [
@@ -108,6 +109,24 @@ class Figure extends AbstractModel
     public function wrapDetailDatas($detailDatas)
     {
         $cacheData = $this->getCacheData($this);
+        $descs = $cacheData['descs'];
+        unset($descs['base']);
+        if (count($descs) > 0) {
+            $descInfos = [];
+            foreach ($descs as $dKey => $dValue) {
+                $descInfos[] = ['type' => $dKey, 'major' => $dValue];
+            }
+            $detailDatas['commonFixTableDescs'] = [
+                'topName' => '',
+                'baselist' => [
+                    'name' => '简评',
+                    'titles' => ['type' => '类型', 'major' => '简介'],
+                    'fixTitleField' => 'type',
+                    'brief' => '',
+                    'baseInfos' => $descInfos,
+                ],
+            ];
+        }
         if (isset($cacheData['emperorData']) && !empty($cacheData['emperorData'])) {
             $detailDatas['commonFixTableEmperor'] = [
                 'topName' => '主政信息',
@@ -213,8 +232,8 @@ class Figure extends AbstractModel
             $deathData = $results['death'];
             $bdStr = $birthData['fullStr'] ?: '?';
             $bdStr .= '-' . ($deathData['fullStr'] ?: '?');
-            if ($bdStr == '?-?') {
-                $bdStr = '';
+            if ($bdStr == '未知-未知') {
+                $bdStr = '-';
             }
             $age = '';
             if ($birthData['sourceData']['year'] != 0 && $deathData['sourceData']['year'] != 0) {
@@ -224,6 +243,9 @@ class Figure extends AbstractModel
             $simpleStr = $birthData['sourceData']['year'] != 0 ? $birthData['sourceData']['year'] : '?';
             $simpleStr .= '-';
             $simpleStr .= $deathData['sourceData']['year'] != 0 ? $deathData['sourceData']['year'] : '?';
+            if ($simpleStr == '?-?') {
+                $simpleStr = '-';
+            }
             $results['common']['age'] = $age;
             $results['common']['ageStr'] = $age;
             $results['common']['birthDeathStr'] = $bdStr;
@@ -236,7 +258,8 @@ class Figure extends AbstractModel
 
     public function _formatEmperorData()
     {
-        $infos = $this->getModelObj('period')->where(['figure_code' => $this->code])->whereIn('period_type', ['emperor', 'eraname'])->get();
+        $typeStr = 'country,emperor,eraname';
+        $infos = $this->getModelObj('period')->where(['figure_code' => $this->code])->whereIn('period_type', ['emperor', 'eraname'])->orderByRaw("FIND_IN_SET(period_type, '{$typeStr}') asc")->get();
         if ($infos->count() < 1) {
             return [];
         }
@@ -307,6 +330,9 @@ class Figure extends AbstractModel
         $extData = [];
         if (file_exists($fPath)) {
             $details = require($fPath);
+            if ($this->path_gather) {
+                $details = $details[$this->code] ?? [];
+            }
             $extData = $details['baseData'] ?? [];
         }
         $descs['base'] = $this->description;

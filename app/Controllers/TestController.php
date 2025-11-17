@@ -31,103 +31,6 @@ class TestController extends AbstractController
 
     }
 
-    public function _testTmp()
-    {
-        $file = '/data/log/tmp/kd.php';
-        $infos = \DB::select("SELECT * FROM `work_tmp_knowledge`.`wp_knowledge` WHERE `code` = 'ruxueqianhan';");
-        foreach ($infos as $info) {
-            //print_r($info);
-            $sInfos = \DB::select("SELECT * FROM `work_tmp_knowledge`.`wp_knowledge_listing` WHERE `knowledge_code` = '{$info->code}';");
-            $bStr = '';
-            $str = "<?php\nreturn [\n";
-            foreach ($sInfos as $sInfo) {
-                //print_r($sInfo);
-                $filePath = '/data/database/knowledge/古代中国/culture/中国思想史/' . $info->name . '/' . $sInfo->code . '.php';
-                if (!file_exists($filePath)) {
-                    var_dump($filePath);
-                    continue;
-                }
-                $datas = require($filePath);
-                $newPath = '/data/database/knowledge/小知识/易经/' . $info->name . '/';
-                $str .= "[\n";
-                $str .= "    'ask' => '{$sInfo->name}',\n";
-                foreach ($datas as $data) {
-                    foreach ($data as $subData) {
-                    foreach ($subData as $key => $value) {
-                        $str .= $key == 'content' ? "    'answer' => [\n" : "    '{$key}' => [\n";
-                        foreach ((array)$value as $subValue) {
-                            $str .= "        '{$subValue}',\n";
-                        }
-                        $str .= "    ],\n";
-                    }
-                        $str .= "],\n";
-                    }
-                    //file_put_contents($newFile, $str);
-                }
-            }
-            $str .= "];";
-            echo $str;exit();
-            //echo $bStr;
-        }
-        exit();
-
-
-        $infos = \DB::select("SELECT * FROM `work_tmp_knowledge`.`wp_knowledge` WHERE `code` = 'yijingcihui';");
-        foreach ($infos as $info) {
-            print_r($info);
-            $sInfos = \DB::select("SELECT * FROM `work_tmp_knowledge`.`wp_knowledge_listing` WHERE `knowledge_code` = '{$info->code}';");
-            $bStr = '';
-            foreach ($sInfos as $sInfo) {
-                print_r($sInfo);
-                $filePath = '/data/database/knowledge/古代中国/culture/中国思想史/' . $info->name . '/' . $sInfo->code . '.php';
-                if (!file_exists($filePath)) {
-                    var_dump($filePath);
-                    continue;
-                }
-                $datas = require($filePath);
-                $str = "<?php\nreturn [\n";
-                $newPath = '/data/database/knowledge/小知识/易经/' . $info->name . '/';
-                if (!is_dir($newPath)) {
-                    var_dump($newPath);
-                    mkdir($newPath, 0777, true);
-                }
-                $newFile = $newPath . $sInfo->name . '.php';
-                $bStr .= "        [\n";
-                $bStr .= "            'name' => '{$sInfo->name}',\n";
-                $bStr .= "            'subInfos' => require(__DIR__ . '/{$info->name}/{$sInfo->name}.php'),\n";
-                $bStr .= "        ],\n";
-                foreach ($datas as $data) {
-                    //print_r($data);
-                    foreach ($data as $subData) {
-                        $str .= "[\n";
-                    foreach ($subData as $key => $value) {
-                        var_dump($key);
-                        print_r($value);
-                        if ($key == 'name') {
-                            $str .= "    'ask' => '{$value}',\n";
-                        } else {
-                            $str .= "    'answer' => [\n";
-                            foreach ((array)$value as $subValue) {
-                                $str .= "        '{$subValue}',\n";
-                            }
-                            $str .= "    ],\n";
-                        }
-                    }
-                        $str .= "],\n";
-                    }
-                    $str .= "];";
-                    file_put_contents($newFile, $str);
-                //echo $str;exit();
-                }
-                //print_r($datas);
-                //exit();
-                //var_dump($filePath);
-            }
-            echo $bStr;
-        }
-        exit();
-    }
-
     public function _testKing2()
     {
         $showAnnals = request()->input('show_annals');
@@ -152,6 +55,7 @@ class TestController extends AbstractController
             $fMark = '.para_ZDNLn';
             $fMark = '.para_Y9ue8';
             $fMark = '.para_foMcK';
+            $fMark = '.para_ExsgO';
         }
         $crawler->filter($fMark)->each(function ($crawler) use (& $datas, $titles, $showAnnals) {
             $data = [];
@@ -164,6 +68,7 @@ class TestController extends AbstractController
                 $sMark = '.text_zBf3n';
                 $sMark = '.text_afkPS';
                 $sMark = '.text_wPXe7';
+                $sMark = '.text__nQVi';
             }
             $crawler->filter($sMark)->each(function ($subCrawler) use (& $data, & $i, $titles) {
                 $text = $subCrawler->html();
@@ -378,53 +283,6 @@ class TestController extends AbstractController
         exit();
     }
 
-    public function _testDealgroup()
-    {
-        $sorts = ['ancients', 'contemporary', 'contemporary', 'modern'];
-        $sorts = ['culture'];
-        $sorts = ['foreign'];
-        $sorts = ['dynasty'];
-        //$sorts = ['subject', 'period'];
-        $subjectSorts = $this->getModelObj('subjectSort')->whereIn('code', $sorts)->get();
-        foreach ($subjectSorts as $sData) {
-            echo $sData['name'] . '--' . $sData['code'] . '<br />';
-            $subjects = $this->getModelObj('subject')->where(['subject_sort' => $sData['code']])->orderBy('orderlist', 'desc')->get();
-            foreach ($subjects as $subject) {
-                echo '---        ---' . $subject['name'] . '--' . $subject['code'] . '<br />';
-                $sgDatas = $this->getModelObj('groupSubject')->where(['subject_code' => $subject['code']])->orderBy('orderlist', 'desc')->get();
-
-                $kPath = "古代中国/{$subject['name']}/base";
-                $nData = [
-                    'county' => 'ancientchina',
-                    'nationality' => 'huaxia',
-                    'code' => $subject['code'],
-                    'name' => $subject['name'],
-                    'parent_code' => '',
-                    'knowledge_path' => $kPath,
-                ];
-                print_r($nData);
-                //$this->getModelObj('dynasty')->create($nData);
-                foreach ($sgDatas as $sgData) {
-                    echo '---        ---===---        ---' . $sgData->groupInfo['name'] . '--' . $sgData['group_code'] . '<br />';
-                    $kPath = "古代中国/{$subject['name']}/{$sgData->groupInfo['name']}/base";
-                    $nData = [
-                        'county' => 'ancientchina',
-                        'nationality' => 'huaxia',
-                        'code' => $sgData['group_code'],
-                        'name' => $sgData->groupInfo['name'],
-                        'parent_code' => $subject['code'],
-                        'knowledge_path' => $kPath,
-                    ];
-                    print_r($nData);
-                    //$this->getModelObj('dynasty')->create($nData);
-                    //$this->getModelObj('country')->create($nData);
-                    //print_r($nData);
-                }
-            }
-        }
-        exit();
-    }
-
     public function _testDealResource()
     {
         $basePath = '/data/htmlwww/resource/';
@@ -474,7 +332,7 @@ class TestController extends AbstractController
                 'orderlist' => $i++,
             ];
             print_r($nData);
-            $this->getModelObj('navsort')->create($nData);
+            //$this->getModelObj('navsort')->create($nData);
             $orderlist = 1;
             foreach ($nInfo['subDatas'] as $nsCode => $nsInfo) {
                 $nsData = [
@@ -486,7 +344,7 @@ class TestController extends AbstractController
                     'extparam' => isset($nsInfo['withVolume']) ? json_encode(['withVolume' => $nsInfo['withVolume']]) : '',
                 ];
                 print_r($nsData);
-                $this->getModelObj('navsort')->create($nsData);
+                //$this->getModelObj('navsort')->create($nsData);
                 if (isset($nsInfo['subDatas'])) {
                 $j = 1;
                 foreach ($nsInfo['subDatas'] as $nssCode => $nssInfo) {
@@ -499,7 +357,7 @@ class TestController extends AbstractController
                         'extparam' => isset($nssInfo['withVolume']) ? json_encode(['withVolume' => $nssInfo['withVolume']]) : '',
                     ];
                     print_r($nssData);
-                    $this->getModelObj('navsort')->create($nssData);
+                    //$this->getModelObj('navsort')->create($nssData);
                 }
                 }
             }
@@ -507,15 +365,6 @@ class TestController extends AbstractController
         }
         print_R($navs);
         exit();
-        $infos = $this->getModelObj('book')->where('id', '>=', 1056)->where('id', '<=', 1072)->get();
-        $code = '';
-        foreach ($infos as $info) {
-            $code .= "'{$info['code']}',";
-            //var_dump($info['name']);
-        }
-        echo trim($code, ',');
-        return false;
-        //$swbooks = require('/data/htmlwww/laravel-system/vendor/candocker/knowledge/resources/formatdata/swbooks.php');
     }
 
     public function _testFormatData()
@@ -528,7 +377,7 @@ class TestController extends AbstractController
         //$service->_initCenturyData();exit();
         //$service->_initAnnalsData();exit();
         //$service->initPeriodData();exit();
-        //$service->initEmperorData();
+        $service->initEmperorData();
 
         //$service->_initBaseData();exit();
         $sort = request()->input('sort');

@@ -139,11 +139,10 @@ class Chronology extends AbstractModel
         $cnYear = 2697 + $year;
         $pTitle .= "，黄帝纪年第{$cnYear}年。";
 
-        $lunarString = $this->getChineseYear($year);
-
-        $eranameStr = $this->getEranameStr();
         $brief = "<a href='/zghistory-hronicle'>编年史</a>/<a href='/wiki-century-{$this->century_code}.html'>{$centuryInfo['name']}</a>/";
-        $brief .= "{$lunarString}{$eranameStr}";
+        $lunarString = $this->getChineseYear($year);
+        $brief .= $lunarString;
+        $brief .= $this->brief ?: $this->getEranameStr();
 
         $result = [
             'tdkData' => ['title' => strip_tags($pTitle), 'description' => $brief],

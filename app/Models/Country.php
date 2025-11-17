@@ -124,18 +124,22 @@ class Country extends AbstractModel
                 $emperorData = $eInfo['emperorData'] ?? [];
                 $emperorData = $emperorData['terms'] ?? [];
                 $emperorData = $emperorData[$term] ?? [];
+                //print_r($emperorData);exit();
                 $data = [];
                 foreach ($eData['titles'] as $field => $fName) {
                     switch ($field) {
                     case 'temple_name':
                         $templeName = $eInfo['extInfos']['庙号'] ?? '';
-                        $value = $eInfo['baseData']['name'] . ($templeName ? " ({$templeName})" : '');
+                        $value = $eInfo['baseData']['name_jump'] . ($templeName ? " ({$templeName})" : '');
                         break;
                     case 'posthumous_name':
                         $posthumousName = $eInfo['extInfos']['谥号'] ?? '';
-                        $value = $eInfo['baseData']['name'] . ($posthumousName ? " ({$posthumousName})" : '');
+                        $value = $eInfo['baseData']['name_jump'] . ($posthumousName ? " ({$posthumousName})" : '');
                     case 'name':
                         $value = $eInfo['baseData']['name_jump'];
+                        break;
+                    case 'rulerange':
+                        $value = $emperorData['durationStr'] ?? '';
                         break;
                     case 'eraname':
                         $value = isset($emperorData['eraname']) ? implode('、', $emperorData['eraname']) : '';
@@ -145,6 +149,9 @@ class Country extends AbstractModel
                         break;
                     case 'major':
                         $value = $eInfo['descs']['base'];
+                        break;
+                    case 'appendhonor':
+                        $value = $eInfo['descs']['追尊'] ?? $eInfo['descs']['base'];
                         break;
                     default:
                         $value = '未知';
