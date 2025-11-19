@@ -152,10 +152,19 @@ class Figure extends AbstractModel
                 ],
             ];
         }
-        if ($this->birth_year != 0 && ($this->death_accurate == 'running' || $this->death_year != 0)) {
-            $start = $this->birth_year;
-            $end = $this->death_accurate == 'running' ? date('Y') : $this->death_year;
-            $detailDatas['commonFixTableYear'] = $this->getCommonYearDetails($this->name, $start, $end);
+
+        $bYear = $this->birth_year;
+        $dYear = $this->death_year;
+        $activeAt = $this->active_at;
+        if ($bYear == 0) {
+            $bYear = $dYear != 0 ? $dYear - 80 : ($activeAt ? $activeAt - 50 : $bYear);
+        }
+        if ($dYear == 0) {
+            $dYear = $this->death_accurate == 'running' ? date('Y') : ($bYear != 0 ? $bYear + 80 : ($activeAt ? $activeAt + 50 : $dYear));
+        }
+
+        if ($bYear != 0 && $dYear != 0) {
+            $detailDatas['commonFixTableYear'] = $this->getCommonYearDetails($this->name, $bYear, $dYear);
         }
         return $detailDatas;
     }
@@ -240,9 +249,9 @@ class Figure extends AbstractModel
                 $age = $deathData['sourceData']['year'] - $birthData['sourceData']['year'] + 1;
             }
             $ageStr = $age ? $age . '岁' : '';
-            $simpleStr = $birthData['sourceData']['year'] != 0 ? $birthData['sourceData']['year'] : '?';
+            $simpleStr = $birthData['sourceData']['year'] != 0 ? str_replace(['-'], ['前'], $birthData['sourceData']['year']) : '?';
             $simpleStr .= '-';
-            $simpleStr .= $deathData['sourceData']['year'] != 0 ? $deathData['sourceData']['year'] : '?';
+            $simpleStr .= $deathData['sourceData']['year'] != 0 ? str_replace(['-'], ['前'], $deathData['sourceData']['year']) : '?';
             if ($simpleStr == '?-?') {
                 $simpleStr = '-';
             }
@@ -270,7 +279,7 @@ class Figure extends AbstractModel
             if (!isset($terms[$termNum])) {
                 $terms[$termNum] = [];
             }
-            $duration = $info->start_year . '-' . $info->end_year;
+            $duration = str_replace('-', '前', $info->start_year) . '-' . str_replace('-', '前', $info->end_year);
             $diff = $info->end_year - $info->start_year;
             $diffStr = $diff < 1 ? '不足1年' : $diff . '年';
             if ($info['period_type'] == 'emperor') {
@@ -299,6 +308,7 @@ class Figure extends AbstractModel
         $key = 'kk_figure_data_' . $info['code'];
         if ($force) {
             $data = $info->formatCacheData();
+            //print_r($data);exit();
             $this->getRepositoryObj('passport-user')->setPointCaches($key, $data);
             return $data;
         }

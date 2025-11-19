@@ -4,7 +4,7 @@ namespace ModuleKnowledge\Services;
 
 trait FormatFigureTrait
 {
-    public function initEmperorData2()
+    public function initEmperorData()
     {
         $nhDatas = require('/data/htmlwww/laravel-system/vendor/candocker/knowledge/resources/nh.php');
         $sql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `eraname`, `brief`, `baidu_url`, `start_year`, `end_year`, `orderlist`) VALUES\n";
@@ -79,9 +79,13 @@ trait FormatFigureTrait
             $nhUrl = $nhData['name'];
             $nhUrl = substr($nhUrl, strpos($nhUrl, 'https'));
             $nhUrl = substr($nhUrl, 0, strpos($nhUrl, '">'));
+            $sStart = str_replace('前', '-', $sStart);
+            $sEnd = str_replace('前', '-', $sEnd);
+            $nhStart = str_replace('前', '-', $nhStart);
+            $nhEnd = str_replace('前', '-', $nhEnd);
         //$sql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `eraname`, `brief`, `baidu_url`, `start_year`, `end_year`) VALUES\n";
-            $sql .= "('emperor', 'qingchao', '{$figure['code']}', '', '', '', {$sStart}, {$sEnd}, 1),\n";
-            $sql .= "('eraname', 'qingchao', '{$figure['code']}', '{$nhName}', '{$nhBrief}', '{$nhUrl}', {$nhStart}, {$nhEnd}, 1),\n";
+            $sql .= "('emperor', 'xihan', '{$figure['code']}', '', '', '', {$sStart}, {$sEnd}, 0),\n";
+            $sql .= "('eraname', 'xihan', '{$figure['code']}', '{$nhName}', '{$nhBrief}', '{$nhUrl}', {$nhStart}, {$nhEnd}, 0),\n";
             //var_dump($nhName . '-' . $nhUrl);
         }
         echo $sql;
@@ -89,12 +93,13 @@ trait FormatFigureTrait
         exit();
     }
 
-    public function initEmperorData()
+    public function initEmperorData1()
     {
         $dynasty = 'houjinqing';
         $dynasty = 'qingchao';
         $dynasty = 'yuanchao';
         $dynasty = 'menggu';
+        $dynasty = 'xihan';
         //$dynasty = 'mingchao';
 
         // UPDATE `wp_figure` AS `f`, `wp_figure_listing` AS `fl`SET `f`.`path_label` = '君主' WHERE `f`.`country_code` = 'qingchao' AND `f`.`code` = `fl`.`figure_code` AND `fl`.`type` = 'cnemperor';
@@ -103,13 +108,13 @@ trait FormatFigureTrait
         //echo $sql;
         $infos = \DB::select($sql);
         $infos = $this->getModelObj('figure')->where(['country_code' => $dynasty])->where('birth_year', 0)->get();
-        $infos = $this->getModelObj('figure')->where(['country_code' => $dynasty])->orderBy('birth_year')->get();
+        //$infos = $this->getModelObj('figure')->where(['country_code' => $dynasty])->orderBy('birth_year')->get();
         //print_r($infos);
         $fields = ['birth_accurate', 'birth_year', 'birth_month', 'birth_day'];
         $fields2 = ['death_accurate', 'death_year', 'death_month', 'death_day'];
         foreach ($infos as $info) {
             //echo "        '{$info['code']}', // {$info['name']}\n";continue;
-            echo "        '{$info['code']}', // <a href='{$info['baidu_url']}' target='_blank'>{$info['name']}</a><br />\n";continue;
+            //echo "        '{$info['code']}', // <a href='{$info['baidu_url']}' target='_blank'>{$info['name']}</a><br />\n";continue;
             $str = "UPDATE `wp_figure` SET ";
             foreach ($fields as $field) {
                 if (in_array($field, ['path_gather', 'path_label', 'birth_accurate', 'death_accurate'])) {
