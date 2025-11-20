@@ -39,8 +39,8 @@ class Chronology extends AbstractModel
                 'topName' => $affairTypes['keypoint'],
                 'keypoint' => [
                     'name' => '',
-                    'titles' => ['name' => '标题', 'major' => '简介'],
-                    'fixTitleField' => 'name',
+                    'titles' => ['title' => '标题', 'major' => '简介'],
+                    'fixTitleField' => 'title',
                     'brief' => '',
                     'baseInfos' => $affairDatas['keypoint'],
                 ],
@@ -113,7 +113,7 @@ class Chronology extends AbstractModel
 
         $formatDatas = [];
         foreach ($affairs as $affair) {
-            $dateInfo = $affair->foramtDataInfo();
+            $dateInfo = $affair->formatDateInfo();
             $brief = $affair->brief;
             if (!empty($affair['point_path'])) {
                 $brief .= "<a href='/wiki-affair-{$affair['id']}.html'>详情</a>";
@@ -122,7 +122,7 @@ class Chronology extends AbstractModel
                 $brief .= "<a href='{$affair['baidu_url']}.html'>(百科)</a>";
             }
             $formatDatas[$affair['affair_type']][] = [
-                'date' => $affair->dateInfo['monthDay2'],
+                'date' => $dateInfo['monthDay2'],
                 'title' => $affair->title,
                 'major' => $brief,
             ];

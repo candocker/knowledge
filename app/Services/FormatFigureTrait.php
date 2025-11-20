@@ -4,7 +4,7 @@ namespace ModuleKnowledge\Services;
 
 trait FormatFigureTrait
 {
-    public function initEmperorData()
+    public function initEmperorData2()
     {
         $nhDatas = require('/data/htmlwww/laravel-system/vendor/candocker/knowledge/resources/nh.php');
         $sql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `eraname`, `brief`, `baidu_url`, `start_year`, `end_year`, `orderlist`) VALUES\n";
@@ -93,13 +93,14 @@ trait FormatFigureTrait
         exit();
     }
 
-    public function initEmperorData1()
+    public function initEmperorData()
     {
         $dynasty = 'houjinqing';
         $dynasty = 'qingchao';
         $dynasty = 'yuanchao';
         $dynasty = 'menggu';
         $dynasty = 'xihan';
+        $dynasty = 'waluwawangchao';
         //$dynasty = 'mingchao';
 
         // UPDATE `wp_figure` AS `f`, `wp_figure_listing` AS `fl`SET `f`.`path_label` = '君主' WHERE `f`.`country_code` = 'qingchao' AND `f`.`code` = `fl`.`figure_code` AND `fl`.`type` = 'cnemperor';
@@ -114,7 +115,7 @@ trait FormatFigureTrait
         $fields2 = ['death_accurate', 'death_year', 'death_month', 'death_day'];
         foreach ($infos as $info) {
             //echo "        '{$info['code']}', // {$info['name']}\n";continue;
-            //echo "        '{$info['code']}', // <a href='{$info['baidu_url']}' target='_blank'>{$info['name']}</a><br />\n";continue;
+            echo "        '{$info['code']}', // <a href='{$info['baidu_url']}' target='_blank'>{$info['name']}</a>、<a href='http://mu.canliang.wang/wiki-figure-{$info['code']}.html' target='_blank'>详情</a><br />\n";continue;
             $str = "UPDATE `wp_figure` SET ";
             foreach ($fields as $field) {
                 if (in_array($field, ['path_gather', 'path_label', 'birth_accurate', 'death_accurate'])) {

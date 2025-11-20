@@ -108,6 +108,12 @@ class SubjectService extends AbstractService
                 if (!file_exists($fFile) && $autoCreate) {
                     $sFile = $this->config->get('knowledge.knowledge_path') . 'sourcefile/' . $autoCreate . '.php';
                     if (file_exists($sFile)) {
+                        if (!is_dir(dirname($fFile))) {
+                            if (!is_dir(dirname(dirname($fFile)))) {
+                                mkdir(dirname(dirname($fFile)));
+                            }
+                            mkdir(dirname($fFile));
+                        }
                         file_put_contents($fFile, file_get_contents($sFile));
                     }
                 }
