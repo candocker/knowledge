@@ -15,27 +15,38 @@ trait FormatAnnalTrait
     {
         $base = $this->config->get('knowledge.knowledge_path') . '编年史/annals/';
         $eranameDatas = [];
-        $infos = $this->getModelObj('period')->get();
+        $infos = $this->getModelObj('period')->where(['deal_status' => 0])->limit(200)->get();
+        if ($infos->count() < 1) {
+            echo 'no to deal';exit();
+        }
 
         $tmpTable = 'wp_period_year_tmp';
-        $bSql = "RENAME TABLE `online_knowledge`.`wp_period_year` TO `online_knowledge`.`{$tmpTable}`;";
-        \DB::connection('knowledge')->select($bSql);
-        $iSql = "CREATE TABLE `online_knowledge`.`wp_period_year` LIKE `online_knowledge`.`{$tmpTable}`;";
-        \DB::connection('knowledge')->select($iSql);
+        //$bSql = "RENAME TABLE `online_knowledge`.`wp_period_year` TO `online_knowledge`.`{$tmpTable}`;";
+        //\DB::connection('knowledge')->select($bSql);
+        //$iSql = "CREATE TABLE `online_knowledge`.`wp_period_year` LIKE `online_knowledge`.`{$tmpTable}`;";
+        //\DB::connection('knowledge')->select($iSql);
 
         //$infos = $this->getModelObj('period')->whereIn('id', [24, 25])->get();
         $newDatas = [];
+        $ids = [];
         foreach ($infos as $info) {
             $pDatas = $this->dealCenturyData($info, $eranameDatas);
             $newDatas = array_merge($newDatas, $pDatas);
+            $ids[] = $info['id'];
         }
+        $idStr = implode(',', $ids);
+        $bakSql = "INSERT INTO `wp_period_year_tmp` (`id`, `period_id`, `year`, `period_type`, `country_code`, `figure_code`, `eraname`, `title`, `orderlist`, `show_type_base`, `show_type`) SELECT * FROM `wp_period_year` WHERE `period_id` IN ({$idStr});\n";
+        \DB::connection('knowledge')->select($bakSql);
+        $this->getModelObj('periodYear')->whereIn('period_id', $ids)->delete();
         $this->getModelObj('periodYear')->insert($newDatas);
         $uSql = "UPDATE `wp_period_year` AS `py`, `{$tmpTable}` AS `po` SET `py`.`show_type` = `po`.`show_type` WHERE `py`.`period_id` = `po`.`period_id`;";
         \DB::connection('knowledge')->select($uSql);
         $uSql = "UPDATE `wp_chronology` SET `period_status` = 1;";
         \DB::connection('knowledge')->select($uSql);
-        $uSql = "DROP TABLE `{$tmpTable}`;";
+        //$uSql = "DROP TABLE `{$tmpTable}`;";
+        $uSql = "TRUNCATE TABLE `{$tmpTable}`;";
         \DB::connection('knowledge')->select($uSql);
+        $this->getModelObj('period')->whereIn('id', $ids)->update(['deal_status' => 1]);
         return true;
         //print_r($newDatas);
         /*foreach ($eranameDatas as $year => & $yDatas) {

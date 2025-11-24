@@ -22,11 +22,6 @@ class Chronology extends AbstractModel
     public function wrapDetailDatas($detailDatas)
     {
         unset($detailDatas['pageData']);
-        $figureDatas = $this->getFigureDatas();
-        //print_r($figureDatas);exit();
-        if (!empty($figureDatas)) {
-            $detailDatas['commonFixTableBirthDeath'] = $figureDatas;
-        }
         $periodDatas = $this->getModelObj('periodYear')->getPointPeriodYearDatas($this->orderlist, $this->name);
         if (!empty($periodDatas)) {
             $detailDatas['commonFixTablePeriod'] = $periodDatas;
@@ -47,23 +42,28 @@ class Chronology extends AbstractModel
             ];
             unset($affairDatas['keypoint']);
         }
-        if (empty($affairData)) {
-            return $detailDatas;
-        }
-        $affairDetails = [
-            'topName' => '事件列表',
-        ];
-
-        foreach ($affairDatas as $aType => $infos) {
-            $affairDetails[$aType] = [
-                'name' => $affairTypes[$aType],
-                'titles' => ['date' => '日期', 'major' => '简介'],
-                'fixTitleField' => 'date',
-                'brief' => '',
-                'baseInfos' => $infos,
+        if (!empty($affairData)) {
+            $affairDetails = [
+                'topName' => '事件列表',
             ];
+
+            foreach ($affairDatas as $aType => $infos) {
+                $affairDetails[$aType] = [
+                    'name' => $affairTypes[$aType],
+                    'titles' => ['date' => '日期', 'major' => '简介'],
+                    'fixTitleField' => 'date',
+                    'brief' => '',
+                    'baseInfos' => $infos,
+                ];
+            }
+            $detailDatas['commonFixTableAffair'] = $affairDetails;
         }
-        $detailDatas['commonFixTableAffair'] = $affairDetails;
+
+        $figureDatas = $this->getFigureDatas();
+        //print_r($figureDatas);exit();
+        if (!empty($figureDatas)) {
+            $detailDatas['commonFixTableBirthDeath'] = $figureDatas;
+        }
         //print_r($detailDatas);exit();
         return $detailDatas;
     }
@@ -86,10 +86,12 @@ class Chronology extends AbstractModel
             $eTitle = $type == 'birth' ? '出生人物' : '逝世人物';
             $baseInfos = [];
             foreach ($infos as $info) {
-                $dateInfo = $info->formatDate([$type]);
+                $eInfo = $this->getModelObj('figure')->getCacheData($info);
+                //print_r($eInfo);
+                $dateInfo = $eInfo['birthDeathDate'][$type];
                 $baseInfos[] = [
-                    'date' => $dateInfo[$type]['monthDay2'],
-                    'name' => "<a href='wiki-figure-{$info['code']}.html'>{$info->name}</a>",
+                    'date' => $dateInfo['monthDay2'],
+                    'name' => "<a href='wiki-figure-{$info['code']}.html'>{$info->name}</a> ({$eInfo['baseData']['country_name']})",
                     'major' => $info['description'],
                 ];
             }

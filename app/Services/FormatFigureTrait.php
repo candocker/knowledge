@@ -2,97 +2,10 @@
 
 namespace ModuleKnowledge\Services;
 
+use Swoolecan\Foundation\Helpers\CommonTool;
+
 trait FormatFigureTrait
 {
-    public function initEmperorData2()
-    {
-        $nhDatas = require('/data/htmlwww/laravel-system/vendor/candocker/knowledge/resources/nh.php');
-        $sql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `eraname`, `brief`, `baidu_url`, `start_year`, `end_year`, `orderlist`) VALUES\n";
-        $lastData = [];
-        foreach ($nhDatas as $nhData) {
-            if (count($nhData) == 4) {
-                $tmpData = $nhData;
-                $nhData = $lastData;
-                $nhData['name'] = $tmpData['begin_end'];
-                $nhData['brief'] = $tmpData['name_card'];
-                $nhData['brief2'] = $tmpData['name'];
-                $nhData['brief3'] = $tmpData['brief'];
-            } else {
-                $lastData = $nhData;
-            }
-            $name = $nhData['begin_end'];
-            $nUrl = substr($name, strpos($name, 'https'));
-            $nUrl = substr($nUrl, 0, strpos($nUrl, '">'));
-            //var_dump($nUrl);
-            $name = strip_tags($name);
-            //$name = substr($name, strpos($name, '朱'));
-            $name = substr($name, 9);
-            //var_dump($name);continue;
-            $figures = $this->getModelObj('figure')->where(['name' => $name])->get();
-            $count = $figures->count();
-            if ($count < 1) {
-                $name = substr($name, 3);
-                $figures = $this->getModelObj('figure')->where(['name' => $name])->get();
-                $count = $figures->count();
-            }
-            if ($count > 1) {
-                var_dump($name . '===');
-                continue;
-            } elseif ($count < 1) {
-                var_dump($name);
-                continue;
-            } else {
-                $figure = $figures[0];
-            }
-            //print_r($figure->toArray());
-            if ($figure->baidu_url != $nUrl) {
-                //echo "<a href='{$nUrl}' target='_blank'>当前<a>、<a href='{$figure->baidu_url}' target='_blank'>{$figure['name']}</a>{$figure['baidu_url']}<br />";
-            }
-            $sEnd = $nhData['name_card'];
-            $sEnd = str_replace(['年'], [''], $sEnd);
-            if (strpos($sEnd, '—') === false) {
-                $sStart = $sEnd;
-                $sEnd = $sEnd;
-            } else {
-                $sEndTmp = explode('—', $sEnd);
-                $sStart = $sEndTmp[0];
-                $sEnd = $sEndTmp[1];
-
-            }
-            //var_dump($sStart . '-' . $sEnd);
-            $nhEnd = $nhData['brief'];
-
-            $nhEnd = str_replace(['年'], [''], $nhEnd);
-            if (strpos($nhEnd, '—') === false) {
-                $nhStart = $nhEnd;
-                $nhEnd = $nhEnd;
-            } else {
-                $nhEndTmp = explode('—', $nhEnd);
-                $nhStart = $nhEndTmp[0];
-                $nhEnd = $nhEndTmp[1];
-
-            }
-            //var_dump($nhStart . '=' . $nhEnd);
-            $nhBrief = strip_tags($nhData['brief3']);
-
-            $nhName = strip_tags($nhData['name']);
-            $nhUrl = $nhData['name'];
-            $nhUrl = substr($nhUrl, strpos($nhUrl, 'https'));
-            $nhUrl = substr($nhUrl, 0, strpos($nhUrl, '">'));
-            $sStart = str_replace('前', '-', $sStart);
-            $sEnd = str_replace('前', '-', $sEnd);
-            $nhStart = str_replace('前', '-', $nhStart);
-            $nhEnd = str_replace('前', '-', $nhEnd);
-        //$sql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `eraname`, `brief`, `baidu_url`, `start_year`, `end_year`) VALUES\n";
-            $sql .= "('emperor', 'xihan', '{$figure['code']}', '', '', '', {$sStart}, {$sEnd}, 0),\n";
-            $sql .= "('eraname', 'xihan', '{$figure['code']}', '{$nhName}', '{$nhBrief}', '{$nhUrl}', {$nhStart}, {$nhEnd}, 0),\n";
-            //var_dump($nhName . '-' . $nhUrl);
-        }
-        echo $sql;
-        //print_r($nhDatas);
-        exit();
-    }
-
     public function initEmperorData()
     {
         $dynasty = 'houjinqing';
@@ -109,13 +22,15 @@ trait FormatFigureTrait
         //echo $sql;
         $infos = \DB::select($sql);
         $infos = $this->getModelObj('figure')->where(['country_code' => $dynasty])->where('birth_year', 0)->get();
-        //$infos = $this->getModelObj('figure')->where(['country_code' => $dynasty])->orderBy('birth_year')->get();
+        $infos = $this->getModelObj('figure')->where(['country_code' => $dynasty])->orderBy('id')->get();
         //print_r($infos);
         $fields = ['birth_accurate', 'birth_year', 'birth_month', 'birth_day'];
         $fields2 = ['death_accurate', 'death_year', 'death_month', 'death_day'];
+        $fSql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `start_year`, `end_year`, `orderlist`) VALUES\n";
         foreach ($infos as $info) {
-            //echo "        '{$info['code']}', // {$info['name']}\n";continue;
-            echo "        '{$info['code']}', // <a href='{$info['baidu_url']}' target='_blank'>{$info['name']}</a>、<a href='http://mu.canliang.wang/wiki-figure-{$info['code']}.html' target='_blank'>详情</a><br />\n";continue;
+            $fSql .= "('emperor', '{$dynasty}', '{$info['code']}', '', '', '100'), --{$info['name']}\n";
+            echo "        '{$info['code']}', // {$info['name']}\n";continue;
+            //echo "        '{$info['code']}', // <a href='{$info['baidu_url']}' target='_blank'>{$info['name']}</a>、<a href='http://mu.canliang.wang/wiki-figure-{$info['code']}.html' target='_blank'>详情</a><br />\n";continue;
             $str = "UPDATE `wp_figure` SET ";
             foreach ($fields as $field) {
                 if (in_array($field, ['path_gather', 'path_label', 'birth_accurate', 'death_accurate'])) {
@@ -137,6 +52,7 @@ trait FormatFigureTrait
             echo $str . " WHERE `code` = '{$info['code']}'; ----<a href='{$info['baidu_url']}' target='_blank'>{$info['name']}</a>\n<br />";
             //echo $str . " WHERE `code` = '{$info['code']}'; <br />";
         }
+        echo $fSql;
 
         exit();
     }
@@ -360,5 +276,111 @@ trait FormatFigureTrait
 
         //print_r($birthData);print_r($deathData);
         return ['bStr' => implode('', $birthData), 'dStr' => implode('', $deathData)];
+    }*/
+
+    /*public function initEmperorData2()
+    {
+        $nhDatas = require('/data/htmlwww/laravel-system/vendor/candocker/knowledge/resources/nh.php');
+        $sql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `eraname`, `brief`, `baidu_url`, `start_year`, `end_year`, `orderlist`) VALUES\n";
+        $dynasty = 'xixia';
+        $listorder = 60;
+        $sql .= "('country', '{$dynasty}', '', '', '', '', , , {$listorder}),\n";
+        $lastData = [];
+        $eExists = [];
+        $fSql = "INSERT INTO `wp_figure` (`code`, `name`, `name_card`, `country_code`, `baidu_url`) VALUES \n";
+        foreach ($nhDatas as $nhData) {
+            if (count($nhData) == 4) {
+                $tmpData = $nhData;
+                $nhData = $lastData;
+                $nhData['name'] = $tmpData['begin_end'];
+                $nhData['brief'] = $tmpData['name_card'];
+                $nhData['brief2'] = $tmpData['name'];
+                $nhData['brief3'] = $tmpData['brief'];
+            } else {
+                $lastData = $nhData;
+            }
+            //print_r($nhData);
+            $name = $nhData['begin_end'];
+            $nUrl = substr($name, strpos($name, 'https'));
+            $nUrl = substr($nUrl, 0, strpos($nUrl, '">'));
+            //var_dump($nUrl);
+            $name = strip_tags($name);
+            //$name = substr($name, strpos($name, '朱'));
+            $name = substr($name, 9);
+            //var_dump($name);continue;
+
+            $code = CommonTool::getSpellStr($name, '');
+            //var_dump($code . '-' . $name);
+            $fSql .= "('{$code}', '{$name}', '{$name}', '{$dynasty}', '{$nUrl}'),\n";
+            //print_r($nhData);exit();
+            //continue;
+
+            $figures = $this->getModelObj('figure')->where(['name' => $name, 'country_code' => $dynasty])->get();
+            $count = $figures->count();
+            if ($count < 1) {
+                $name = substr($name, 3);
+                $figures = $this->getModelObj('figure')->where(['name' => $name])->get();
+                $count = $figures->count();
+            }
+            if ($count > 1) {
+                var_dump($name . '=oo==');
+                continue;
+            } elseif ($count < 1) {
+                var_dump($name . 'pppp');
+                continue;
+            } else {
+                $figure = $figures[0];
+            }
+            //print_r($figure->toArray());
+            if ($figure->baidu_url != $nUrl) {
+                //echo "<a href='{$nUrl}' target='_blank'>当前<a>、<a href='{$figure->baidu_url}' target='_blank'>{$figure['name']}</a>{$figure['baidu_url']}<br />";
+            }
+            $sEnd = $nhData['name_card'];
+            $sEnd = str_replace(['年'], [''], $sEnd);
+            if (strpos($sEnd, '—') === false) {
+                $sStart = $sEnd;
+                $sEnd = $sEnd;
+            } else {
+                $sEndTmp = explode('—', $sEnd);
+                $sStart = $sEndTmp[0];
+                $sEnd = $sEndTmp[1];
+
+            }
+            //var_dump($sStart . '-' . $sEnd);
+            $nhEnd = $nhData['brief'];
+
+            $nhEnd = str_replace(['年'], [''], $nhEnd);
+            if (strpos($nhEnd, '—') === false) {
+                $nhStart = $nhEnd;
+                $nhEnd = $nhEnd;
+            } else {
+                $nhEndTmp = explode('—', $nhEnd);
+                $nhStart = $nhEndTmp[0];
+                $nhEnd = $nhEndTmp[1];
+
+            }
+            //var_dump($nhStart . '=' . $nhEnd);
+            $nhBrief = strip_tags($nhData['brief3']);
+
+            $nhName = strip_tags($nhData['name']);
+            $nhUrl = $nhData['name'];
+            $nhUrl = substr($nhUrl, strpos($nhUrl, 'https'));
+            $nhUrl = substr($nhUrl, 0, strpos($nhUrl, '">'));
+            $sStart = str_replace('前', '-', $sStart);
+            $sEnd = str_replace('前', '-', $sEnd);
+            $nhStart = str_replace('前', '-', $nhStart);
+            $nhEnd = str_replace('前', '-', $nhEnd);
+        //$sql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `eraname`, `brief`, `baidu_url`, `start_year`, `end_year`) VALUES\n";
+            if (!in_array($figure['code'], $eExists)) {
+                $sql .= "('emperor', '{$dynasty}', '{$figure['code']}', '', '', '', {$sStart}, {$sEnd}, {$listorder}),\n";
+                $eExists[] = $figure['code'];
+            }
+            $sql .= "('eraname', '{$dynasty}', '{$figure['code']}', '{$nhName}', '{$nhBrief}', '{$nhUrl}', {$nhStart}, {$nhEnd}, {$listorder}),\n";
+            //var_dump($nhName . '-' . $nhUrl);
+        }
+        //echo $fSql;exit();
+        echo trim(trim($sql), ',');
+        //print_r($nhDatas);
+        exit();
     }*/
 }

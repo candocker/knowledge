@@ -8,6 +8,7 @@ class Period extends AbstractModel
 {
     protected $table = 'period';
     protected $guarded = ['id'];
+    public $timestamps = false;
 
     public function getCurrentTitle()
     {
