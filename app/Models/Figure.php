@@ -281,7 +281,7 @@ class Figure extends AbstractModel
             }
             $duration = str_replace('-', '前', $info->start_year) . '-' . str_replace('-', '前', $info->end_year);
             $diff = $info->end_year - $info->start_year;
-            $diffStr = $diff < 1 ? '不足1年' : $diff . '年';
+            $diffStr = $diff < 1 ? '<1年' : $diff . '年';
             if ($info['period_type'] == 'emperor') {
                 $terms[$termNum]['duration'] = $duration;
                 $terms[$termNum]['durationStr'] = "{$diffStr}/{$duration}";
@@ -325,6 +325,7 @@ class Figure extends AbstractModel
         $country = $this->countryInfo;
         $fPath = $this->full_knowledge_path;
         $nameJump = "<a href='/wiki-figure-{$this->code}.html?force_create_file=figure'>{$this->name}</a>";
+        $nameJump = "<a href='/wiki-figure-{$this->code}.html'>{$this->name}</a>";
         $nameJumpFull = $this->baidu_url ? $nameJump . " (<a href='{$this->baidu_url}'>百科</a>)" : $nameJump;
         $baseData = [
             'code' => $this->code,

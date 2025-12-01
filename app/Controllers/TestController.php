@@ -33,15 +33,21 @@ class TestController extends AbstractController
 
     public function _testDealxt()
     {
+        $sql = file_get_contents('/tmp/sql.sql');
+        \DB::connection('knowledge')->select($sql);exit();
         $datas = file_get_contents('/tmp/xt.json');
         $datas = json_decode($datas, true);
         $datas = $datas['data']['list'];
         //print_r($datas);
-        $sql = "INSERT INTO `wp_figure` (`code`, `name`, `name_card`, `country_code`, `description`, `baidu_url`, `baidu_picture`) VALUES \n";
+        $sql = "INSERT INTO `wp_figure` (`code`, `name`, `name_card`, `country_code`,  `birth_accurate`, `birth_year`, `birth_month`, `birth_day`, `death_accurate`, `death_year`, `death_month`, `death_day`, `baidu_url`, `description`, `baidu_picture`) VALUES \n";
         foreach ($datas as $data) {
             //print_r($data);
             $name = $data['lemmaTitle'];
-            //$code = CommonTool::getSpellStr($data[$title], '');
+            $code = CommonTool::getSpellStr($name, '');
+            $exist = $this->getModelObj('figure')->where(['code' => $code])->first();
+            if ($exist) {
+                var_dump($name);
+            }
             $baiduUrl = "https://baike.baidu.com/item/{$name}/{$data['lemmaId']}";
             $picture = $data['coverPic'];
             //var_dump($picture);
@@ -49,7 +55,7 @@ class TestController extends AbstractController
                 $picture = substr($picture, 0, strpos($picture, ','));
             }
             //var_dump($picture);
-            $sql .= "('', '{$name}', '{$name}', 'waluwawangchao', '{$data['summary']}', '{$baiduUrl}', '{$picture}'),\n";
+            $sql .= "('{$code}', '{$name}', '{$name}', 'mingchao', '', 0, 0, 0, '', 0, 0, 0, '{$baiduUrl}', '{$data['summary']}', '{$picture}'),\n";
         }
         echo $sql;
         exit();
@@ -64,6 +70,7 @@ class TestController extends AbstractController
         $crawler->addContent($content);
         $fMark = 'tr';
         $fMark = '.para_ExsgO';
+        $fMark = '.dpu8C';
 
         $subMark = 'td';
         $subMark = '.para_ExsgO';
@@ -89,6 +96,7 @@ class TestController extends AbstractController
         });
         //$datas = array_reverse($datas);
         $this->_dealCrawlerData($datas);
+        exit();
         var_export($datas);exit();
     }
 
@@ -97,6 +105,7 @@ class TestController extends AbstractController
         $sql = "INSERT INTO `wp_affair` (`affair_type`, `accurate`, `year`, `month`, `day`, `name`, `country_code`, `title`, `brief`, `baidu_url`) VALUES\n";
         $fSql = "INSERT INTO `wp_figure` (`code`, `name`, `name_card`, `country_code`, `description`, `baidu_url`, `path_label`, `path_gather`, `path_point`, `birth_accurate`, `birth_year`, `birth_month`, `birth_day`, `death_accurate`, `death_year`, `death_month`, `death_day`, `active_at`) VALUES\n";
         foreach ($datas as $key => $data) {
+            //print_r($data);
             $sql .= "('', '', 1380, 0, 0, '', '', '', '{$data['text']}', ''),\n";
 
         }

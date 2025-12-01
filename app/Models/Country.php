@@ -136,6 +136,10 @@ class Country extends AbstractModel
                         $posthumousName = $eInfo['extInfos']['谥号'] ?? '';
                         $value = $eInfo['baseData']['name_jump'] . ($posthumousName ? " ({$posthumousName})" : '');
                         break;
+                    case 'card_name':
+                        $cardName = $eInfo['baseData']['name_card'] ?? '';
+                        $value = $eInfo['baseData']['name_jump'] . ($cardName ? " ({$cardName})" : '');
+                        break;
                     case 'name':
                         $value = $eInfo['baseData']['name_jump'];
                         break;

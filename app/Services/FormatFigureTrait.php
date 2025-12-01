@@ -8,6 +8,96 @@ trait FormatFigureTrait
 {
     public function initEmperorData()
     {
+        $sorts = ['dynasty'];//, 'gdempire'];
+        $infos = $this->getModelObj('country')->whereIn('sort', $sorts)->get();
+        foreach ($infos as $info) {
+            $dynasty = $info['code'];
+            $pData = $this->getModelObj('period')->where(['country_code' => $dynasty, 'period_type' => 'country'])->first();
+            if (empty($pData)) {
+                var_dump($info['code'] . '-' . $info['name']);
+            }
+        }
+        //exit();
+        //$dynasty = 'shang'; $listorder = 0;
+        //$dynasty = 'xia'; $listorder = 0;
+        //$dynasty = 'beiweidai'; $listorder = 70;
+        //$dynasty = 'beiweidai'; $listorder = 70;
+        $dynasty = 'yangwu'; $listorder = 60;
+
+        //$dynasty = 'songguo'; $listorder = 35;
+        //$dynasty = 'qiguo'; $listorder = 14;
+        //$dynasty = 'jinguo'; $listorder = 12;
+        //$dynasty = 'chuguo'; $listorder = 16;
+        //$dynasty = 'luguo'; $listorder = 22;
+        //$dynasty = 'zhengguo'; $listorder = 24;
+        //$dynasty = 'wuguo'; $listorder = 26;
+        //$dynasty = 'yueguo'; $listorder = 28;
+        //$dynasty = 'yanguo'; $listorder = 32;
+        $country = $this->getModelObj('country')->where(['code' => $dynasty])->first();
+        $fFile = $country->full_knowledge_path;
+        $data = require($fFile);
+        $sql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `start_year`, `end_year`, `orderlist`) VALUES\n";
+        $sql .= "('country', '{$dynasty}', '', , , {$listorder}),\n";
+        $ufSql = '';
+        foreach ($data['commonFixTable'] as $eKey => $eDatas) {
+            if ($eKey == 'topName') {
+                continue;
+            }
+            foreach ($eDatas['baseInfos'] as $emperor) {
+                $name = $emperor['name'];
+                $sName = strip_tags($name);
+                $name = str_replace(['<a href="/wiki-figure-'], [''], $name);
+                $name = substr($name, 0, strpos($name, '.'));
+                $duration = $emperor['eraname'];
+                if (strpos($duration, '(') !== false) {
+                    $duration = substr($duration, strpos($duration, '(') + 1);
+                }
+                //$duration = $emperor['alias'];
+                $duration = substr($duration, 0, strpos($duration, ' '));
+                //var_dump($duration);
+
+                //echo "        '{$name}', // {$emperor['dynastic']}\n";
+                echo "        '{$name}', // {$sName}\n";
+                //echo "        '{$name}', // {$emperor['alias']}\n";
+                //$sql .= "('emperor', '{$dynasty}', '{$name}', 0, 0, {$listorder}), ---{$emperor['alias']}\n";
+
+                $tmp = explode('-', $duration);
+                if (count($tmp) < 2) {
+                    $start = $tmp[0];
+                    if (empty($start)) {
+                        //print_r($emperor);
+                        //var_dump($start);
+                        //$ufSql .= "UPDATE `wp_figure` SET `name` = '{$emperor['alias']}', `birth_accurate` = 'unknown', `death_year` = 0, `birth_year` = 0, `description` = '{$emperor['major']}'  WHERE `code` = '{$name}';\n";
+                        //$ufSql .= "UPDATE `wp_figure` SET `name_card` = '{$sName}' WHERE `code` = '{$name}';\n";
+                        continue;
+                    }
+                    $end = $start;
+                } else {
+                    $start = $tmp[0];
+                    $end = $tmp[1];
+                }
+                $start = str_replace(['年', '前'], ['', '-'], $start);
+                $end = str_replace(['年', '前'], ['', '-'], $end);
+                $sql .= "('emperor', '{$dynasty}', '{$name}', {$start}, {$end}, {$listorder}),\n";
+                $nameCard = $emperor['dynastic'];
+                if (strpos($nameCard, ' ') !== false) {
+                    $nameCard = substr($nameCard, 0, strpos($nameCard, ' '));
+                }
+                $ufSql .= "UPDATE `wp_figure` SET `name_card` = '{$nameCard}', `birth_accurate` = 'unknown', `death_year` = {$end}, `birth_year` = 0, `description` = '{$emperor['major']}'  WHERE `code` = '{$name}';\n";
+                //var_dump($name . '-' . $duration);
+                //print_r($emperor);
+
+            }
+        }
+        echo $ufSql;
+        echo $sql;
+        //print_r($data);
+        //var_dump($fFile);
+        exit();
+    }
+
+    public function initEmperorDataold()
+    {
         $dynasty = 'houjinqing';
         $dynasty = 'qingchao';
         $dynasty = 'yuanchao';
