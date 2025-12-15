@@ -15,7 +15,7 @@ trait FormatAnnalTrait
     {
         $base = $this->config->get('knowledge.knowledge_path') . '编年史/annals/';
         $eranameDatas = [];
-        $infos = $this->getModelObj('period')->where(['deal_status' => 0])->limit(200)->get();
+        $infos = $this->getModelObj('period')->where(['deal_status' => 0])->limit(20)->get();
         if ($infos->count() < 1) {
             echo 'no to deal';exit();
         }

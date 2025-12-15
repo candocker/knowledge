@@ -160,7 +160,8 @@ class Chronology extends AbstractModel
         }
 
         $typeStr = 'country,emperor,eraname';
-        $pyInfos = $this->getModelObj('periodYear')->where(['year' => $this->orderlist])->whereNotIn('show_type_base', [-1])->orderBy('show_type', 'desc')->orderBy('orderlist')->orderByRaw("FIND_IN_SET(period_type, '{$typeStr}') asc")->limit(5)->get();
+        //$pyInfos = $this->getModelObj('periodYear')->where(['year' => $this->orderlist])->whereNotIn('show_type_base', [-1])->orderBy('show_type', 'desc')->orderBy('orderlist')->orderByRaw("FIND_IN_SET(period_type, '{$typeStr}') asc")->limit(10)->get();
+        $pyInfos = $this->getModelObj('periodYear')->where(['year' => $this->orderlist])->whereNotIn('show_type_base', [-1])->orderBy('show_type', 'desc')->orderBy('orderlist')->orderByRaw("FIND_IN_SET(period_type, '{$typeStr}') asc")->get();
         $str = '';
         foreach ($pyInfos as $pyInfo) {
             $str .= $pyInfo['title'] . '、';
