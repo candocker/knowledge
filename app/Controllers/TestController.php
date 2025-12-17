@@ -33,32 +33,65 @@ class TestController extends AbstractController
 
     public function _testDealxt()
     {
-        $sql = file_get_contents('/tmp/sql.sql');
-        \DB::connection('knowledge')->select($sql);exit();
+        //$sql = file_get_contents('/tmp/sql.sql');
+        //\DB::connection('knowledge')->select($sql);exit();
         $datas = file_get_contents('/tmp/xt.json');
         $datas = json_decode($datas, true);
         $datas = $datas['data']['list'];
+        $this->dealxtFigure($datas);
+        exit();
+    }
+
+    public function dealxtFigure($datas)
+    {
+        /*$figures = $this->getModelObj('figure')->where(['country_code' => 'egypter'])->orderBy('id', 'asc')->get();
+        $gStr = '';
+        foreach ($figures as $figure) {
+            $gStr .= $this->_dealFigureGather($figure['code'], $figure['name'], '');
+        }
+        echo $gStr;
+        exit();*/
+        $dynasty = 'egyptshiyi';
+        $gPath = '帝国历史/尼罗河流域/埃及第十一王朝/法老';
         //print_r($datas);
-        $sql = "INSERT INTO `wp_figure` (`code`, `name`, `name_card`, `country_code`,  `birth_accurate`, `birth_year`, `birth_month`, `birth_day`, `death_accurate`, `death_year`, `death_month`, `death_day`, `baidu_url`, `description`, `baidu_picture`) VALUES \n";
-        foreach ($datas as $data) {
+        $sql = "INSERT INTO `wp_figure` (`code`, `name`, `name_card`, `country_code`, `baidu_url`, `description`, `baidu_picture`, `path_gather`, `path_point`) VALUES \n";
+        $gStr = '';
+        $eCodes = ['mentuhotep1', 'intef1', 'intef2', 'intef3', 'mentuhotep2', 'mentuhotep3', 'mentuhotep4'];
+        foreach ($datas as $index => $data) {
             //print_r($data);
             $name = $data['lemmaTitle'];
-            $code = CommonTool::getSpellStr($name, '');
+            $code = $eCodes[$index] ?? CommonTool::getSpellStr($name, '');
+            echo "        '{$code}', // {$name}\n";
+            //continue;
             $exist = $this->getModelObj('figure')->where(['code' => $code])->first();
             if ($exist) {
                 var_dump($name);
             }
             $baiduUrl = "https://baike.baidu.com/item/{$name}/{$data['lemmaId']}";
             $picture = $data['coverPic'];
+            $description = $data['summary'];
             //var_dump($picture);
             if (strpos($picture, ',') !== false) {
                 $picture = substr($picture, 0, strpos($picture, ','));
             }
             //var_dump($picture);
-            $sql .= "('{$code}', '{$name}', '{$name}', 'mingchao', '', 0, 0, 0, '', 0, 0, 0, '{$baiduUrl}', '{$data['summary']}', '{$picture}'),\n";
+            $sql .= "('{$code}', '{$name}', '{$name}', '{$dynasty}', '{$baiduUrl}', '', '{$picture}', '法老', '{$gPath}'),\n";
+            $gStr .= $this->_dealFigureGather($code, $name, $description);
         }
+        echo $gStr;
         echo $sql;
-        exit();
+    }
+
+    public function _dealFigureGather($code, $name, $description)
+    {
+        $gStr = '';
+        $gStr .= "// {$name}\n";
+        $gStr .= "'{$code}' => [\n";
+        //$gStr .= "'baseData' => [\n'infos' => [\n],\n],\n\n";
+        $gStr .= "'singleText' => [\n    '{$description}',\n],\n\n";
+        //$gStr .= "'extDetails' => [\n],\n";
+        $gStr .= "],\n\n";
+        return $gStr;
     }
 
     public function _testDealhtml()
@@ -69,14 +102,15 @@ class TestController extends AbstractController
         $content = file_get_contents($file);
         $crawler->addContent($content);
         $fMark = 'tr';
-        $fMark = '.para_ExsgO';
-        $fMark = '.dpu8C';
+        //$fMark = '.para_ExsgO';
+        //$fMark = '.dpu8C';
 
         $subMark = 'td';
-        $subMark = '.para_ExsgO';
+        //$subMark = '.para_ExsgO';
         $noSubElem = false;
-        $noSubElem = true;
+        //$noSubElem = true;
 
+        $datas = [];
         $crawler->filter($fMark)->each(function ($crawler) use (& $datas, $subMark, $noSubElem) {
             if ($noSubElem) {
                 $datas[] = $this->_formatCrawlerData($crawler);
@@ -86,7 +120,7 @@ class TestController extends AbstractController
             $data = [];
             $i = 0;
             $crawler->filter($subMark)->each(function ($subCrawler) use (& $data, & $i) {
-                $datas[$i] = $this->_formatCrawlerData($subCrawler);
+                $data[$i] = $this->_formatCrawlerData($subCrawler);
                 $i++;
                 return ;
             });
@@ -94,6 +128,7 @@ class TestController extends AbstractController
                 $datas[] = $data;
             }
         });
+        print_r($datas);exit();
         //$datas = array_reverse($datas);
         $this->_dealCrawlerData($datas);
         exit();

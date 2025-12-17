@@ -70,7 +70,7 @@ class Country extends AbstractModel
         $sortDatas = [
             '' => ['bigsort' => 'region', 'path' => '国家地区'],
             'dynasty' => ['bigsort' => 'dynasty', 'path' => '古代中国'],
-            'gdempire' => ['bigsort' => 'gdempire', 'path' => '帝国历史'],
+            'gdempire' => ['bigsort' => 'gdempire', 'path' => ''],
         ];
         $where = ['country_code' => $this->code, 'bigsort' => $sortDatas[$this->sort]['bigsort']];
         $clInfo = $this->getModelObj('countryListing')->where($where)->first();

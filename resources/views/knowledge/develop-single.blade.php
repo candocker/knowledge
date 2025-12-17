@@ -44,7 +44,8 @@ if (isset($pageData['url'])) {
   @php if ($ddKey == 'simpleFixed') { $ddKey = $isMobile ? 'simpleFixed' : 'simpleTable'; } @endphp
   @php if (strpos($ddKey, 'commonFixTable') !== false) { $ddKey = $isMobile ? 'commonFixed' : 'commonTable'; } @endphp
   @php if (in_array($ddKey, ['simpleText', 'simpleText1', 'simpleText2'])) { $ddKey = 'simpleText'; } @endphp
-  @if (in_array($ddKey, ['image', 'simpleTable', 'askwiki', 'commonFixed', 'advanced', 'commonTable', 'simpleFixed', 'timeline', 'simpleText']))
+  @php if (strpos($ddKey, 'singleText') !== false) { $ddKey = 'singleText'; } @endphp
+  @if (in_array($ddKey, ['image', 'simpleTable', 'askwiki', 'commonFixed', 'advanced', 'commonTable', 'simpleFixed', 'timeline', 'simpleText', 'singleText']))
   <div class="container">
     @if (isset($ddDatas['title']))
     <div class="span12">
