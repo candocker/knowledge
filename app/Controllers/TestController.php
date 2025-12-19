@@ -51,16 +51,20 @@ class TestController extends AbstractController
         }
         echo $gStr;
         exit();*/
-        $dynasty = 'egyptshiyi';
-        $gPath = '帝国历史/尼罗河流域/埃及第十一王朝/法老';
+        $dynasty = 'egyptsanshi';
+        $gPath = '帝国历史/尼罗河流域/埃及第三十王朝/法老';
         //print_r($datas);
         $sql = "INSERT INTO `wp_figure` (`code`, `name`, `name_card`, `country_code`, `baidu_url`, `description`, `baidu_picture`, `path_gather`, `path_point`) VALUES \n";
         $gStr = '';
-        $eCodes = ['mentuhotep1', 'intef1', 'intef2', 'intef3', 'mentuhotep2', 'mentuhotep3', 'mentuhotep4'];
+        $eCodes = ['nectanebo1', 'theos', 'nectanebo1'];
+        $eNames = ['内克塔内布一世', '泰奥斯', '内克塔内布二世'];
+        $pSql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `orderlist`, `start_accurate`, `start_year`, `end_accurate`, `end_year`) VALUES \n";
         foreach ($datas as $index => $data) {
             //print_r($data);
             $name = $data['lemmaTitle'];
+            $name = $eNames[$index] ?? '';
             $code = $eCodes[$index] ?? CommonTool::getSpellStr($name, '');
+            $pSql .= "('emperor', '{$dynasty}', '{$code}', 200, '', -, '', -),\n";
             echo "        '{$code}', // {$name}\n";
             //continue;
             $exist = $this->getModelObj('figure')->where(['code' => $code])->first();
@@ -68,8 +72,11 @@ class TestController extends AbstractController
                 var_dump($name);
             }
             $baiduUrl = "https://baike.baidu.com/item/{$name}/{$data['lemmaId']}";
+            $baiduUrl = '';
             $picture = $data['coverPic'];
+            $picture = '';
             $description = $data['summary'];
+            $description = '';
             //var_dump($picture);
             if (strpos($picture, ',') !== false) {
                 $picture = substr($picture, 0, strpos($picture, ','));
@@ -80,6 +87,7 @@ class TestController extends AbstractController
         }
         echo $gStr;
         echo $sql;
+        echo $pSql;
     }
 
     public function _dealFigureGather($code, $name, $description)
