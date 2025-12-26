@@ -95,78 +95,110 @@ class Country extends AbstractModel
 
     public function wrapDetailDatas($detailDatas)
     {
-        $emperorDatas = $detailDatas['commonFixTableEmperor'] ?? [];
-        if (!empty($emperorDatas)) {
-            $detailDatas['commonFixTableEmperor'] = $this->_formatEmperorDatas($emperorDatas);
-            //unset($detailDatas['commonFixTableEmperor']);
+        $figureFields = ['commonFixTableEmperor', 'commonFixTableFigureDetail', 'commonFixTableFigureDetail1'];
+        foreach ($figureFields as $fField) {
+            $fDatas = $detailDatas[$fField] ?? [];
+            if (!empty($fDatas)) {
+                $detailDatas[$fField] = $this->_formatFigureDetailDatas($fDatas);
+            }
         }
         return $detailDatas;
     }
 
-    public function _formatEmperorDatas($eDatas)
+    public function _formatFigureDetailDatas($eDatas)
     {
         foreach ($eDatas as $key => & $eData) {
             if ($key == 'topName') {
                 continue;
             }
-            $emperors = $eData['emperors'];
-            $baseInfos = [];
-            unset($eData['emperors']);
-            foreach ($emperors as $emperor) {
+            if (isset($eData['emperors'])) {
+                $eData['baseInfos'] = $eData['emperors'];
+                unset($eData['emperors']);
+            }
+            foreach ($eData['baseInfos'] as & $baseInfo) {
+                if (is_array($baseInfo) && !isset($baseInfo['fCode'])) {
+                    continue;
+                }
+                if (is_array($baseInfo)) {
+                    $fCode = $baseInfo['fCode'];
+                    unset($baseInfo['fCode']);
+                } else {
+                    $fCode = $baseInfo;
+                    $baseInfo = [];
+                }
                 $term = 0;
-                if (strpos($emperor, '_mul_') !== false) {
-                    $tmp = explode('_mul_', $emperor);
-                    $emperor = $tmp[0];
+                if (strpos($fCode, '_mul_') !== false) {
+                    $tmp = explode('_mul_', $fCode);
+                    $fCode = $tmp[0];
                     $term = $tmp[1];
                 }
-                $eInfo = $this->getModelObj('figure')->getCacheData($emperor);
+                $eInfo = $this->getModelObj('figure')->getCacheData($fCode);
                 //print_r($eInfo);exit();
                 $emperorData = $eInfo['emperorData'] ?? [];
                 $emperorData = $emperorData['terms'] ?? [];
                 $emperorData = $emperorData[$term] ?? [];
                 //print_r($emperorData);exit();
-                $data = [];
+
+                $baseInfoNew = [];
                 foreach ($eData['titles'] as $field => $fName) {
-                    switch ($field) {
-                    case 'temple_name':
-                        $templeName = $eInfo['extInfos']['庙号'] ?? '';
-                        $value = $eInfo['baseData']['name_jump'] . ($templeName ? " ({$templeName})" : '');
-                        break;
-                    case 'posthumous_name':
-                        $posthumousName = $eInfo['extInfos']['谥号'] ?? '';
-                        $value = $eInfo['baseData']['name_jump'] . ($posthumousName ? " ({$posthumousName})" : '');
-                        break;
-                    case 'card_name':
-                        $cardName = $eInfo['baseData']['name_card'] ?? '';
-                        $value = $eInfo['baseData']['name_jump'] . ($cardName ? " ({$cardName})" : '');
-                        break;
-                    case 'name':
-                        $value = $eInfo['baseData']['name_jump'];
-                        break;
-                    case 'rulerange':
-                        $value = $emperorData['durationStr'] ?? '';
-                        break;
-                    case 'eraname':
-                        $value = isset($emperorData['eraname']) ? implode('、', $emperorData['eraname']) : '';
-                        break;
-                    case 'birth_death':
-                        $value = $eInfo['birthDeathDate']['common']['birthDeathStrAgeSimple'];
-                        break;
-                    case 'major':
-                        $value = $eInfo['descs']['base'];
-                        break;
-                    case 'appendhonor':
-                        $value = $eInfo['descs']['追尊'] ?? $eInfo['descs']['base'];
-                        break;
-                    default:
-                        $value = '未知';
+                    if (isset($baseInfo[$field])) {
+                        $baseInfoNew[$field] = $baseInfo[$field];
+                        continue;
                     }
-                    $data[$field] = $value;
+                    $baseInfoNew[$field] = $this->_getPointFigureField($field, $eInfo, $emperorData);
                 }
-                $baseInfos[] = $data;
+                $baseInfo = $baseInfoNew;
             }
-            $eData['baseInfos'] = $baseInfos;
         }
         return $eDatas;
+    }
+
+    public function _getPointFigureField($field, $figureData, $emperorData = [])
+    {
+        if ($field == 'temple_name') {
+            $templeName = $figureData['extInfos']['庙号'] ?? '';
+            $value = $figureData['baseData']['name_jump'] . ($templeName ? " ({$templeName})" : '');
+            return $value;
+        }
+        if ($field == 'posthumous_name') {
+            $posthumousName = $figureData['extInfos']['谥号'] ?? '';
+            $value = $figureData['baseData']['name_jump'] . ($posthumousName ? " ({$posthumousName})" : '');
+            return $value;
+        }
+        if ($field == 'card_name') {
+            $cardName = $figureData['baseData']['name_card'] ?? '';
+            $value = $figureData['baseData']['name_jump'] . ($cardName ? " ({$cardName})" : '');
+            return $value;
+        }
+        if ($field == 'name') {
+            $value = $figureData['baseData']['name_jump'];
+            return $value;
+        }
+        if ($field == 'native_place') {
+            $value = $figureData['baseData']['native_place'];
+            return $value;
+        }
+        if ($field == 'birth_death') {
+            $value = $figureData['birthDeathDate']['common']['birthDeathStrAgeSimple'];
+            return $value;
+        }
+        if ($field == 'major') {
+            $value = $figureData['descs']['base'];
+            return $value;
+        }
+        if ($field == 'appendhonor') {
+            $value = $figureData['descs']['追尊'] ?? $figureData['descs']['base'];
+            return $value;
+        }
+
+        if ($field == 'rulerange') {
+            $value = $emperorData['durationStr'] ?? '';
+            return $value;
+        }
+        if ($field == 'eraname') {
+            $value = isset($emperorData['eraname']) ? implode('、', $emperorData['eraname']) : '';
+            return $value;
+        }
+        return '未知';
     }
 }

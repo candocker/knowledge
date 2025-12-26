@@ -8,71 +8,40 @@ trait FormatFigureTrait
 {
     public function initEmperorData()
     {
-        $sorts = ['dynasty'];
-        $sorts = ['gdempire'];
-        $infos = $this->getModelObj('country')->whereIn('sort', $sorts)->get();
-        foreach ($infos as $info) {
-            $dynasty = $info['code'];
-            $pData = $this->getModelObj('period')->where(['country_code' => $dynasty, 'period_type' => 'country'])->first();
-            if (empty($pData)) {
-                $sql = "SELECT * FROM `wp_period1106` WHERE `country_code` = '{$info['code']}';\n";
-                $eDatas = \DB::connection('knowledge')->select($sql);
-            //var_dump(count($eDatas));
-                if (empty($eDatas)) {
-                var_dump($info['code'] . '-' . $info['name'] . '-' . $info['begin_end']);
-                } else {
-                    echo $eDatas[0]->id . ',';
-                }
-            }
-        }
-        //exit();
-        $dynasty = 'shang'; $listorder = 0;
-        //$dynasty = 'xia'; $listorder = 0;
-        //$dynasty = 'beiyang'; $listorder = 0;
-        //$dynasty = 'beiweidai'; $listorder = 70;
-        //$dynasty = 'beiweidai'; $listorder = 70;
-        //$dynasty = 'yangwu'; $listorder = 60;
-        //$dynasty = 'nantang'; $listorder = 61;
-        //$dynasty = 'wuyue'; $listorder = 62;
-        //$dynasty = 'minguowang'; $listorder = 64;
-        //$dynasty = 'qianshu'; $listorder = 65;
-        //$dynasty = 'houshu'; $listorder = 66;
-        //$dynasty = 'nanping'; $listorder = 67;
-        //$dynasty = 'nanhan'; $listorder = 68;
-        //$dynasty = 'nanchu'; $listorder = 69;
-        //$dynasty = 'beihan'; $listorder = 63;
-
-        //$dynasty = 'songguo'; $listorder = 35;
-        //$dynasty = 'qiguo'; $listorder = 14;
-        //$dynasty = 'jinguo'; $listorder = 12;
-        //$dynasty = 'chuguo'; $listorder = 16;
-        //$dynasty = 'luguo'; $listorder = 22;
-        //$dynasty = 'zhengguo'; $listorder = 24;
-        //$dynasty = 'wuguo'; $listorder = 26;
-        //$dynasty = 'yueguo'; $listorder = 28;
-        //$dynasty = 'yanguo'; $listorder = 32;
+        $dynasty = 'qingchao'; $listorder = 0;
         $country = $this->getModelObj('country')->where(['code' => $dynasty])->first();
         $fFile = $country->full_knowledge_path;
-        $fFile = '/data/database/knowledge/古代中国/先秦/诸侯国/鲁国/人物/孔子/figure.php';
         $data = require($fFile);
-        $sql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `start_year`, `end_year`, `orderlist`) VALUES\n";
-        $sql .= "('country', '{$dynasty}', '', , , {$listorder}),\n";
+        //$sql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `start_year`, `end_year`, `orderlist`) VALUES\n";
+        //$sql .= "('country', '{$dynasty}', '', , , {$listorder}),\n";
         $ufSql = '';
         foreach ($data['commonFixTable'] as $eKey => $eDatas) {
-            if ($eKey == 'topName') {
+            if (in_array($eKey, ['gmzflist', 'topName'])) {
                 continue;
             }
             foreach ($eDatas['baseInfos'] as $emperor) {
+                //print_r($emperor);
                 $name = $emperor['name'];
                 $sName = strip_tags($name);
                 $name = str_replace(['<a href="/wiki-figure-'], [''], $name);
-                $name = substr($name, 0, strpos($name, '.'));
-                echo "'{$name}',";
-                continue;
-                /*$duration = $emperor['eraname'];
+                //$name = str_replace(['<a href="'], [''], $name);
+                //$name = substr($name, 0, strpos($name, '">'));
+                //$baiduUrl = $name;
+                $name = CommonTool::getSpellStr($sName, '');
+                //echo "'{$name}',";
+                //continue;
+                $duration = $emperor['eraname'];
+                $exist = $this->getModelObj('figure')->where(['code' => $name])->first();
+                if (empty($exist)) {
+                }
+                if (empty($exist->description)) {
+                    //print_r($emperor);
+                    $ufSql .= "UPDATE `wp_figure` SET `description` = '{$emperor['major']}'  WHERE `code` = '{$name}';\n";
+                }
+                //$duration = $emperor['begin_end'];
                 if (strpos($duration, '(') !== false) {
                     $duration = substr($duration, strpos($duration, '(') + 1);
-                }*/
+                }
                 //$duration = $emperor['alias'];
                 //$duration = substr($duration, 0, strpos($duration, ' '));
                 //var_dump($duration);
@@ -82,12 +51,12 @@ trait FormatFigureTrait
                 //echo "        '{$name}', // {$emperor['alias']}\n";
                 //$sql .= "('emperor', '{$dynasty}', '{$name}', 0, 0, {$listorder}), ---{$emperor['alias']}\n";
 
-                /*$tmp = explode('-', $duration);
-                $nameCard = $emperor['dynastic'];
+                $tmp = explode('-', $duration);
+                /*$nameCard = $emperor['dynastic'];
                 if (strpos($nameCard, ' ') !== false) {
                     $nameCard = substr($nameCard, 0, strpos($nameCard, ' '));
                 }*/
-                $tmp[0] = '1';
+                //$tmp[0] = '1';
                 if (count($tmp) < 2) {
                     $start = $tmp[0];
                     if (empty($start)) {
@@ -106,69 +75,32 @@ trait FormatFigureTrait
                 }
                 $start = str_replace(['年', '前'], ['', '-'], $start);
                 $end = str_replace(['年', '前'], ['', '-'], $end);
-                $sql .= "('emperor', '{$dynasty}', '{$name}', {$start}, {$end}, {$listorder}),\n";
+                //$sql .= "('emperor', '{$dynasty}', '{$name}', {$start}, {$end}, {$listorder}),\n";
                 //$ufSql .= "UPDATE `wp_figure` SET `name_card` = '{$nameCard}', `birth_accurate` = 'unknown', `death_year` = {$end}, `birth_year` = 0, `description` = '{$emperor['major']}'  WHERE `code` = '{$name}';\n";
-                $ufSql .= "UPDATE `wp_figure` SET `birth_accurate` = 'unknown', `death_year` = {$end}, `birth_year` = 0, `description` = '{$emperor['major']}'  WHERE `code` = '{$name}';\n";
+                //$ufSql .= "UPDATE `wp_figure` SET `birth_accurate` = 'unknown', `death_year` = {$end}, `birth_year` = 0, `description` = '{$emperor['major']}'  WHERE `code` = '{$name}';\n";
+                //$ufSql .= "INSERT INTO `wp_figure` (`code`, `name`, `name_card`, `description`) VALUE ('{$name}', '{$sName}', '{$sName}', '{$emperor['major']}');\n";
+                //$ufSql .= "UPDATE `wp_figure` SET `baidu_url` = '{$baiduUrl}'  WHERE `code` = '{$name}';\n";
                 //var_dump($name . '-' . $duration);
                 //print_r($emperor);
 
             }
         }
         echo $ufSql;
-        echo $sql;
+        //echo $sql;
         //print_r($data);
         //var_dump($fFile);
         exit();
-    }
-
-    public function initEmperorDataold()
-    {
-        $dynasty = 'houjinqing';
-        $dynasty = 'qingchao';
-        $dynasty = 'yuanchao';
-        $dynasty = 'menggu';
-        $dynasty = 'xihan';
-        $dynasty = 'waluwawangchao';
-        //$dynasty = 'mingchao';
-
-        // UPDATE `wp_figure` AS `f`, `wp_figure_listing` AS `fl`SET `f`.`path_label` = '君主' WHERE `f`.`country_code` = 'qingchao' AND `f`.`code` = `fl`.`figure_code` AND `fl`.`type` = 'cnemperor';
-        $sql = "SELECT * FROM `online_knowledge`.`ztmp_wp_emperor` WHERE `dynasty` = '{$dynasty}';";
-        $sql = "SELECT * FROM `work_knowledge`.`wp_emperor` WHERE `dynasty` = '{$dynasty}';";
-        //echo $sql;
-        $infos = \DB::select($sql);
-        $infos = $this->getModelObj('figure')->where(['country_code' => $dynasty])->where('birth_year', 0)->get();
-        $infos = $this->getModelObj('figure')->where(['country_code' => $dynasty])->orderBy('id')->get();
-        //print_r($infos);
-        $fields = ['birth_accurate', 'birth_year', 'birth_month', 'birth_day'];
-        $fields2 = ['death_accurate', 'death_year', 'death_month', 'death_day'];
-        $fSql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `start_year`, `end_year`, `orderlist`) VALUES\n";
+        $sorts = ['dynasty'];
+        $sorts = ['gdempire'];
+        $infos = $this->getModelObj('country')->whereIn('sort', $sorts)->get();
         foreach ($infos as $info) {
-            $fSql .= "('emperor', '{$dynasty}', '{$info['code']}', '', '', '100'), --{$info['name']}\n";
-            echo "        '{$info['code']}', // {$info['name']}\n";continue;
-            //echo "        '{$info['code']}', // <a href='{$info['baidu_url']}' target='_blank'>{$info['name']}</a>、<a href='http://mu.canliang.wang/wiki-figure-{$info['code']}.html' target='_blank'>详情</a><br />\n";continue;
-            $str = "UPDATE `wp_figure` SET ";
-            foreach ($fields as $field) {
-                if (in_array($field, ['path_gather', 'path_label', 'birth_accurate', 'death_accurate'])) {
-                    $str .= "`{$field}` = '',";
-                } else {
-                    $str .= "`{$field}` = ,";
-                }
+            $dynasty = $info['code'];
+            $pData = $this->getModelObj('period')->where(['country_code' => $dynasty, 'period_type' => 'country'])->first();
+            if (empty($pData)) {
+                print_r($info->toArray());
+                //exit();
             }
-            $str = trim($str, ',');
-            $str .= " WHERE `code` = '{$info['code']}';\n<br />UPDATE `wp_figure` SET ";
-            foreach ($fields2 as $field) {
-                if (in_array($field, ['path_gather', 'path_label', 'birth_accurate', 'death_accurate'])) {
-                    $str .= "`{$field}` = '',";
-                } else {
-                    $str .= "`{$field}` = ,";
-                }
-            }
-            $str = trim($str, ',');
-            echo $str . " WHERE `code` = '{$info['code']}'; ----<a href='{$info['baidu_url']}' target='_blank'>{$info['name']}</a>\n<br />";
-            //echo $str . " WHERE `code` = '{$info['code']}'; <br />";
         }
-        echo $fSql;
-
         exit();
     }
 

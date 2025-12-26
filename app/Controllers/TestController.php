@@ -44,37 +44,42 @@ class TestController extends AbstractController
 
     public function dealxtFigure($datas)
     {
-        /*$figures = $this->getModelObj('figure')->where(['country_code' => 'egypter'])->orderBy('id', 'asc')->get();
+        $figures = $this->getModelObj('figure')->where(['country_code' => 'jinguowanyan', 'path_label' => '君主', 'path_gather' => '其他'])->orderBy('id', 'asc')->get();
         $gStr = '';
         foreach ($figures as $figure) {
+            //echo "<a href='{$figure['baidu_url']}' target='_blank'>{$figure['name']}</a><br />";
+            echo "        '{$figure['code']}', // {$figure['name']}\n";
             $gStr .= $this->_dealFigureGather($figure['code'], $figure['name'], '');
         }
         echo $gStr;
-        exit();*/
-        $dynasty = 'egyptsanshi';
-        $gPath = '帝国历史/尼罗河流域/埃及第三十王朝/法老';
+        exit();
+        //$dynasty = 'egyptsanshi';
+        //$gPath = '帝国历史/尼罗河流域/埃及第三十王朝/法老';
+        $dynasty = 'beiyang';
+        $gPath = '';
         //print_r($datas);
-        $sql = "INSERT INTO `wp_figure` (`code`, `name`, `name_card`, `country_code`, `baidu_url`, `description`, `baidu_picture`, `path_gather`, `path_point`) VALUES \n";
+        $sql = "INSERT INTO `wp_figure` (`code`, `name`, `name_card`, `country_code`, `baidu_url`, `native_place`, `birth_year`, `birth_month`, `birth_day`, `death_year`, `death_month`, `death_day`, `baidu_picture`) VALUES \n";
         $gStr = '';
-        $eCodes = ['nectanebo1', 'theos', 'nectanebo1'];
-        $eNames = ['内克塔内布一世', '泰奥斯', '内克塔内布二世'];
+        $eCodes = [];//'nectanebo1', 'theos', 'nectanebo1'];
+        //$eNames = ['内克塔内布一世', '泰奥斯', '内克塔内布二世'];
         $pSql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `orderlist`, `start_accurate`, `start_year`, `end_accurate`, `end_year`) VALUES \n";
         foreach ($datas as $index => $data) {
             //print_r($data);
             $name = $data['lemmaTitle'];
-            $name = $eNames[$index] ?? '';
+            //$name = $eNames[$index] ?? '';
             $code = $eCodes[$index] ?? CommonTool::getSpellStr($name, '');
-            $pSql .= "('emperor', '{$dynasty}', '{$code}', 200, '', -, '', -),\n";
-            echo "        '{$code}', // {$name}\n";
+            //$pSql .= "('emperor', '{$dynasty}', '{$code}', 200, '', -, '', -),\n";
+            echo "            'fCode' => '{$code}', // {$name}\n";
             //continue;
             $exist = $this->getModelObj('figure')->where(['code' => $code])->first();
             if ($exist) {
-                var_dump($name);
+                //var_dump($name);
+                continue;
             }
             $baiduUrl = "https://baike.baidu.com/item/{$name}/{$data['lemmaId']}";
-            $baiduUrl = '';
+            //$baiduUrl = '';
             $picture = $data['coverPic'];
-            $picture = '';
+            //$picture = '';
             $description = $data['summary'];
             $description = '';
             //var_dump($picture);
@@ -82,7 +87,7 @@ class TestController extends AbstractController
                 $picture = substr($picture, 0, strpos($picture, ','));
             }
             //var_dump($picture);
-            $sql .= "('{$code}', '{$name}', '{$name}', '{$dynasty}', '{$baiduUrl}', '', '{$picture}', '法老', '{$gPath}'),\n";
+            $sql .= "('{$code}', '{$name}', '{$name}', '{$dynasty}', '{$baiduUrl}', '', '', '', '', '', '', '', '{$picture}'),\n";
             $gStr .= $this->_dealFigureGather($code, $name, $description);
         }
         echo $gStr;
@@ -95,7 +100,7 @@ class TestController extends AbstractController
         $gStr = '';
         $gStr .= "// {$name}\n";
         $gStr .= "'{$code}' => [\n";
-        //$gStr .= "'baseData' => [\n'infos' => [\n],\n],\n\n";
+        $gStr .= "'baseData' => [\n'infos' => [\n],\n],\n\n";
         $gStr .= "'singleText' => [\n    '{$description}',\n],\n\n";
         //$gStr .= "'extDetails' => [\n],\n";
         $gStr .= "],\n\n";
@@ -136,7 +141,7 @@ class TestController extends AbstractController
                 $datas[] = $data;
             }
         });
-        print_r($datas);exit();
+        //print_r($datas);exit();
         //$datas = array_reverse($datas);
         $this->_dealCrawlerData($datas);
         exit();
@@ -147,11 +152,36 @@ class TestController extends AbstractController
     {
         $sql = "INSERT INTO `wp_affair` (`affair_type`, `accurate`, `year`, `month`, `day`, `name`, `country_code`, `title`, `brief`, `baidu_url`) VALUES\n";
         $fSql = "INSERT INTO `wp_figure` (`code`, `name`, `name_card`, `country_code`, `description`, `baidu_url`, `path_label`, `path_gather`, `path_point`, `birth_accurate`, `birth_year`, `birth_month`, `birth_day`, `death_accurate`, `death_year`, `death_month`, `death_day`, `active_at`) VALUES\n";
-        foreach ($datas as $key => $data) {
+        $fSql = "INSERT INTO `wp_figure` (`code`, `name`, `name_card`, `country_code`, `native_place`, `baidu_url`) VALUES\n";
+        foreach ($datas as $key => $subData) {
+            if ($key == 0) {
+                continue;
+            }
+            //print_r($data);exit();
+            $data = [];
+            if (count($subData) > 2) {
+                $data[0] = $subData[3];
+                $data[1] = $subData[4];
+            } else {
+                $data = $subData;
+            }
             //print_r($data);
-            $sql .= "('', '', 1380, 0, 0, '', '', '', '{$data['text']}', ''),\n";
+            $name = $data[0]['text'];
+            $code = CommonTool::getSpellStr($name, '');
+            echo "        '{$code}', // {$name},\n";
+            $nativePlace = $data[1]['text'] ?? '';
+            //print_r($data[0]);
+            $baiduUrl = isset($data[0]['urls'][0]) ? $data[0]['urls'][0][$name] : '';
+            $exist = $this->getModelObj('figure')->where(['name' => $name])->first();
+            if (!empty($exist)) {
+                continue;
+            var_dump($code . '-' . $name . '-' . $baiduUrl);
+            }
+            //print_r($data);
+            $fSql .= "('{$code}', '{$name}', '{$name}', 'beiyang', '{$nativePlace}', '{$baiduUrl}'),\n";
 
         }
+        echo $fSql;exit();
         echo $sql;
     }
 

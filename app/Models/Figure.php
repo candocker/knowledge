@@ -88,6 +88,10 @@ class Figure extends AbstractModel
         }
         $bInfos['生卒日期 '] = $cacheData['birthDeathDate']['common']['birthDeathStrAge'];
         $bInfos['国家/王朝'] = $cacheData['baseData']['country_name'];
+        if (!empty($cacheData['baseData']['native_place']) || !empty($cacheData['baseData']['native_place_history'])) {
+            $place = $cacheData['baseData']['native_place'] . ' / ' . $cacheData['baseData']['native_place_history'];
+            $bInfos['祖籍/出生地'] = trim($place, ' / ');
+        }
 
         $desc = $cacheData['descs']['base'];
         $baseData = [
@@ -268,7 +272,7 @@ class Figure extends AbstractModel
     public function _formatEmperorData()
     {
         $typeStr = 'country,emperor,eraname';
-        $infos = $this->getModelObj('period')->where(['figure_code' => $this->code])->whereIn('period_type', ['emperor', 'eraname'])->orderByRaw("FIND_IN_SET(period_type, '{$typeStr}') asc")->get();
+        $infos = $this->getModelObj('period')->where(['figure_code' => $this->code])->whereIn('period_type', ['emperor', 'eraname'])->orderByRaw("FIND_IN_SET(period_type, '{$typeStr}') asc")->orderBy('start_year', 'asc')->get();
         if ($infos->count() < 1) {
             return [];
         }
@@ -325,7 +329,7 @@ class Figure extends AbstractModel
         $country = $this->countryInfo;
         $fPath = $this->full_knowledge_path;
         $nameJump = "<a href='/wiki-figure-{$this->code}.html?force_create_file=figure'>{$this->name}</a>";
-        $nameJump = "<a href='/wiki-figure-{$this->code}.html'>{$this->name}</a>";
+        //$nameJump = "<a href='/wiki-figure-{$this->code}.html'>{$this->name}</a>";
         $nameJumpFull = $this->baidu_url ? $nameJump . " (<a href='{$this->baidu_url}'>百科</a>)" : $nameJump;
         $baseData = [
             'code' => $this->code,
@@ -333,6 +337,8 @@ class Figure extends AbstractModel
             'name_jump' => $nameJump,
             'name_jump_full' => $nameJumpFull,
             'name_card' => $this->name_card,
+            'native_place' => $this->native_place,
+            'native_place_history' => $this->native_place_history,
             'country_code' => $country ? $country['code'] : '',
             'country_name' => $country ? "<a href='/wiki-country-{$country['code']}.html'>{$country['name']}</a>" : '',
             'headerPicUrl' => $this->photoUrl,
