@@ -13,7 +13,11 @@ class Country extends AbstractModel
     public function getFullKnowledgePathAttribute()
     {
         $base = $this->config->get('knowledge.knowledge_path');
-        return $this->knowledge_path ? $base . $this->knowledge_path . '/base.php' : $base . $this->formatKnowledgePath() . '/base.php';
+        $kPath = $this->knowledge_path;
+        if (strpos($kPath, '.php') !== false) {
+            return $base . $kPath;
+        }
+        return $kPath ? $base . $kPath . '/base.php' : $base . $this->formatKnowledgePath() . '/base.php';
     }
 
     public function _formatBaseData($isMobile)

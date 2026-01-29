@@ -33,6 +33,17 @@ class TestController extends AbstractController
 
     public function _testDealxt()
     {
+        $cInfos = $this->getModelObj('country')->where(['sort' => 'gdempire', 'status' => 0])->get();
+        $i = 1;
+        foreach ($cInfos as $info) {
+            $fCount = $this->getModelObj('figure')->where(['country_code' => $info['code']])->count();
+            $bUrl = $info['baidu_url'] ?? '';
+            $str = "{$i}---{$fCount}-<a href='http://mu.canliang.wang/wiki-country-{$info['code']}.html' target='_blank'>{$info['name']}</a>";
+            $str .= $bUrl ? " (<a href='{$bUrl}' target='_blank'>百科</a>)" : '';
+            echo $str . '<br />';
+            $i++;
+        }
+        echo "\n\n";
         //$sql = file_get_contents('/tmp/sql.sql');
         //\DB::connection('knowledge')->select($sql);exit();
         $datas = file_get_contents('/tmp/xt.json');
@@ -44,7 +55,169 @@ class TestController extends AbstractController
 
     public function dealxtFigure($datas)
     {
-        $figures = $this->getModelObj('figure')->where(['country_code' => 'jinguowanyan', 'path_label' => '君主', 'path_gather' => '其他'])->orderBy('id', 'asc')->get();
+        $pInfos = require('/tmp/tmp.php');
+        //$datas = array_reverse($datas);
+        $dynasty = 'yinjiadiguo';
+        $typeExt = '君主';
+        $extStr = '印加帝国';
+        $gPath = '大国和组织/印度/贵霜帝国/' . $typeExt . '_' . $extStr;
+        $gPath = '帝国历史/其他帝国/美洲/印加帝国_' . $typeExt;
+        //print_r($datas);
+        $sql = "INSERT INTO `wp_figure` (`code`, `name`, `name_card`, `country_code`, `baidu_url`, `path_label`, `path_gather`, `path_point`, `native_place`, `birth_year`, `birth_month`, `birth_day`, `death_year`, `death_month`, `death_day`, `baidu_picture`, `description`) VALUES\n";
+        $gStr = '';
+        $eCodes = [
+        ];
+        $eNames = [
+        ];
+        $bDatas = [
+        ];
+        $pSql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `orderlist`, `start_year`, `end_year`, `start_end_detail`, `type_ext`) VALUES\n";
+        foreach ($pInfos as $pInfo) {
+            $code = $pInfo['英文名'] ?? '';
+            $code = strtolower(str_replace([' ', '-'], ['', '_'], $code));
+            $name = $pInfo['name'];
+            $exist = $this->getModelObj('figure')->where(['code' => $code])->first();
+            if ($exist) {
+                var_dump($name);
+                //continue;
+            }
+            $nameSource = strip_tags($name);
+            $baiduUrl = '';
+            if (strpos($name, 'href') !== false) {
+                $name = str_replace(['<a href="'], [''], $name);
+                $name = substr($name, 0, strpos($name, '">'));
+                $baiduUrl = $name;
+            }
+            $duration = $pInfo['begin_end'] ?? '';
+            $duration = str_replace(['年'], [''], $duration);
+            $duration = strpos($duration, ' ') !== false ? substr($duration, 0, strpos($duration, ' ')) : $duration;
+            if (strpos($duration, '-') !== false) {
+                //var_dump($duration);
+                list($start, $end) = explode('-', $duration);
+            } else {
+                $start = $duration;
+                $end = $duration;
+            }
+            $start = $pInfo['reign_start'];
+            $end = $pInfo['reign_end'];
+            $start = str_replace(['年', '约', '前'], ['', '', '-'], $start);
+            $end = str_replace(['年', '约', '前'], ['', '', '-'], $end);
+            $deathYear = $pInfo['death_year'] ?? $end;
+            $description = $pInfo['notes'];
+            $extDatas = ['英文名' => $pInfo['英文名'] ?? ''];
+            if (isset($pInfo['relationship'])) {
+                $extDatas['世系'] = $pInfo['relationship'];
+            }
+            $gStr .= $this->_dealFigureGather($code, $nameSource, $description, $extDatas);
+            //echo "{$nameSource}\n";
+            echo "        '{$code}', // {$nameSource}\n";
+            $sql .= "('{$code}', '{$nameSource}', '{$nameSource}', '{$dynasty}', '{$baiduUrl}', '君主', '{$extStr}', '{$gPath}', '', '0', '0', '0', '{$deathYear}', '0', '0', '', '{$description}'),\n";
+            $pSql .= "('emperor', '{$dynasty}', '{$code}', 200, {$start}, {$end}, '', '{$typeExt}'),\n";
+        }
+        echo trim($sql, ",\n") . ";\n";
+        echo trim($pSql, ",\n") . ";\n";
+        $fFile = "/data/database/knowledge/{$gPath}.php";
+        //file_put_contents($fFile, "<?php\nreturn [\n{$gStr}\n];");
+        echo $gStr;
+        //print_r($pInfos);
+        exit();
+        //*/
+        $pSql .= "('country', '{$dynasty}', '', 200, , , '', ''),\n";
+        foreach ($datas as $index => $data) {
+            //print_r($data);
+            $nameCard = $data['lemmaTitle'];
+            $name = $eNames[$index] ?? $nameCard;
+            $englishName = isset($bDatas[$index]) ? $bDatas[$index]['english'] : '';
+            //var_dump($englishName);
+            $code = str_replace(['-', ' '], ['', ''], $englishName);
+            $code = strtolower($code);
+
+            $duration = isset($bDatas[$index]) ? $bDatas[$index]['reign'] : '';
+            $duration = str_replace(['–', 'c.', ' CE', 'BCE', 'BC', '约公元前', '公元前', '年', '(claimant)', ' '], ['-', '', '', '', '', '', '', '', '', ''], $duration);
+            $duration = strpos($duration, ' ') !== false ? substr($duration, 0, strpos($duration, ' ')) : $duration;
+            if (strpos($duration, '-') !== false) {
+                //var_dump($duration);
+                list($start, $end) = explode('-', $duration);
+            } else {
+                $start = $duration;
+                $end = $duration;
+            }
+            //$start = 0;//$bDatas[$index]['reign_start'];
+            //$end = 0;//$bDatas[$index]['reign_end'];
+            $start = -$start;
+            $end = -$end;
+
+            //$code = $eCodes[$index] ?? CommonTool::getSpellStr($name, '');
+            $pSql .= "('emperor', '{$dynasty}', '{$code}', 200, {$start}, {$end}, '', '{$typeExt}'),\n";
+            //echo "{$name}\n";
+            echo "        '{$code}', // {$name}\n";
+            //echo "            'fCode' => '{$code}', // {$name}\n";
+            //continue;
+            $exist = $this->getModelObj('figure')->where(['code' => $code])->first();
+            if ($exist) {
+                //var_dump($name);
+                //continue;
+            }
+            $baiduUrl = "https://baike.baidu.com/item/{$nameCard}/{$data['lemmaId']}";
+            //$baiduUrl = '';
+            $picture = $data['coverPic'];
+            //$picture = '';
+            $description = $data['summary'];
+            $description = '';
+
+            //var_dump($picture);
+            if (strpos($picture, ',') !== false) {
+                $picture = substr($picture, 0, strpos($picture, ','));
+            }
+            //var_dump($picture);
+            $sql .= "('{$code}', '{$name}', '{$nameCard}', '{$dynasty}', '{$baiduUrl}', '君主', '{$extStr}', '{$gPath}', '', '0', '0', '0', '{$end}', '0', '0', '{$picture}'),\n";
+            $gStr .= $this->_dealFigureGather($code, $name, $description, ['英文名' => $englishName]);
+        }
+        $fFile = "/data/database/knowledge/{$gPath}.php";
+        //file_put_contents($fFile, "<?php\nreturn [\n{$gStr}\n];");
+        echo $gStr;
+        echo trim($sql, ",\n") . ";\n";
+        echo trim($pSql, ",\n") . ";\n";
+    }
+
+    public function _dealFigureGather($code, $name, $description, $bInfos = [])
+    {
+        $gStr = '';
+        $gStr .= "// {$name}\n";
+        $gStr .= "'{$code}' => [\n";
+        $gStr .= "'baseData' => [\n'infos' => [\n";
+        foreach ($bInfos as $key => $value) {
+            $gStr .= "    '{$key}' => '{$value}',\n";
+        }
+        $gStr .= "],\n],\n\n";
+        $gStr .= "'singleText' => [\n    '{$description}',\n],\n\n";
+        //$gStr .= "'extDetails' => [\n],\n";
+        $gStr .= "],\n\n";
+        return $gStr;
+    }
+
+    public function _testDealFigure()
+    {
+        /*$datas = $this->getModelObj('countryListing')->where(['catalog_code' => 'chunqiuzhanguo'])->get();
+        $datas = $this->getModelObj('countryListing')->where(['catalog_code' => 'nanchao'])->get();
+        foreach ($datas as $data) {
+            if (in_array($data['country_code'], ['xiaoliang', 'nanchen'])) {
+                continue;
+            }
+            $where = ['path_label' => '', 'path_gather' => '', 'path_point' => ''];
+            $country = $this->getModelObj('country')->where(['code' => $data['country_code']])->first();
+            $uData = [
+                'path_label' => '君主',
+                'path_gather' => '其他',
+                'path_point' => '古代中国/魏晋南北朝/南朝/' . $country['name'] . '/君主',
+            ];
+            $count = $this->getModelObj('figure')->where(['country_code' => $data['country_code']])->where($where)->count();
+            //$count = $this->getModelObj('figure')->where(['country_code' => $data['country_code']])->where($where)->update($uData);
+            var_dump($count);
+            print_r($uData);
+        }
+        exit();*/
+        $figures = $this->getModelObj('figure')->where(['country_code' => 'beiliang', 'path_label' => '君主', 'path_gather' => '其他'])->orderBy('id', 'asc')->get();
         $gStr = '';
         foreach ($figures as $figure) {
             //echo "<a href='{$figure['baidu_url']}' target='_blank'>{$figure['name']}</a><br />";
@@ -53,58 +226,6 @@ class TestController extends AbstractController
         }
         echo $gStr;
         exit();
-        //$dynasty = 'egyptsanshi';
-        //$gPath = '帝国历史/尼罗河流域/埃及第三十王朝/法老';
-        $dynasty = 'beiyang';
-        $gPath = '';
-        //print_r($datas);
-        $sql = "INSERT INTO `wp_figure` (`code`, `name`, `name_card`, `country_code`, `baidu_url`, `native_place`, `birth_year`, `birth_month`, `birth_day`, `death_year`, `death_month`, `death_day`, `baidu_picture`) VALUES \n";
-        $gStr = '';
-        $eCodes = [];//'nectanebo1', 'theos', 'nectanebo1'];
-        //$eNames = ['内克塔内布一世', '泰奥斯', '内克塔内布二世'];
-        $pSql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `orderlist`, `start_accurate`, `start_year`, `end_accurate`, `end_year`) VALUES \n";
-        foreach ($datas as $index => $data) {
-            //print_r($data);
-            $name = $data['lemmaTitle'];
-            //$name = $eNames[$index] ?? '';
-            $code = $eCodes[$index] ?? CommonTool::getSpellStr($name, '');
-            //$pSql .= "('emperor', '{$dynasty}', '{$code}', 200, '', -, '', -),\n";
-            echo "            'fCode' => '{$code}', // {$name}\n";
-            //continue;
-            $exist = $this->getModelObj('figure')->where(['code' => $code])->first();
-            if ($exist) {
-                //var_dump($name);
-                continue;
-            }
-            $baiduUrl = "https://baike.baidu.com/item/{$name}/{$data['lemmaId']}";
-            //$baiduUrl = '';
-            $picture = $data['coverPic'];
-            //$picture = '';
-            $description = $data['summary'];
-            $description = '';
-            //var_dump($picture);
-            if (strpos($picture, ',') !== false) {
-                $picture = substr($picture, 0, strpos($picture, ','));
-            }
-            //var_dump($picture);
-            $sql .= "('{$code}', '{$name}', '{$name}', '{$dynasty}', '{$baiduUrl}', '', '', '', '', '', '', '', '{$picture}'),\n";
-            $gStr .= $this->_dealFigureGather($code, $name, $description);
-        }
-        echo $gStr;
-        echo $sql;
-        echo $pSql;
-    }
-
-    public function _dealFigureGather($code, $name, $description)
-    {
-        $gStr = '';
-        $gStr .= "// {$name}\n";
-        $gStr .= "'{$code}' => [\n";
-        $gStr .= "'baseData' => [\n'infos' => [\n],\n],\n\n";
-        $gStr .= "'singleText' => [\n    '{$description}',\n],\n\n";
-        //$gStr .= "'extDetails' => [\n],\n";
-        $gStr .= "],\n\n";
-        return $gStr;
     }
 
     public function _testDealhtml()
@@ -198,7 +319,7 @@ class TestController extends AbstractController
         });
 
         $htmlContent = $crawler->text();
-        //$htmlContent = strip_tags($htmlContent, '<a>');
+        //$htmlContent = strip_tags($htmlContent, '</a>');
         return ['text' => $htmlContent, 'urls' => $urls];
     }
 

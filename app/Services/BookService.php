@@ -110,6 +110,9 @@ class BookService extends AbstractService
         }
         //print_r($contents);exit();
         $datas['contents'] = $contents;
+        if (!empty($chapterInfo['brief'])) {
+            $datas['brief'] = $chapterInfo['brief'];
+        }
         if ($bookCode == 'yijing') {
             $datas['contents'] = array_merge(unserialize($datas['currentChapterData']['brief']), $contents);
         }

@@ -210,7 +210,7 @@ class Figure extends AbstractModel
             $accurateStr = $accurateValues[$accurate];
             $monthStr = $month ? $month . '月' : '';
             $dayStr = $day ? $day . '日' : '';
-            if ($accurate == 'unknown') {
+            if (in_array($accurate, ['running', 'unknown'])) {
                 $monthDay = $accurateStr;
                 $fullStr = $monthDay;
             } else {
@@ -255,7 +255,7 @@ class Figure extends AbstractModel
             $ageStr = $age ? $age . '岁' : '';
             $simpleStr = $birthData['sourceData']['year'] != 0 ? str_replace(['-'], ['前'], $birthData['sourceData']['year']) : '?';
             $simpleStr .= '-';
-            $simpleStr .= $deathData['sourceData']['year'] != 0 ? str_replace(['-'], ['前'], $deathData['sourceData']['year']) : '?';
+            $simpleStr .= $deathData['sourceData']['year'] != 0 ? str_replace(['-'], ['前'], $deathData['sourceData']['year']) : ($deathData['sourceData']['accurate'] == 'running' ? '至今' : '?');
             if ($simpleStr == '?-?') {
                 $simpleStr = '-';
             }
@@ -283,21 +283,27 @@ class Figure extends AbstractModel
             if (!isset($terms[$termNum])) {
                 $terms[$termNum] = [];
             }
-            $duration = str_replace('-', '前', $info->start_year) . '-' . str_replace('-', '前', $info->end_year);
-            $diff = $info->end_year - $info->start_year;
-            $diffStr = $diff < 1 ? '<1年' : $diff . '年';
+            $endYear = $info->end_year;
+            if ($info->end_accurate == 'running') {
+                $duration = str_replace('-', '前', $info->start_year) . '-至今';
+                $diffStr = '';
+            } else {
+                $duration = str_replace('-', '前', $info->start_year) . '-' . str_replace('-', '前', $info->end_year);
+                $diff = $info->end_year - $info->start_year;
+                $diffStr = $diff < 1 ? '<1年/' : $diff . '年/';
+            }
             if ($info['period_type'] == 'emperor') {
                 $terms[$termNum]['duration'] = $duration;
-                $terms[$termNum]['durationStr'] = "{$diffStr}/{$duration}";
+                $terms[$termNum]['durationStr'] = "{$diffStr}{$duration}";
             }
             if ($info['period_type'] == 'eraname') {
                 $eraname = !empty($info->baidu_url) ? "<a href='{$info->baidu_url}'>{$info->eraname}</a>" : $info->ername;
-                $terms[$termNum]['eraname'][] = "{$eraname} ({$diffStr}/{$duration})";
+                $terms[$termNum]['eraname'][] = "{$eraname} ({$diffStr}{$duration})";
             }
 
             $details[] = [
                 'type' => $periodTypes[$info->period_type] ?? $info->period_type,
-                'name' => $info->getCurrentTitle() . " ({$diffStr}/{$duration})",
+                'name' => $info->getCurrentTitle() . " ({$diffStr}{$duration})",
                 'major' => $info->getMajorStr(),
             ];
         }
