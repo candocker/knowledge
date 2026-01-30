@@ -99,7 +99,7 @@ class Country extends AbstractModel
 
     public function wrapDetailDatas($detailDatas)
     {
-        $figureFields = ['commonFixTableEmperor', 'commonFixTableFigureDetail', 'commonFixTableFigureDetail1'];
+        $figureFields = ['commonFixTableEmperor', 'commonFixTableFigureDetail', 'commonFixTableFigureDetail1', 'commonFixTableFigureDetail2'];
         foreach ($figureFields as $fField) {
             $fDatas = $detailDatas[$fField] ?? [];
             if (!empty($fDatas)) {

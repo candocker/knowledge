@@ -55,15 +55,34 @@ class TestController extends AbstractController
 
     public function dealxtFigure($datas)
     {
-        $pInfos = require('/tmp/tmp.php');
         //$datas = array_reverse($datas);
-        $dynasty = 'yinjiadiguo';
+        $dynasty = 'sashanwangchao';
         $typeExt = '君主';
-        $extStr = '印加帝国';
-        $gPath = '大国和组织/印度/贵霜帝国/' . $typeExt . '_' . $extStr;
-        $gPath = '帝国历史/其他帝国/美洲/印加帝国_' . $typeExt;
+        $extStr = '萨珊王朝';
+        $gBase = '帝国历史/波斯/萨珊/';
+        $gPath = $gBase . $typeExt . '_' . $extStr;
+        $gPath = $gBase . $typeExt;
         //print_r($datas);
         $sql = "INSERT INTO `wp_figure` (`code`, `name`, `name_card`, `country_code`, `baidu_url`, `path_label`, `path_gather`, `path_point`, `native_place`, `birth_year`, `birth_month`, `birth_day`, `death_year`, `death_month`, `death_day`, `baidu_picture`, `description`) VALUES\n";
+        $pSql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `orderlist`, `start_year`, `end_year`, `start_end_detail`, `type_ext`) VALUES\n";
+
+        $pInfos = require('/tmp/tmp.php');
+        $this->dealSimpleFigures($pInfos, $dynasty, $typeExt, $extStr, $gPath, $sql, $pSql);exit();
+        $mulInfos = require('/tmp/tmp.php');
+        $m1Infos = require('/tmp/tmp.php');
+        //foreach ($mulInfos as $m1Key => $m1Infos) {
+            foreach ($m1Infos as $m2Key => $m2Infos) {
+                foreach ($m2Infos as $extStr => $pInfos) {
+                    //$extStr = strpos($extStr, '（') !== false ? substr($extStr, 0, strpos($extStr, '（')) : $extStr;
+                    var_dump($extStr);//print_r($pInfos);exit();
+                    $gPath = $gBase . $typeExt . '_' . $extStr;
+                    $this->dealSimpleFigures($pInfos, $dynasty, $typeExt, $extStr, $gPath, $sql, $pSql);
+                }
+            }
+        //}
+        //print_r($pInfos);
+        exit();
+
         $gStr = '';
         $eCodes = [
         ];
@@ -71,57 +90,6 @@ class TestController extends AbstractController
         ];
         $bDatas = [
         ];
-        $pSql = "INSERT INTO `wp_period` (`period_type`, `country_code`, `figure_code`, `orderlist`, `start_year`, `end_year`, `start_end_detail`, `type_ext`) VALUES\n";
-        foreach ($pInfos as $pInfo) {
-            $code = $pInfo['英文名'] ?? '';
-            $code = strtolower(str_replace([' ', '-'], ['', '_'], $code));
-            $name = $pInfo['name'];
-            $exist = $this->getModelObj('figure')->where(['code' => $code])->first();
-            if ($exist) {
-                var_dump($name);
-                //continue;
-            }
-            $nameSource = strip_tags($name);
-            $baiduUrl = '';
-            if (strpos($name, 'href') !== false) {
-                $name = str_replace(['<a href="'], [''], $name);
-                $name = substr($name, 0, strpos($name, '">'));
-                $baiduUrl = $name;
-            }
-            $duration = $pInfo['begin_end'] ?? '';
-            $duration = str_replace(['年'], [''], $duration);
-            $duration = strpos($duration, ' ') !== false ? substr($duration, 0, strpos($duration, ' ')) : $duration;
-            if (strpos($duration, '-') !== false) {
-                //var_dump($duration);
-                list($start, $end) = explode('-', $duration);
-            } else {
-                $start = $duration;
-                $end = $duration;
-            }
-            $start = $pInfo['reign_start'];
-            $end = $pInfo['reign_end'];
-            $start = str_replace(['年', '约', '前'], ['', '', '-'], $start);
-            $end = str_replace(['年', '约', '前'], ['', '', '-'], $end);
-            $deathYear = $pInfo['death_year'] ?? $end;
-            $description = $pInfo['notes'];
-            $extDatas = ['英文名' => $pInfo['英文名'] ?? ''];
-            if (isset($pInfo['relationship'])) {
-                $extDatas['世系'] = $pInfo['relationship'];
-            }
-            $gStr .= $this->_dealFigureGather($code, $nameSource, $description, $extDatas);
-            //echo "{$nameSource}\n";
-            echo "        '{$code}', // {$nameSource}\n";
-            $sql .= "('{$code}', '{$nameSource}', '{$nameSource}', '{$dynasty}', '{$baiduUrl}', '君主', '{$extStr}', '{$gPath}', '', '0', '0', '0', '{$deathYear}', '0', '0', '', '{$description}'),\n";
-            $pSql .= "('emperor', '{$dynasty}', '{$code}', 200, {$start}, {$end}, '', '{$typeExt}'),\n";
-        }
-        echo trim($sql, ",\n") . ";\n";
-        echo trim($pSql, ",\n") . ";\n";
-        $fFile = "/data/database/knowledge/{$gPath}.php";
-        //file_put_contents($fFile, "<?php\nreturn [\n{$gStr}\n];");
-        echo $gStr;
-        //print_r($pInfos);
-        exit();
-        //*/
         $pSql .= "('country', '{$dynasty}', '', 200, , , '', ''),\n";
         foreach ($datas as $index => $data) {
             //print_r($data);
@@ -178,6 +146,79 @@ class TestController extends AbstractController
         echo $gStr;
         echo trim($sql, ",\n") . ";\n";
         echo trim($pSql, ",\n") . ";\n";
+    }
+
+    public function dealSimpleFigures($pInfos, $dynasty, $typeExt, $extStr, $gPath, $sql, $pSql)
+    {
+        $gStr = '';
+        foreach ($pInfos as $pInfo) {
+            $code = $pInfo['英文名'] ?? '';
+            $code = strtolower(str_replace([' ', '-'], ['', '_'], $code));
+            $name = $pInfo['name'];
+            $exist = $this->getModelObj('figure')->where(['code' => $code])->first();
+            if ($exist) {
+                var_dump($name);
+                //continue;
+            }
+            $nameSource = strip_tags($name);
+            $baiduUrl = '';
+            if (strpos($name, 'href') !== false) {
+                $name = str_replace(['<a href="'], [''], $name);
+                $name = substr($name, 0, strpos($name, '">'));
+                $baiduUrl = $name;
+            }
+            $duration = $pInfo['begin_end'] ?? '';
+            $duration = str_replace(['年'], [''], $duration);
+            $duration = strpos($duration, ' ') !== false ? substr($duration, 0, strpos($duration, ' ')) : $duration;
+            if (strpos($duration, '-') !== false) {
+                //var_dump($duration);
+                list($start, $end) = explode('-', $duration);
+            } else {
+                $start = $duration;
+                $end = $duration;
+            }
+            $start = $pInfo['reign_start'];
+            $end = $pInfo['reign_end'];
+            $seStr = '';
+            //$seStr = str_replace('-', '/', $start) . '-' . str_replace('-', '/', $end);
+            //$start = strpos(strval($start), '-') !== false ? substr($start, 0, strpos($start, '-')) : $start;
+            //$end = strpos(strval($end), '-') !== false ? substr($end, 0, strpos($end, '-')) : $end;
+            //var_dump($seStr);
+            //$start = str_replace(['公元前', '年', '约', '前'], ['', '', '', '-'], $start);
+            //$end = str_replace(['年', '约', '前'], ['', '', '-'], $end);
+            //$start = -intval($start);
+            //$end = -intval($end);
+            $birthYear = $pInfo['birth_year'] ?? 0;
+            $birthYear = str_replace(['c.'], [''], strval($birthYear));
+            $deathYear = $pInfo['death_year'] ?? $end;
+            if (isset($pInfo['death']) && strpos($pInfo['death'], '自然') === false) {
+            $pInfo['notes'][] = $pInfo['death'];
+            }
+            $description = isset($pInfo['notes']) ? (is_array($pInfo['notes']) ? implode('；', $pInfo['notes']) : $pInfo['notes']) : '';
+            $birthMonth = $birthDay = $deathMonth = $deathDay = 0;
+            //list($birthYear, $birthMonth, $birthDay) = explode('-', str_replace('-0', '-', $pInfo['birth']));
+            /*if (strpos($pInfo['reign_end'], '-') !== false) {
+                list($deathYear, $deathMonth, $deathDay) = explode('-', str_replace('-0', '-', $pInfo['reign_end']));
+            }*/
+            $extDatas = ['英文名' => $pInfo['英文名'] ?? ''];
+            //if (isset($pInfo['relationship'])) {
+            if (isset($pInfo['father'])) {
+                $extDatas['世系'] = $pInfo['father'] . '之子';
+            }
+            $gStr .= $this->_dealFigureGather($code, $nameSource, $description, $extDatas);
+            //echo "{$nameSource}\n";
+            echo "        '{$code}', // {$nameSource}\n";
+            $sql .= "('{$code}', '{$nameSource}', '{$nameSource}', '{$dynasty}', '{$baiduUrl}', '君主', '{$extStr}', '{$gPath}', '', '{$birthYear}', '{$birthMonth}', '{$birthDay}', '{$deathYear}', '{$deathMonth}', '{$deathDay}', '', '{$description}'),\n";
+            $pSql .= "('emperor', '{$dynasty}', '{$code}', 200, {$start}, {$end}, '{$seStr}', '{$typeExt}'),\n";
+        }
+        echo trim($sql, ",\n") . ";\n";
+        echo trim($pSql, ",\n") . ";\n";
+        $fFile = "/data/database/knowledge/{$gPath}.php";
+        $createFile = request('create_file');
+        if ($createFile) {
+            file_put_contents($fFile, "<?php\nreturn [\n{$gStr}\n];");
+        }
+        echo $gStr;
     }
 
     public function _dealFigureGather($code, $name, $description, $bInfos = [])
