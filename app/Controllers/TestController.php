@@ -56,10 +56,10 @@ class TestController extends AbstractController
     public function dealxtFigure($datas)
     {
         //$datas = array_reverse($datas);
-        $dynasty = 'sashanwangchao';
+        $dynasty = 'luomannuofuwangchao';
         $typeExt = '君主';
-        $extStr = '萨珊王朝';
-        $gBase = '帝国历史/波斯/萨珊/';
+        $extStr = '罗曼诺夫王朝';
+        $gBase = '大国和组织/俄国/罗曼诺夫王朝/';
         $gPath = $gBase . $typeExt . '_' . $extStr;
         $gPath = $gBase . $typeExt;
         //print_r($datas);
@@ -153,11 +153,11 @@ class TestController extends AbstractController
         $gStr = '';
         foreach ($pInfos as $pInfo) {
             $code = $pInfo['英文名'] ?? '';
-            $code = strtolower(str_replace([' ', '-'], ['', '_'], $code));
+            $code = strtolower(str_replace([' ', '-', "'", '.'], ['', '_', '_', '_'], $code));
             $name = $pInfo['name'];
             $exist = $this->getModelObj('figure')->where(['code' => $code])->first();
             if ($exist) {
-                var_dump($name);
+                //var_dump($name);
                 //continue;
             }
             $nameSource = strip_tags($name);
@@ -180,9 +180,9 @@ class TestController extends AbstractController
             $start = $pInfo['reign_start'];
             $end = $pInfo['reign_end'];
             $seStr = '';
-            //$seStr = str_replace('-', '/', $start) . '-' . str_replace('-', '/', $end);
-            //$start = strpos(strval($start), '-') !== false ? substr($start, 0, strpos($start, '-')) : $start;
-            //$end = strpos(strval($end), '-') !== false ? substr($end, 0, strpos($end, '-')) : $end;
+            $seStr = str_replace('-', '/', $start) . '-' . str_replace('-', '/', $end);
+            $start = strpos(strval($start), '-') !== false ? substr($start, 0, strpos($start, '-')) : $start;
+            $end = strpos(strval($end), '-') !== false ? substr($end, 0, strpos($end, '-')) : $end;
             //var_dump($seStr);
             //$start = str_replace(['公元前', '年', '约', '前'], ['', '', '', '-'], $start);
             //$end = str_replace(['年', '约', '前'], ['', '', '-'], $end);
@@ -191,19 +191,29 @@ class TestController extends AbstractController
             $birthYear = $pInfo['birth_year'] ?? 0;
             $birthYear = str_replace(['c.'], [''], strval($birthYear));
             $deathYear = $pInfo['death_year'] ?? $end;
-            if (isset($pInfo['death']) && strpos($pInfo['death'], '自然') === false) {
-            $pInfo['notes'][] = $pInfo['death'];
+            $pInfo['notes'] = array_merge([$pInfo['notes']], $pInfo['key_events'] ?? []);
+            if (isset($pInfo['death_cause']) && $pInfo['death_cause'] != '自然死亡') {
+            //$pInfo['notes'][] = $pInfo['death_cause'];
             }
+            //print_R($pInfo);
             $description = isset($pInfo['notes']) ? (is_array($pInfo['notes']) ? implode('；', $pInfo['notes']) : $pInfo['notes']) : '';
             $birthMonth = $birthDay = $deathMonth = $deathDay = 0;
-            //list($birthYear, $birthMonth, $birthDay) = explode('-', str_replace('-0', '-', $pInfo['birth']));
+            list($birthYear, $birthMonth, $birthDay) = explode('-', str_replace('-0', '-', $pInfo['birth_date']));
+            list($deathYear, $deathMonth, $deathDay) = explode('-', str_replace('-0', '-', $pInfo['death_date']));
             /*if (strpos($pInfo['reign_end'], '-') !== false) {
                 list($deathYear, $deathMonth, $deathDay) = explode('-', str_replace('-0', '-', $pInfo['reign_end']));
             }*/
             $extDatas = ['英文名' => $pInfo['英文名'] ?? ''];
             //if (isset($pInfo['relationship'])) {
-            if (isset($pInfo['father'])) {
-                $extDatas['世系'] = $pInfo['father'] . '之子';
+            if (isset($pInfo['relationship'])) {
+                $extDatas['世系'] = $pInfo['relationship'];
+            }
+            //$extDatas['头衔'] = $pInfo['title'];
+            if (isset($pInfo['nickname'])) {
+                $extDatas['别名'] = $pInfo['nickname'];
+            }
+            if (isset($pInfo['death_cause'])) {
+                $extDatas['死因'] = $pInfo['death_cause'];
             }
             $gStr .= $this->_dealFigureGather($code, $nameSource, $description, $extDatas);
             //echo "{$nameSource}\n";
