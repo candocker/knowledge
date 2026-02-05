@@ -269,13 +269,47 @@ class TestController extends AbstractController
         }
         exit();*/
         $figures = $this->getModelObj('figure')->where(['country_code' => 'beiliang', 'path_label' => '君主', 'path_gather' => '其他'])->orderBy('id', 'asc')->get();
+        $figures = $this->getModelObj('period')->where(['country_code' => 'us'])->orderBy('start_year', 'desc')->get();
+        //echo $figures->count();
         $gStr = '';
+        $i = 49;
         foreach ($figures as $figure) {
+            $figure = $this->getModelObj('figure')->where(['code' => $figure['figure_code']])->first();
+                $point = '独霸和没落';
+                //$point = '二战和冷战';
+                //$point = '繁荣和萧条';
+                //$point = '南北战争';
+                //$point = '建国和扩张';
+            if (empty($figure) || $figure->path_gather != $point) {
+                //continue;
+            }
+            /*$point = '';
+            if ($i > 43) {
+                $point = '独霸和没落';
+            } else if ($i > 33) {
+                $point = '二战和冷战';
+            } else if ($i > 22) {
+                $point = '繁荣和萧条';
+            } else if ($i > 11) {
+                $point = '南北战争';
+            } else {
+                $point = '建国和扩张';
+            }*/
+                //var_dump($point . '-' . $figure['name']);
+            $i--;
+            //echo "UPDATE `wp_figure` SET `path_label` = '总统', `path_gather` = '{$point}', `path_point` = '大国和组织/美国/人物/总统/{$point}' WHERE `code` = '{$figure['code']}';\n";
+            $fullPath = $figure->fullKnowledgePath;
+            if (file_exists($fullPath)) {
+                var_dump($fullPath);
+            }
             //echo "<a href='{$figure['baidu_url']}' target='_blank'>{$figure['name']}</a><br />";
-            echo "        '{$figure['code']}', // {$figure['name']}\n";
+            //echo "        '{$figure['code']}', // {$figure['name']}\n";
             $gStr .= $this->_dealFigureGather($figure['code'], $figure['name'], '');
         }
         echo $gStr;
+        $fFile = "/data/database/knowledge/大国和组织/美国/人物/总统/{$point}.php";
+        var_dump($fFile);
+        //file_put_contents($fFile, "<?php\nreturn [\n{$gStr}\n];");
         exit();
     }
 

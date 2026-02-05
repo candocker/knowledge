@@ -4,7 +4,7 @@ $baseData = $datas['baseData'];
 <div id="responsive" class="modal container" tabindex="-1">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-    <h3>{!!$baseData['brief']!!}</h3>
+    @if (isset($baseData['brief']))<h3>{!!$baseData['brief']!!}</h3>@endif
   </div>
   <div class="modal-body ">
     <div class="" style="display: flex; justify-content: center; align-items: center;">
@@ -14,7 +14,7 @@ $baseData = $datas['baseData'];
   <div class="modal-body " style="display: flex; justify-content: center; align-items: center;">
     <div class="portlet sale-summary span12">
       <div class="portlet-title" style="display: flex; justify-content: center; align-items: center;">
-        <div class="caption">{!!$baseData['brief']!!}</div>
+        @if (isset($baseData['brief']))<div class="caption">{!!$baseData['brief']!!}</div>@endif
       </div>
       <ul class="unstyled">
         @foreach ($baseData['infos'] as $bKey => $bValue)

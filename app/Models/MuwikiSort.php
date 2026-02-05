@@ -4,9 +4,9 @@ declare(strict_types = 1);
 
 namespace ModuleKnowledge\Models;
 
-class MuwikiCatalog extends AbstractModel
+class MuwikiSort extends AbstractModel
 {
-    protected $table = 'muwiki_catalog';
+    protected $table = 'muwiki_sort';
     protected $fillable = ['name'];
     public $timestamps = false;
 

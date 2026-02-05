@@ -150,6 +150,7 @@ class SubjectService extends AbstractService
             'figure' => ['mCode' => 'figure', 'field' => 'code'],
             'book' => ['mCode' => 'book', 'field' => 'code'],
             'muwiki' => ['mCode' => 'muwiki', 'field' => 'code'],
+            'muwikicatalog' => ['mCode' => 'muwikiCatalog', 'field' => 'code'],
             'volume' => ['mCode' => 'bookVolume', 'field' => 'id'],
             'country' => ['mCode' => 'country', 'field' => 'code'],
             'countrycatalog' => ['mCode' => 'countryCatalog', 'field' => 'code'],
@@ -284,7 +285,6 @@ class SubjectService extends AbstractService
             $details[$fData['name']] = "<a href='javascript:;' modal-url='/ajax-figure-{$fData['code']}.html' class='modal_ajax_btn'>{$fData['name']}</a>";
             $modalDatas[$info['code']] = [
                 '名字' => $fData->fullName,
-                'abc' => 'efg',
             ];
         }
         //print_r($baseDatas);exit();

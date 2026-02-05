@@ -4,16 +4,14 @@ $formatedExtDatas = [];
 @endphp
 @php $commonTitles = $commonTableDatas['titles'] ?? []; @endphp
 <div class="portlet box green">
-  @if (isset($commonTableDatas['topName']))
   <div class="portlet-title">
     <div class="caption">
-      <b>{!!$commonTableDatas['topName']!!}</b>
+      @if (isset($commonTableDatas['topName']))<b>{!!$commonTableDatas['topName']!!}</b>@endif
     </div>
     <div class="tools">
       @if (isset($commonTableDatas['showUrl']) && !empty($commonTableDatas['showUrl']))<a href="{{$commonTableDatas['showUrl']}}" style="color:red;">详情</a>@endif
     </div>
   </div>
-  @endif
   @foreach ($commonTableDatas as $tData)
   @if (isset($tData['infos']))
   @php $tTitles = $tData['titles'] ?? $commonTitles; @endphp
