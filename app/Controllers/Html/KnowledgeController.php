@@ -244,11 +244,11 @@ class KnowledgeController extends AbstractController
     {
         $base = $this->config->get('knowledge.knowledge_path');
         $datas = [
-            'kongzi' => $base. '小知识/孔子/base.php',
-            'ruxue' => $base. '小知识/儒学/base.php',
-            'ruxuelishi' => $base. '小知识/儒学历史/base.php',
-            'zxcidian' => $base. '小知识/哲学辞典/base.php',
-            'yjxiaozhishi' => $base. '小知识/易经/base.php',
+            'kongzi' => $base. '知识汇编/孔子/base.php',
+            'ruxue' => $base. '知识汇编/儒学/base.php',
+            'ruxuelishi' => $base. '知识汇编/儒学历史/base.php',
+            'zxcidian' => $base. '知识汇编/哲学辞典/base.php',
+            'yjxiaozhishi' => $base. '知识汇编/易经/base.php',
         ];
         return is_null($code) ? $datas : $datas[$code];
     }

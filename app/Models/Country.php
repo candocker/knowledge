@@ -174,6 +174,11 @@ class Country extends AbstractModel
             $value = $figureData['baseData']['name_jump'] . ($cardName ? " ({$cardName})" : '');
             return $value;
         }
+        if ($field == 'name_term') {
+            $termName = $emperorData['term'] ?? '';
+            $value = $figureData['baseData']['name_jump'] . ($termName ? " ({$termName})" : '');
+            return $value;
+        }
         if ($field == 'name') {
             $value = $figureData['baseData']['name_jump'];
             return $value;

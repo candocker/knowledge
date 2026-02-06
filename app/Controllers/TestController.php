@@ -300,6 +300,7 @@ class TestController extends AbstractController
             //echo "UPDATE `wp_figure` SET `path_label` = '总统', `path_gather` = '{$point}', `path_point` = '大国和组织/美国/人物/总统/{$point}' WHERE `code` = '{$figure['code']}';\n";
             $fullPath = $figure->fullKnowledgePath;
             if (file_exists($fullPath)) {
+            //echo "'{$figure['code']}',";
                 var_dump($fullPath);
             }
             //echo "<a href='{$figure['baidu_url']}' target='_blank'>{$figure['name']}</a><br />";

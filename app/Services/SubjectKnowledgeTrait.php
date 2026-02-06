@@ -47,7 +47,7 @@ trait SubjectKnowledgeTrait
     public function _getKnowledgeDatas($categories)
     {
         $results = [];
-        $knowledges = $this->getModelObj('muwikiCatalog')->whereIn('bigsort', $categories)->orderBy('orderlist', 'asc')->get();
+        $knowledges = $this->getModelObj('muwiki')->whereIn('bigsort', $categories)->orderBy('orderlist', 'asc')->get();
         foreach ($knowledges as $knowledge) {
             $vData = [
                 'name' => $knowledge['name'],

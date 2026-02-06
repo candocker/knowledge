@@ -150,7 +150,7 @@ class SubjectService extends AbstractService
             'figure' => ['mCode' => 'figure', 'field' => 'code'],
             'book' => ['mCode' => 'book', 'field' => 'code'],
             'muwiki' => ['mCode' => 'muwiki', 'field' => 'code'],
-            'muwikicatalog' => ['mCode' => 'muwikiCatalog', 'field' => 'code'],
+            'muwikisort' => ['mCode' => 'muwikiSort', 'field' => 'code'],
             'volume' => ['mCode' => 'bookVolume', 'field' => 'id'],
             'country' => ['mCode' => 'country', 'field' => 'code'],
             'countrycatalog' => ['mCode' => 'countryCatalog', 'field' => 'code'],
@@ -182,7 +182,7 @@ class SubjectService extends AbstractService
 
             'worldregion' => $base . '国家地区/base.php',
             'hronicle' => $base . '编年史/base.php',
-            'subject' => $base . '专辑/base.php',
+            'subject' => $base . '知识汇编/专题入口.php',
             'gjorganization' => $base . '大国和组织/国际组织/base.php',
 
             'luxunworks' => $base . 'books/鲁迅著作/works.php',

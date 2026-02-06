@@ -293,8 +293,10 @@ class Figure extends AbstractModel
                 $diffStr = $diff < 1 ? '<1年/' : $diff . '年/';
             }
             if ($info['period_type'] == 'emperor') {
+                $terms[$termNum]['term'] = $info->term;
                 $terms[$termNum]['duration'] = $duration;
-                $terms[$termNum]['durationStr'] = "{$diffStr}{$duration}";
+                $durationStr = "{$diffStr}{$duration}";
+                $terms[$termNum]['durationStr'] = $durationStr;
             }
             if ($info['period_type'] == 'eraname') {
                 $eraname = !empty($info->baidu_url) ? "<a href='{$info->baidu_url}'>{$info->eraname}</a>" : $info->ername;
