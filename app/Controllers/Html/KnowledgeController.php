@@ -117,7 +117,7 @@ class KnowledgeController extends AbstractController
         $results = $this->getBookServiceObj()->getVolumeBookListings($topNavs['currentNav'], null);
         $datas = array_merge($topNavs, $results);
         $datas['isMobile'] = $this->isMobile(true);
-        $datas['detailDatas'] = require('/data/database/knowledge/test.php');
+        $datas['detailDatas'] = require('/data/database/knowledge/sourcefile/test.php');
         return $this->customView('develop-' . $view, $datas);
     }
 

@@ -94,25 +94,6 @@ trait FormatAnnalTrait
         return $pDatas;
     }
 
-    public function _initAnnalsData()
-    {
-        $command = '';
-        $base = $this->config->get('knowledge.knowledge_path') . '编年史/年表/';
-        for ($i = -8; $i <= 21; $i++) {
-            if ($i == 0) {
-                continue;
-            }
-            $path = $i < 0 ? 'BC' . abs($i) : $i;
-            $fullPath = $base . $path;
-            $command .= "mkdir {$fullPath};\n";
-
-            for ($j = 0; $j <= 9; $j++) {
-                $command .= "mkdir {$fullPath}/{$j};\n";
-            }
-        }
-        echo $command;
-    }
-
     public function _initBaseData()
     {
         $results = [
@@ -214,61 +195,6 @@ trait FormatAnnalTrait
         //print_r($results);exit();
         return $results;
     }
-
-    /*public function formatBaikeDatas()
-    {
-        $base = $this->config->get('knowledge.knowledge_path') . '编年史/';
-        $baikeFile = $base . '/annals/baike.php';
-        //var_dump($baikeFile);
-        $datas = [];//require($baikeFile);
-        $datas = (array) $datas;
-        $sPath = '/data/log/tmp/annals/';
-        $files = scandir($sPath);
-        //print_r($files);exit();
-        foreach ($files as $file) {
-            if ($file == '.' || $file == '..') {
-                continue;
-            }
-            if ($file != 'bc2_1.json') {
-                //continue;
-            }
-            $sFile = $sPath . $file;
-
-            $sDatas = file_get_contents($sFile);
-            $sDatas = json_decode($sDatas, true);
-            $lDatas = $sDatas['data'] ?? [];
-            $lDatas = $lDatas['list'] ?? [];
-            foreach ($lDatas as $lData) {
-                $baseStr = $lData['lemmaTitle'] ?? '';
-                $extStr = $lData['lemmaId'] ?? '';
-                $year = str_replace(['年', '公元前', '公元'], ['', '-', ''], $baseStr);
-                $baikeUrl = 'https://baike.baidu.com/item/' . $baseStr . '/' . $extStr;
-                if (!isset($datas[$year])) {
-                    $datas[$year] = $baikeUrl;
-                    //var_dump($baikeUrl);
-                }
-            }
-            //print_r($sDatas);
-        }
-        foreach ($datas as $key => $data) {
-            $info = $this->getModelObj('chronology')->where(['orderlist' => $key])->first();
-            if (empty($info)) {
-                continue;
-            } else {
-                var_dump($info['code'] . '-' . $info['name'] . '-' . $key . '-' . $data);
-                $info->baidu_url = $data;
-                $info->save();
-            }
-        }
-        exit();
-        ksort($datas);
-        print_r($datas);exit();
-        $str = var_export($datas, true);
-        $str = "<?php return {$str};";
-        file_put_contents($baikeFile, $str);
-        //print_R($datas);
-        return $datas;
-    }*/
 
     /*public function dealCenturyData($cName, $data, & $eranameDatas)
     {
