@@ -17,9 +17,13 @@ class Muwiki extends AbstractModel
 
     public function _formatBaseData($isMobile)
     {
+        $pTitle = "<a href='/wiki-muwiki-gcdqgdbdh.html'>中国全国代表大会</a>-" . $this->name;
+        if (!empty($this->baidu_url)) {
+            $pTitle .= " (<a href='{$this->baidu_url}'>百科</a>)";
+        }
         $result = [
             'tdkData' => ['title' => $this->name, 'description' => $this->description],
-            'pageData' => ['title' => $this->name, 'brief' => $this->brief],
+            'pageData' => ['title' => $pTitle, 'brief' => $this->description],
         ];
         return $result;
     }
@@ -49,5 +53,52 @@ class Muwiki extends AbstractModel
         $path = $muwikiSortInfo->knowledge_path;
         $path = rtrim($path, '/') . '/' . $this->name;
         return $path;
+    }
+
+    public function _formatMuwikiDetailDatas($eDatas)
+    {
+        foreach ($eDatas as $key => & $eData) {
+            if ($key == 'topName') {
+                continue;
+            }
+            if (!isset($eData['baseInfos'])) {
+                continue;
+            }
+            foreach ($eData['baseInfos'] as & $baseInfo) {
+                if (is_array($baseInfo) && !isset($baseInfo['mCode'])) {
+                    continue;
+                }
+                if (is_array($baseInfo)) {
+                    $mCode = $baseInfo['mCode'];
+                    unset($baseInfo['mCode']);
+                } else {
+                    $mCode = $baseInfo;
+                    $baseInfo = [];
+                }
+                $mInfo = $this->getModelObj('muwiki')->where(['code' => $mCode])->first();
+                $baseInfoNew = [];
+                foreach ($eData['titles'] as $field => $fName) {
+                    if (isset($baseInfo[$field])) {
+                        $baseInfoNew[$field] = $baseInfo[$field];
+                        continue;
+                    }
+                    $baseInfoNew[$field] = $this->_getPointMuwikiField($field, $mInfo);
+                }
+                $baseInfo = $baseInfoNew;
+            }
+        }
+        return $eDatas;
+    }
+
+    public function _getPointMuwikiField($field, $info)
+    {
+        if ($field == 'name') {
+            $nameJump = "<a href='/wiki-muwiki-{$info->code}.html?force_create_file=party'>{$info->name}</a>";
+            return $nameJump;
+        }
+        if ($field == 'major') {
+            return $info->description;
+        }
+        return $info->$field;
     }
 }

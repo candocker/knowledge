@@ -11,6 +11,7 @@ use Carbon\Carbon;
 class TestController extends AbstractController
 {
     use TraitTestFigure;
+    use TraitTestStarmap;
 
     public function test()
     {

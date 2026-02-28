@@ -316,6 +316,15 @@ class SubjectService extends AbstractService
     public function formatDetailDatas($datas, $isMobile)
     {
         foreach ($datas as $key => $value) {
+            if (strpos($key, 'commonFixTableMuwiki') !== false) {
+                $value = $this->getModelObj('muwiki')->_formatMuwikiDetailDatas($value);
+                $datas[$key] = $value;
+            }
+            if (strpos($key, 'commonFixTableEmperor') !== false || strpos($key, 'commonFixTableFigureDetail') !== false) {
+                $value = $this->getModelObj('country')->_formatFigureDetailDatas($value);
+                $datas[$key] = $value;
+            }
+
             if (strpos($key, 'commonFixTable') !== false) {
                 $datas[$key] = $this->_formatCommonFixTable($value, $isMobile);
             }

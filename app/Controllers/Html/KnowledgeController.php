@@ -4,6 +4,7 @@ namespace ModuleKnowledge\Controllers\Html;
 
 class KnowledgeController extends AbstractController
 {
+    use TraitTestElem;
     public function ajaxRequest($navCode, $subCode)
     {
         $isMobile = $this->isMobile(true);
@@ -113,11 +114,16 @@ class KnowledgeController extends AbstractController
 
     public function viewDevelop($view)
     {
+        $service = $this->getSubjectServiceObj();
         $topNavs = $this->getBookServiceObj()->getBookCatalogs(null);
         $results = $this->getBookServiceObj()->getVolumeBookListings($topNavs['currentNav'], null);
+        //print_R($results);exit();
         $datas = array_merge($topNavs, $results);
-        $datas['isMobile'] = $this->isMobile(true);
-        $datas['detailDatas'] = require('/data/database/knowledge/sourcefile/test.php');
+        $isMobile = $this->isMobile(true);
+        $datas['isMobile'] = $isMobile;
+        $detailDatas = $this->getTestElemDatas();
+        $detailDatas = $service->formatDetailDatas($detailDatas, $isMobile);
+        $datas['detailDatas'] = $detailDatas;
         return $this->customView('develop-' . $view, $datas);
     }
 
