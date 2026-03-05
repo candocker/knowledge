@@ -271,4 +271,11 @@ return [
     'rowCount' => 4,
     'rowCountMobile' => 4,
 ],
+'jinsilu' => [
+    'name' => '近思录',
+    'brief' => '近思录',
+    'noteType' => 'inner',
+    'rowCount' => 4,
+    'rowCountMobile' => 4,
+],
 ];

@@ -138,6 +138,7 @@ class BookService extends AbstractService
     {
         $bookPath = $chapter->book->fullPath;
         $file = "{$bookPath}{$chapter['code']}.php";
+        //var_dump($file);
         if (!file_exists($file)) {
             $this->resource->throwException(400, '章节文件不存在-' . $file);
         }

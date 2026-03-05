@@ -17,7 +17,10 @@ class Muwiki extends AbstractModel
 
     public function _formatBaseData($isMobile)
     {
-        $pTitle = "<a href='/wiki-muwiki-gcdqgdbdh.html'>中国全国代表大会</a>-" . $this->name;
+        $pTitle = $this->name;
+        if ($this->sort == 'zggcd') {
+            $pTitle = "<a href='/wiki-muwiki-gcdqgdbdh.html'>中国全国代表大会</a>-" . $pTitle;
+        }
         if (!empty($this->baidu_url)) {
             $pTitle .= " (<a href='{$this->baidu_url}'>百科</a>)";
         }

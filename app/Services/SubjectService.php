@@ -8,6 +8,7 @@ class SubjectService extends AbstractService
     use OtherLoanTrait;
     use SubjectBookTrait;
     use SubjectKnowledgeTrait;
+    use SubjectPointDataTrait;
 
     public function getSubjectSorts($subjectSort, $subjectCode)
     {
@@ -133,7 +134,6 @@ class SubjectService extends AbstractService
             $fData = $info->formatBaseData($detailDatas['baseData'] ?? [], $isMobile);
             $detailDatas = $info->wrapDetailDatas($detailDatas);
         }
-        $detailDatas = $this->formatDetailDatas($detailDatas, $isMobile);
 
         $detailDatas['tdkData'] = $fData['tdkData'] ?? [];
         $detailDatas['pageData'] = $detailDatas['pageData'] ?? ($fData['pageData'] ?? []);
@@ -141,6 +141,7 @@ class SubjectService extends AbstractService
 
         $pData = $this->getPointSubjectDatas(['code' => $code], $isMobile, $detailDatas);
         $detailDatas = array_merge($detailDatas, $pData);
+        $detailDatas = $this->formatDetailDatas($detailDatas, $isMobile);
         return $detailDatas;
     }
 
@@ -201,116 +202,6 @@ class SubjectService extends AbstractService
             var_dump($sCode);exit();
         }
         return is_null($sCode) ? $datas : $datas[$sCode] ?? $datas['other'];
-    }
-
-    public function _gdempirePointSubjectDatas($currentNav, $isMobile, & $baseDatas)
-    {
-        return [];
-        $sorts = [];
-        $results = [
-            'empire' => ['name' => '帝国', 'infos' => []],
-        ];
-        $num = $isMobile ? 50 : 7;
-        $details = [];
-        foreach ($results as $sort => & $sData) {
-            $i = 1;
-            $key = 1;
-            $newInfos = [];
-            $infos = $this->getModelObj('country')->where('sort', 'gdempire')->orderBy('orderlist', 'asc')->get();
-            foreach ($infos as $info) {
-                $name = $info['name'];
-                if (!empty($info['begin_end'])) {
-                    $name .= "( {$info['begin_end']} )";
-                }
-                $name = "<a href='/wiki-country-{$info['code']}.html'>{$name}</a>";
-                $details[$info['name']] = $name;
-                if (!empty($info['sort'])) {
-                    //continue;
-                }
-
-                //$info['name'] .= strlen($info['name']);
-                $bCode = $info['code'];
-                $url = "/wiki-country-{$bCode}.html";
-                $info['url'] = $url;
-                $newInfos[$key][] = ['name' => $info['name'], 'url' => $url];
-                if ($i % $num == 0) {
-                    $key++;
-                }
-                $step = 1;
-                $i = $i + $step;
-            }
-            $sData['infos'] = $newInfos;
-            $sData['fixed'] = $newInfos;
-        }
-        //print_r($details);
-        $sourceDatas = $baseDatas['commonTable']['empires']['infos'];
-        foreach ($sourceDatas as $key => & $sData) {
-            foreach ($sData as & $sValue) {
-                if (is_array($sValue)) {
-                    continue;
-                }
-                $oValue = strip_tags($sValue);
-                if (isset($details[$oValue])) {
-                    $sValue = str_replace($oValue, $details[$oValue], $sValue);
-                }
-            }
-        }
-        $baseDatas['commonTable']['empires']['infos'] = $sourceDatas;
-
-        return ['simpleFixed' => $results];
-
-    }
-
-    public function _americanpotusPointSubjectDatas($currentNav, $isMobile, & $baseDatas)
-    {
-        $modalDatas = [];
-        $infos = $this->getModelObj('figureListing')->where(['type' => 'usapresident'])->get();
-        $sessions = require($this->_specialKnowledgePath('usasession'));
-        $cases = [
-            'illness' => 'blue',
-            'attacked' => 'red',
-            'replace' => 'green',
-            'impeach' => 'orange',
-        ];
-        foreach ($sessions as & $session) {
-            $case = $session['case'] ?? '';
-            if (!empty($case)) {
-                $session['term'] = "<span style='color:{$cases[$case]}'>{$session['term']}</span>";
-            }
-        }
-        $details = [];
-        foreach ($infos as $info) {
-            $fData = $info->figureInfo;
-            //$details[$fData['name']] = "<a data-toggle='modal' data-target='#responsives'>{$fData['name']}</a>";
-            $details[$fData['name']] = "<a href='javascript:;' modal-url='/ajax-figure-{$fData['code']}.html' class='modal_ajax_btn'>{$fData['name']}</a>";
-            $modalDatas[$info['code']] = [
-                '名字' => $fData->fullName,
-            ];
-        }
-        //print_r($baseDatas);exit();
-        //print_r($details);
-        $sourceDatas = $baseDatas['commonTable']['base']['infos'];
-        foreach ($sourceDatas as $key => & $sData) {
-            foreach ($sData as & $sValue) {
-                if (is_array($sValue)) {
-                    continue;
-                }
-                if (isset($sessions[$sValue])) {
-                    $session = $sessions[$sValue];
-                    $sStr = $session['term'];
-                    $sValue = $sStr;
-                    continue;
-                }
-                $oValue = strip_tags($sValue);
-                if (isset($details[$oValue])) {
-                    $sValue = str_replace($oValue, $details[$oValue], $sValue);
-                }
-            }
-        }
-        $baseDatas['commonTable']['base']['infos'] = $sourceDatas;
-        $baseDatas['modalDatas'] = $modalDatas;
-        //print_r($modalDatas);exit();
-        return [];
     }
 
     public function formatDetailDatas($datas, $isMobile)
