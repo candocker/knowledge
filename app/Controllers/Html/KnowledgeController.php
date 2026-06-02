@@ -105,7 +105,7 @@ class KnowledgeController extends AbstractController
             $datas['tdkData'] = $detailDatas['tdkData'];
             unset($detailDatas['tdkData']);
         }
-        $datas['detailDatas'] =$detailDatas; 
+        $datas['detailDatas'] =$detailDatas;
 
         $datas['isMobile'] = $isMobile;
         //print_r($datas);

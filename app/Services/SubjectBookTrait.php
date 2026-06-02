@@ -37,6 +37,15 @@ trait SubjectBookTrait
             $detailDatas = ['simpleTable' => $this->_formatTableDatas($datas, $navCode, $isMobile)];
         }
         $detailDatas['pageData'] = $pageData;
+
+        $base = $this->config->get('knowledge.knowledge_path');
+        $filePaths = [
+            'classical' => $base. 'books/经典古籍/base.php',
+        ];
+        if (isset($filePaths[$subCode])) {
+            $eDatas = require($filePaths[$subCode]);
+            $detailDatas = array_merge($detailDatas, $eDatas);
+        }
         return $detailDatas;
     }
 
