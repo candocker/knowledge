@@ -26,6 +26,82 @@ class TestController extends AbstractController
         exit();
     }
 
+    public function _testBooks()
+    {
+        $path = '/data/database/books/文集/李敖/ebook';
+        $books = array_diff(scandir($path), ['..', '.']);
+        $results = [];
+        foreach ($books as $book) {
+            $fPath = $path . '/' . $book;
+            $files = array_diff(scandir($fPath), ['..', '.']);
+            $results[$book] = array_values($files);
+        }
+        $sql = "INSERT INTO `wp_book` (`code`, `category`, `name`, `book_path`, `author`, `is_onlineread`, `created_at`, `updated_at`) VALUES \n";
+        $sql = "INSERT INTO `wp_chapter` (`code`, `chapter_type`, `serial`, `book_code`, `name`, `created_at`, `updated_at`) VALUES \n";
+        $sql = '';
+        $command = '';
+        foreach ($results as $book => $chapters) {
+            $code = CommonTool::getSpellStr($book, '');
+            foreach ($chapters as $chapter) {
+                if ($chapter == 'index.txt') {
+                    continue;
+                }
+                $cStr = "<?php\nreturn [\n'title' => '',\n'description' => '',\n'chapters' => [\n";
+                $fullFile = $path . '/' . $book . '/' . $chapter;
+                $content = file($fullFile);
+                $content = array_map(function($line) use (& $cStr) {
+                    $line = mb_convert_encoding($line, 'UTF-8', 'GBK');
+                    $line = trim($line);
+                    $line = str_replace(['　', "'"], ['', '"'], $line);
+                    if (!in_array($line, ['', '李敖研究网发布', '蛋蛋 制作', '目录页', '下一页', '目录页 下一页', '上一页', '上一页 目录页', '上一页 目录页 下一页'])) {
+                        $cStr .= "[\n    'content' => [\n        '{$line}',\n    ],\n],\n";
+                    }
+                    //var_dump($line);
+                    return $line;
+
+                }, $content);
+                //echo $cStr;
+                $cStr .= "],\n];";
+                $cCode = str_replace('.txt', '.php', $chapter);
+                $tFile = '/data/database/books/文集/李敖/' . $book . '/' . $cCode;
+                //file_put_contents($tFile, $cStr);
+                var_dump($book . '-' . $code);
+                //print_r($content);exit();
+            }
+            continue;
+
+
+            $cFile = $path . '/' . $book . '/index.txt';
+            $lines = file($cFile);
+            $lines = array_map(function($line) {
+                return mb_convert_encoding($line, 'UTF-8', 'GBK');
+            }, $lines);
+            //$sql .= "('{$code}', 'liaozhi', '{$book}', '文集/李敖/{$book}', 'liaozhi', 1, NOW(), now()),\n";
+            //var_dump($book);
+            //print_r($chapters);
+            $i = 1;
+            foreach ($lines as $lKey => $line) {
+                $line = trim($line);
+                $cCode = $chapters[$lKey + 1];
+                $cCode = str_replace('.txt', '', $cCode);
+                $serial = $i * 10;
+                //$sql .= "('{$cCode}', 'common', '{$serial}', '{$book}', '{$line}', NOW(), now()),\n";
+                $i++;
+                //var_dump($lKey . '-' . $line . '=' . $cTitle);
+            }
+            exit();
+            $sql .= "UPDATE `wp_chapter` SET `book_code` = '{$code}' WHERE `id` >= 10525 AND `book_code` = '{$book}';\n";
+            //$command .= "mkdir /data/database/books/文集/李敖/{$book};\n";
+            //print_r($lines);
+        }
+        //echo $command;
+        echo $sql;
+        //print_r($results);
+
+        //print_r($books);
+        exit();
+    }
+
     public function _testDealhtml()
     {
         $pointMark = request()->input('point_mark');

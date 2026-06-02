@@ -51,7 +51,7 @@
                         <div class="accordion-body collapse @if ($k == 1) in-o @endif" id="collapse_{{$currentKey}}">
                           @php $answers = $subData['answer'] ?? []; $answers = (array) $answers; @endphp
                           @foreach ($answers as $answer)
-                          <div class="accordion-inner" id="current_{{$currentKey}}">{{$answer}}</div>
+                          <div class="accordion-inner" id="current_{{$currentKey}}">{!!$answer!!}</div>
                           @endforeach
                         </div>
                       </div>

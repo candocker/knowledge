@@ -41,6 +41,7 @@
       <li><a href="/wiki-muwiki-humanevolution.html">人类演变</a></li>
       <li><a href="/wiki-muwiki-ouzhoujiazu.html">欧洲血统</a></li>
       <li><a href="/wiki-muwiki-ghybwl.html">古汉语备忘录<a></li>
+      <li><a href="/wiki-muwiki-xunguxue.html">训诂<a></li>
     </ul>
     <div class="footer-innerbak" style="display: flex; justify-content: center; align-items: center;">
       2024 &copy; acanstudio. 京ICP备13015487号
