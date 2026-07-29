@@ -9,6 +9,7 @@ class SubjectService extends AbstractService
     use SubjectBookTrait;
     use SubjectKnowledgeTrait;
     use SubjectPointDataTrait;
+    use HtmlTableTrait;
 
     public function getSubjectSorts($subjectSort, $subjectCode)
     {

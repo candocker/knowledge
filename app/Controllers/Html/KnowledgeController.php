@@ -91,6 +91,27 @@ class KnowledgeController extends AbstractController
         //$datas['detailDatas'] = $service->getKnowledgeDetailDatas($knowledge);
         //print_R($datas);exit();
         $detail = require($this->_knowledgeDatas($code));
+        foreach ($detail['datas'] as $key => & $dData) {
+            if (!isset($dData['infos'])) {
+                continue;
+            }
+            foreach ($dData['infos'] as & $dInfo) {
+                if (!isset($dInfo['subInfos'])) {
+                    continue;
+                }
+                foreach ($dInfo['subInfos'] as & $subInfo) {
+                    if (!isset($subInfo['tableInfos'])) {
+                        continue;
+                    }
+                    foreach ($subInfo['tableInfos'] as $tableInfos) {
+                        $tableStr = $service->getTableStr($tableInfos);
+                        $subInfo['answer'][] = $tableStr;
+                    }
+                }
+            }
+
+        }
+        //print_r($detail);exit();
         $datas['detailDatas'] = $detail;
         $datas['tdkData'] = ['title' => $detail['title'] . '-' . '知识库'];
         return $this->customView('askwiki', $datas);

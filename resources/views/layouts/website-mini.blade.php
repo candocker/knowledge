@@ -32,11 +32,11 @@ $bodyClasses = [
   color:green;
 }
 </style>
-</head>  
+</head>
 <body @yield('bodyClass')>
     @include('layouts.website._loader-mobile', ['layoutElem' => $layoutElem])
     <div class="uix-wrapper">
-        @include('layouts.website._top', ['data' => ['siteName' => '经典和阅读']])
+        @include('layouts.website._top', ['data' => ['siteName' => '经典阅读']])
         <main id="uix-maincontent">
         @yield('content')
         </main>

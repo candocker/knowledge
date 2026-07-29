@@ -29,14 +29,11 @@ trait OtherLoanTrait
             ['interestRate' => 3.9, 'loanNum' => 2],
             ['interestRate' => '3.3', 'loanNum' => 6],
             ['interestRate' => '3.2', 'loanNum' => 12],
-            ['interestRate' => $rRate, 'loanNum' => 34],
+            ['interestRate' => '3.2', 'loanNum' => 12],
+            ['interestRate' => $rRate, 'loanNum' => 22],
             ['interestRate' => $rRate, 'loanNum' => 36],
             ['interestRate' => $rRate, 'loanNum' => 48],
             ['interestRate' => $rRate, 'loanNum' => 108],
-            /*['interestRate' => 3.30, 'loanNum' => 28],
-            ['interestRate' => 3.30, 'loanNum' => 36],
-            ['interestRate' => 3.30, 'loanNum' => 60],
-            ['interestRate' => 3.30, 'loanNum' => 120],*/
         ];
         $totalGahterData = [];
         $results = [];

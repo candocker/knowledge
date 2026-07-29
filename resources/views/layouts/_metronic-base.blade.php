@@ -27,7 +27,7 @@ $tdkDescription = $datas['tdkData']['description'] ?? '';
   <link href="{{$commonAssetUrl}}/metronic/media/css/uniform.default.css" rel="stylesheet" type="text/css"/>
   <!-- END GLOBAL MANDATORY STYLES -->
   @include('layouts.metronic._point-header', ['viewCode' => $viewCode])
-  <link href="{{$commonAssetUrl}}/metronic/media/css/custom-table.css?v=1" rel="stylesheet" type="text/css"/>
+  <link href="{{$commonAssetUrl}}/metronic/media/css/custom-table.css?v=4" rel="stylesheet" type="text/css"/>
   <link rel="shortcut icon" href="{{$commonAssetUrl}}/metronic/media/image/favicon.ico" />
 </head>
 

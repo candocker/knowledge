@@ -278,4 +278,18 @@ return [
     'rowCount' => 4,
     'rowCountMobile' => 4,
 ],
+'foreignpoetrycollection' => [
+    'name' => '外国诗集',
+    'brief' => '外国诗集',
+    'noteType' => 'inner',
+    'rowCount' => 4,
+    'rowCountMobile' => 4,
+],
+'xinshijianshang' => [
+    'name' => '新诗鉴赏',
+    'brief' => '新诗鉴赏',
+    'noteType' => 'inner',
+    'rowCount' => 4,
+    'rowCountMobile' => 4,
+],
 ];
