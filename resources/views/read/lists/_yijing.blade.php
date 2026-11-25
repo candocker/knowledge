@@ -61,12 +61,12 @@ $rand = time();
               @endforeach
               @if ($i % $rowCount != $rowCount)</tr>@endif
             </tbody>
-          </table>  
-        </div>      
+          </table>
+        </div>
       </div>
     </div>
   </div>
-</section>  
+</section>
 @endforeach
 </div>
 
@@ -80,7 +80,7 @@ $rand = time();
           </div>
           <table>
             <tbody class="uix-t-l--md">
-              @foreach (['wenyan' => '文言', 'xici1' => '系辞上', 'xici2' => '系辞下', 'shuogua' => '说卦', 'xugua' => '序卦', 'zagua' => '杂卦'] as $code => $name)
+              @foreach (['wenyan' => '文言-乾', 'wenyan_kun' => '文言-坤', 'xici1' => '系辞上', 'xici2' => '系辞下', 'shuogua' => '说卦', 'xugua' => '序卦', 'zagua' => '杂卦'] as $code => $name)
               <td style="text-align:center;padding-left:3px;padding-right:1px;padding-bottom:3px; padding-top:5px;">
                 <span style="margin: 0px;font-size:@if ($mobileClass) 9pt @else 14pt @endif;">
                   <a href="/show-yizhuan-{{$code}}">
@@ -90,9 +90,9 @@ $rand = time();
               </td>
               @endforeach
             </tbody>
-          </table>  
-        </div>      
+          </table>
+        </div>
       </div>
     </div>
   </div>
-</section>  
+</section>

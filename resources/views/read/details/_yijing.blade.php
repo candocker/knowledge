@@ -6,21 +6,29 @@ $authors = [
   'vernacular' => ['name' => '译文', 'nameFull' => '译文'],
 ];
 $showElems = [
-  'gua' => ['class' => 'guaci', 'name' => '卦辞'], 
+  'gua' => ['class' => 'guaci', 'name' => '卦辞'],
   'tuan' => ['class' => 'tuan', 'name' => '彖曰'],
   'xiang' => ['class' => 'daxiang', 'name' => '象曰'],
 ];
 $symbols = [0 => '■■■■　■■■■', 1 => '■■■■■■■■■'];
 $contents = $datas['contents'];
+$contents['tuan'] = implode('', (array) $contents['tuan']);
 $cChapter = $datas['currentChapterData'];
+$contents['gua'] = $cChapter['name'] . '：' . $contents['gua'];
 $bookData = $datas['bookData'];
 $symbolDatas = explode(',', $cChapter['description']);
+$yCount = count($contents['yao']);
+$topYao = '';
+$sixYaos = $contents['yao'];
+if ($yCount == 7) {
+  $topYao = array_pop($sixYaos);
+}
 @endphp
 
 <div class="col-12 uix-spacing--no-bottom uix-t-c" style="padding-top:20px;padding-bottom:0px;font-size:10px">
   <div class="col-12 uix-spacing--no">
     <h4 class="uix-heading--pinline uix-t-c title" style="padding-top:5px;">{{$contents['serial']}} {{$cChapter['title']}}</h4>
-    <h6 class=" uix-spacing--no" style="text-align: center; padding: 0px; color: green;">{{$cChapter['name']}}: {{$contents['gua']}}</h6>
+    <h6 class=" uix-spacing--no" style="text-align: center; padding: 0px; color: green;">{{$contents['gua']}}</h6>
     @if (isset($cChapter['descriptiono']))
     <p class=" uix-spacing--no" style="text-align: center; padding: 0px; color: green;">{{$cChapter['description']}}</p>
     @endif
@@ -39,8 +47,7 @@ $symbolDatas = explode(',', $cChapter['description']);
   @endforeach
 @endforeach
 
-@if (in_array($contents['serial'], [1, 2]))
-@php $topYao = array_pop($contents['yao']); @endphp
+@if ($topYao)
 <div style="text-align:center;margin: 0 auto; color:red;padding:0px;">{{$topYao}}</div>
 @endif
 
@@ -50,7 +57,7 @@ $symbolDatas = explode(',', $cChapter['description']);
   @foreach ($symbolDatas as $symbol) {{$symbols[$symbol]}}<br>@endforeach
 </span>
 <pre class="yaoci">
-@foreach (array_reverse($contents['yao']) as $elem)
+@foreach (array_reverse($sixYaos) as $elem)
 {{$elem}}
 @endforeach
 </pre>
@@ -79,6 +86,6 @@ $symbolDatas = explode(',', $cChapter['description']);
 
 @if (isset($contents['vernacular']) && isset($contents['vernacular']['notes']))
   @foreach ($contents['vernacular']['notes'] as $note)
-  <div id="comment1" class="comment"><p>【注释】{{$note}}</p></div>
+  <div class="jiedu yiwen vernacular"><p>【补充】{{$note}}</p></div>
   @endforeach
 @endif

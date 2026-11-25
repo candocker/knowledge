@@ -284,6 +284,7 @@ return [
     'noteType' => 'inner',
     'rowCount' => 4,
     'rowCountMobile' => 4,
+    'withAuthor' => 1,
 ],
 'xinshijianshang' => [
     'name' => '新诗鉴赏',
@@ -291,5 +292,6 @@ return [
     'noteType' => 'inner',
     'rowCount' => 4,
     'rowCountMobile' => 4,
+    'withAuthor' => 1,
 ],
 ];
